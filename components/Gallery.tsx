@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/Reveal";
+import { Glyph } from "@/components/eggs/Glyph";
 
 const frames = [
   { src: "/frames/cat-balcony.jpg", caption: "Paw forward, blue sky" },
@@ -35,6 +36,9 @@ export function Gallery() {
                 <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0" />
                 <p className="relative z-10 w-full p-4 text-xs text-foreground">
                   {frame.caption}
+                  {frame.src === "/frames/moon-clouds.jpg" && (
+                    <Glyph id="gallery" className="ml-2 align-middle" />
+                  )}
                 </p>
               </div>
             </Reveal>

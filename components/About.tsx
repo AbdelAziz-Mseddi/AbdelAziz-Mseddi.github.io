@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/Reveal";
+import { Glyph } from "@/components/eggs/Glyph";
 
 export function About() {
   return (
@@ -27,6 +28,7 @@ export function About() {
             stated plainly: become one of the greats. I&apos;m happiest
             writing code after midnight when the city goes quiet, preferably
             in winter, camera within reach.
+            <Glyph id="about" className="ml-2 align-middle" />
           </p>
         </Reveal>
       </div>

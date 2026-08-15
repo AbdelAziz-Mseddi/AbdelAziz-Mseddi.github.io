@@ -2,6 +2,7 @@
 
 import { AuraButton } from "@/components/AuraButton";
 import { handleSmoothScroll } from "@/lib/smoothScroll";
+import { Glyph } from "@/components/eggs/Glyph";
 
 export function Hero() {
   return (
@@ -18,6 +19,7 @@ export function Hero() {
             Abdelaziz
             <br />
             <span className="text-accent-bright">Mseddi</span>
+            <Glyph id="hero" className="ml-3 align-middle" />
           </h1>
           <p className="mt-8 max-w-xl text-lg text-muted sm:text-xl">
             Software engineering student, AI engineer, certified night owl.

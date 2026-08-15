@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/Reveal";
+import { Glyph } from "@/components/eggs/Glyph";
 
 const socials = [
   { label: "GitHub", href: "https://github.com/AbdelAziz-Mseddi" },
@@ -14,6 +15,7 @@ export function Contact() {
         <Reveal>
           <h2 className="font-display text-balance text-5xl uppercase text-foreground sm:text-6xl">
             Let&apos;s talk, preferably late.
+            <Glyph id="contact" className="ml-3 align-middle" />
           </h2>
           <p className="mt-6 max-w-lg text-lg text-muted">
             Open to interesting problems — AI systems, backend work, or just

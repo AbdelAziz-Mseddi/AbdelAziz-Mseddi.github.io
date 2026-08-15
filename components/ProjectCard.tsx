@@ -1,4 +1,5 @@
 import type { Project } from "@/lib/projects";
+import { Glyph } from "@/components/eggs/Glyph";
 
 const kindLabel: Record<Project["kind"], string> = {
   project: "Project",
@@ -25,6 +26,9 @@ export function ProjectCard({ project }: { project: Project }) {
 
       <h3 className="mt-4 font-display text-2xl uppercase text-foreground">
         {project.title}
+        {project.slug === "campus-connect" && (
+          <Glyph id="work" className="ml-2 align-middle" />
+        )}
       </h3>
       <p className="mt-1 text-sm text-accent-bright/80">{project.tagline}</p>
 
