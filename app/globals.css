@@ -197,6 +197,16 @@ body {
   }
 }
 
+@keyframes shard-flicker {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 ::selection {
   background: var(--accent);
   color: var(--background);

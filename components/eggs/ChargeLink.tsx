@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -8,6 +9,54 @@ import {
   type ReactNode,
 } from "react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
+
+const SHARD_COUNT = 16;
+
+function pseudoRandom(seed: number) {
+  const x = Math.sin(seed * 12.9898) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+type Shard = {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  length: number;
+  ignite: number; // charge fraction at which this shard starts drawing in
+  flickerDelay: number;
+  flickerDuration: number;
+};
+
+// Radiating jagged lines around the text, in the same visual language as
+// AuraButton's "energy shard" hover effect elsewhere on the site — extended
+// here into a full ring so it reads as an aura surrounding the name, not
+// just a corner accent.
+function buildShards(): Shard[] {
+  const cx = 50;
+  const cy = 20;
+  return Array.from({ length: SHARD_COUNT }, (_, i) => {
+    const angle = (i / SHARD_COUNT) * Math.PI * 2;
+    const jag = pseudoRandom(i * 3.7 + 1.1);
+    const jagAngle = angle + (jag - 0.5) * 0.35;
+    const innerR = { x: 54, y: 24 };
+    const outerScale = 0.75 + jag * 0.35;
+    const x1 = cx + Math.cos(angle) * innerR.x;
+    const y1 = cy + Math.sin(angle) * innerR.y;
+    const x2 = cx + Math.cos(jagAngle) * innerR.x * (1.5 * outerScale);
+    const y2 = cy + Math.sin(jagAngle) * innerR.y * (1.5 * outerScale);
+    return {
+      x1,
+      y1,
+      x2,
+      y2,
+      length: Math.hypot(x2 - x1, y2 - y1),
+      ignite: pseudoRandom(i * 5.3 + 2.9) * 0.55,
+      flickerDelay: pseudoRandom(i * 7.1 + 4.2) * 1.4,
+      flickerDuration: 0.5 + pseudoRandom(i * 2.3 + 6.6) * 0.6,
+    };
+  });
+}
 
 const CHARGE_MS = 1300;
 const MAX_READOUT = 9001; // it's always over 9000, quietly
@@ -115,6 +164,7 @@ export function ChargeLink({
     }, CHARGE_MS + 100);
   }
 
+  const shards = useMemo(buildShards, []);
   const readout = Math.round(charge * MAX_READOUT);
   const color = auraColor(charge);
   const shimmer = maxed && !reducedMotion;
@@ -130,6 +180,46 @@ export function ChargeLink({
 
   return (
     <span className="relative inline-flex flex-col">
+      {!reducedMotion && charge > 0 && (
+        <svg
+          className="pointer-events-none absolute"
+          style={{ top: "-1.75rem", left: "-2.75rem", right: "-2.75rem", bottom: "-1.75rem" }}
+          viewBox="-45 -35 190 110"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          {shards.map((s, i) => {
+            const local = Math.min(
+              1,
+              Math.max(0, (charge - s.ignite) / (1 - s.ignite))
+            );
+            if (local <= 0) return null;
+            return (
+              <line
+                key={i}
+                x1={s.x1}
+                y1={s.y1}
+                x2={s.x2}
+                y2={s.y2}
+                stroke={color}
+                strokeWidth={shimmer ? 1.1 : 0.8}
+                strokeLinecap="round"
+                strokeDasharray={s.length}
+                strokeDashoffset={(1 - local) * s.length}
+                style={{
+                  // The charge-driven reveal is strokeDashoffset (line
+                  // growing in); this animation layers a flicker on top of
+                  // whatever's already drawn, not a fade — opacity here
+                  // would just be overridden by the keyframe anyway.
+                  animation: `shard-flicker ${
+                    shimmer ? s.flickerDuration * 0.4 : s.flickerDuration
+                  }s ease-in-out ${s.flickerDelay}s infinite`,
+                }}
+              />
+            );
+          })}
+        </svg>
+      )}
       <a
         href={href}
         onClick={onClick}
