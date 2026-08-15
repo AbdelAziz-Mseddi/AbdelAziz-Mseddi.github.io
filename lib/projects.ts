@@ -12,24 +12,54 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "remai",
-    title: "Rém Data AI",
+    title: "Rém Data & AI",
     tagline: "AI Engineer · currently",
     description:
-      "Building and shipping AI systems for a startup working on ad intelligence and conversational tooling — context extraction pipelines, quality monitoring, and chat integrations running in production.",
-    tech: ["Python", "LLMs", "Vector Search", "FastAPI"],
+      "Started as an intern, then part-time, now full-time AI Engineer — five months to earn the title. Building AI systems for a startup working on ad intelligence and conversational tooling: context extraction pipelines, quality monitoring, chat integrations running in production.",
+    tech: ["Python", "LLMs", "Vector Search", "FastAPI", "Docker"],
     kind: "experience",
-    meta: "2026 — present",
+    meta: "Intern → Full-time, 2026",
   },
   {
     slug: "qrail",
     title: "QRail — Neural Rail Conductor",
     tagline: "Hackathon · AI decision support",
     description:
-      "An operational dashboard that helps railway operators resolve incidents in real time, fusing graph neural networks, LSTM temporal modeling, and vector search over 800+ historical incidents to rank resolutions by predicted success.",
+      "An operational dashboard that helps railway operators resolve incidents in real time, fusing graph attention networks, Bi-LSTM temporal modeling, and Qdrant semantic search over 800+ historical incidents to rank resolutions by predicted success — 4-way visual comparisons across a 50-station network.",
     tech: ["GNN", "LSTM", "Qdrant", "XGBoost", "Python"],
     href: "https://github.com/nourchachia/QRail",
     kind: "hackathon",
-    meta: "Smart India Hackathon",
+    meta: "Top 11 / 85 — Vectors in Orbit",
+  },
+  {
+    slug: "logz-fraudec",
+    title: "LOGZ FRAUDEC",
+    tagline: "Hackathon · insurance fraud AI",
+    description:
+      "Can insurers trust digital evidence in a cyber claim? An on-premise ML tool that scores fraud risk by spotting tampered logs and impossible incident timelines — built in 48 hours with coaching from EY.",
+    tech: ["Python", "ML", "Forensics"],
+    kind: "hackathon",
+    meta: "Hack for Smart Insurance — Dauphine Tunis × EY",
+  },
+  {
+    slug: "cr3m3-brul33",
+    title: "CR3M3 BRUL33",
+    tagline: "Hardware CTF · won",
+    description:
+      "A Securinets workshop on how hackers break IoT devices turned into a hardware Capture-The-Flag — signal analysis and protocol debugging with Saleae Logic, decrypting signals under time pressure. Team won.",
+    tech: ["IoT Security", "Saleae Logic", "Hardware"],
+    kind: "hackathon",
+    meta: "Won — Securinets",
+  },
+  {
+    slug: "driveguardai",
+    title: "DriveGuardAI",
+    tagline: "Hackathon · insurance telematics",
+    description:
+      "An enterprise-grade dashboard turning raw driver telemetry — braking, acceleration, fatigue signals — into insurance driver scores. Next.js/Tailwind frontend, Flask backend processing real-time logs.",
+    tech: ["Next.js", "Tailwind", "Flask", "Python"],
+    kind: "hackathon",
+    meta: "Top 10 Finalist — Hack For Good 4.0",
   },
   {
     slug: "lumen",
@@ -95,4 +125,35 @@ export const interests = [
   "Photography",
   "Night owl",
   "Winter",
+];
+
+export const certifications = [
+  {
+    title: "Vectors in Orbit Hackathon",
+    org: "Google Developer Group Sup'Com Tunisia",
+    detail: "Certificate of participation — ranked 11/85",
+  },
+  {
+    title: "Code Quest 3.0",
+    org: "ACM INSAT Student Chapter",
+    detail: "Beginner competitive-programming competition",
+  },
+  {
+    title: "A Gentle Introduction to AI on Azure",
+    org: "Microsoft",
+    detail: "Issued Nov 2025",
+  },
+];
+
+export const community = [
+  {
+    org: "Google Developer Group on Campus — INSAT",
+    role: "Member",
+    period: "Sep 2025 – May 2026",
+  },
+  {
+    org: "ACM INSAT Student Chapter",
+    role: "Member — Organising Committee, Certified Nvidia Workshop (2024)",
+    period: "Sep 2024 – May 2026",
+  },
 ];

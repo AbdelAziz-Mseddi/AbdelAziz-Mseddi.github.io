@@ -1,12 +1,12 @@
 import { Reveal } from "@/components/Reveal";
 
 const frames = [
-  "Winter, blue hour",
-  "City lights, long exposure",
-  "Empty street, 2am",
-  "Snow on glass",
-  "Cinema seat, before the trailers",
-  "Rooftop, no filter",
+  "The moon, most nights",
+  "A cat, unbothered",
+  "Sunrise, still awake",
+  "City block, 2am",
+  "Sunset, from the balcony",
+  "Sky, no reason",
 ];
 
 export function Gallery() {
@@ -15,14 +15,14 @@ export function Gallery() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="section-num font-mono text-sm text-accent">
-            EP. 03
+            EP. 04
           </p>
           <h2 className="mt-3 font-display text-4xl uppercase text-foreground">
             Frames
           </h2>
           <p className="mt-4 max-w-xl text-muted">
-            A few shots from the archive — replace this grid with your own
-            photography whenever you&apos;re ready.
+            Cats, the moon, the sky at odd hours — this grid is waiting on
+            the real shots.
           </p>
         </Reveal>
 

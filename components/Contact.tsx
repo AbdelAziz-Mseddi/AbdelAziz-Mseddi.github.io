@@ -2,7 +2,8 @@ import { Reveal } from "@/components/Reveal";
 
 const socials = [
   { label: "GitHub", href: "https://github.com/AbdelAziz-Mseddi" },
-  // TODO: swap in real handles/links (Letterboxd, Instagram, LinkedIn, etc.)
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/abdelaziz-mseddi/" },
+  // TODO: swap in real handles/links (Letterboxd, Instagram, etc.)
   { label: "Email", href: "mailto:abdelazizmseddi@gmail.com" },
 ];
 
@@ -12,7 +13,7 @@ export function Contact() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="section-num font-mono text-sm text-accent">
-            EP. 04
+            EP. 05
           </p>
           <h2 className="mt-3 font-display text-balance text-5xl uppercase text-foreground sm:text-6xl">
             Let&apos;s talk, preferably late.

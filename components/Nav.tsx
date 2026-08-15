@@ -1,6 +1,7 @@
 const links = [
   { href: "#about", label: "About" },
   { href: "#work", label: "Work" },
+  { href: "#off-duty", label: "Off Duty" },
   { href: "#gallery", label: "Frames" },
   { href: "#contact", label: "Contact" },
 ];
@@ -15,7 +16,7 @@ export function Nav() {
         >
           A. Mseddi
         </a>
-        <ul className="hidden gap-8 text-sm text-muted sm:flex">
+        <ul className="hidden gap-6 text-sm text-muted lg:flex">
           {links.map((link) => (
             <li key={link.href}>
               <a

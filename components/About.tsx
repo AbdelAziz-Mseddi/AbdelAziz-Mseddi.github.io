@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/Reveal";
-import { interests } from "@/lib/projects";
+import { interests, community } from "@/lib/projects";
 
 export function About() {
   return (
@@ -18,22 +18,25 @@ export function About() {
           <Reveal delay={100} className="space-y-6">
             <p className="text-lg leading-relaxed text-muted">
               I&apos;m a software engineering student at{" "}
-              <span className="text-foreground">INSAT</span>, currently
-              working as an{" "}
+              <span className="text-foreground">INSAT</span> (Génie
+              Logiciel, year 2), currently working as an{" "}
               <span className="text-foreground">AI engineer at Rém Data
-              AI</span>, where I build systems that turn messy real-world
-              data into something a model can reason about.
+              &amp; AI</span> — intern to part-time to full-time in five
+              months. I build systems that turn messy real-world data into
+              something a model can reason about, with a growing sideline
+              in IoT/hardware security.
             </p>
             <p className="text-lg leading-relaxed text-muted">
-              Outside of that, I&apos;m on a permanent rewatch loop of{" "}
-              <span className="text-foreground">Cowboy Bebop</span>,{" "}
-              <span className="text-foreground">BoJack Horseman</span>, and{" "}
-              <span className="text-foreground">Dragon Ball</span> — a jazzy
-              space noir, a horse with an existential crisis, and a guy who
-              yells for five episodes straight. Somehow that&apos;s the whole
-              range of my personality. I&apos;m happiest writing code after
-              midnight when the city goes quiet, preferably in winter, camera
-              within reach.
+              Outside class I&apos;m active with the{" "}
+              <span className="text-foreground">
+                Google Developer Group on Campus
+              </span>{" "}
+              and the{" "}
+              <span className="text-foreground">ACM INSAT Student Chapter</span>
+              , where I helped organize a Certified Nvidia workshop. My
+              goal, stated plainly: become one of the greats. I&apos;m
+              happiest writing code after midnight when the city goes
+              quiet, preferably in winter, camera within reach.
             </p>
 
             <ul className="mt-8 flex flex-wrap gap-3">
@@ -46,6 +49,17 @@ export function About() {
                 </li>
               ))}
             </ul>
+
+            <div className="mt-6 flex flex-wrap gap-2">
+              {community.map((c) => (
+                <span
+                  key={c.org}
+                  className="rounded-full border border-border px-3 py-1 text-xs text-muted-dim"
+                >
+                  {c.org}
+                </span>
+              ))}
+            </div>
           </Reveal>
         </div>
       </div>

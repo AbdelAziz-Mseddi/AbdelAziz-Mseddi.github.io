@@ -3,6 +3,7 @@ import { Hero } from "@/components/Hero";
 import { About } from "@/components/About";
 import { Projects } from "@/components/Projects";
 import { GithubStats } from "@/components/GithubStats";
+import { OffDuty } from "@/components/OffDuty";
 import { Gallery } from "@/components/Gallery";
 import { Contact } from "@/components/Contact";
 import { Footer } from "@/components/Footer";
@@ -16,6 +17,7 @@ export default function Home() {
         <About />
         <Projects />
         <GithubStats />
+        <OffDuty />
         <Gallery />
         <Contact />
       </main>

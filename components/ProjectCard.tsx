@@ -17,7 +17,9 @@ export function ProjectCard({ project }: { project: Project }) {
           {kindLabel[project.kind]}
         </span>
         {project.meta && (
-          <span className="text-xs text-muted-dim">{project.meta}</span>
+          <span className="max-w-[55%] text-right text-xs text-accent-warm">
+            {project.meta}
+          </span>
         )}
       </div>
 
