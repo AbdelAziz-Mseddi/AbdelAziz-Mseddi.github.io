@@ -1,5 +1,4 @@
 import { Reveal } from "@/components/Reveal";
-import { community, certifications } from "@/lib/projects";
 
 const socials = [
   { label: "GitHub", href: "https://github.com/AbdelAziz-Mseddi" },
@@ -34,12 +33,6 @@ export function Contact() {
               </a>
             ))}
           </div>
-
-          <p className="mt-16 max-w-lg text-xs leading-relaxed text-muted-dim">
-            {community.map((c) => c.org).join(" · ")}
-            {" — "}
-            {certifications.map((c) => c.title).join(" · ")}
-          </p>
         </Reveal>
       </div>
     </section>

@@ -9,7 +9,14 @@ type SpotifyController = {
   pause: () => void;
   addListener: (
     event: "playback_update",
-    cb: (e: { data: { isPaused: boolean; isBuffering: boolean } }) => void
+    cb: (e: {
+      data: {
+        isPaused: boolean;
+        isBuffering: boolean;
+        position: number;
+        duration: number;
+      };
+    }) => void
   ) => void;
 };
 
@@ -42,7 +49,15 @@ export function SoundtrackToggle() {
           controllerRef.current = controller;
           setReady(true);
           controller.addListener("playback_update", (e) => {
-            setPlaying(!e.data.isPaused && !e.data.isBuffering);
+            // Spotify's embed doesn't emit a distinct "ended" event — at
+            // the end of the (30s preview) track it just freezes with
+            // isPaused still false and stops sending updates. Without this
+            // check, `playing` gets stuck true forever after the track
+            // ends, so clicking the button calls pause() on something
+            // that's already silently stopped and nothing happens.
+            const ended =
+              e.data.duration > 0 && e.data.position >= e.data.duration;
+            setPlaying(!e.data.isPaused && !e.data.isBuffering && !ended);
           });
           if (pendingPlayRef.current) {
             pendingPlayRef.current = false;
@@ -62,9 +77,14 @@ export function SoundtrackToggle() {
       pendingPlayRef.current = true;
       return;
     }
+    // Optimistic update — playback_update events arrive roughly once a
+    // second, which read as laggy if the button waits for confirmation
+    // before flipping. The next event corrects this if it's ever wrong.
     if (playing) {
+      setPlaying(false);
       controllerRef.current.pause();
     } else {
+      setPlaying(true);
       controllerRef.current.play();
     }
   }

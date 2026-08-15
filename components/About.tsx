@@ -7,15 +7,14 @@ export function About() {
         <Reveal className="space-y-6">
           <p className="text-lg leading-relaxed text-muted">
             I&apos;m a software engineering student at{" "}
-            <span className="text-foreground">INSAT</span> (Génie Logiciel,
-            year 2), currently working as an{" "}
+            <span className="text-foreground">INSAT</span>, currently working
+            as an{" "}
             <span className="text-foreground">
               AI engineer at Rém Data &amp; AI
             </span>{" "}
             — intern to part-time to full-time in five months. I build
             systems that turn messy real-world data into something a model
-            can reason about, with a growing sideline in IoT/hardware
-            security.
+            can reason about.
           </p>
           <p className="text-lg leading-relaxed text-muted">
             Outside class I was active with the{" "}

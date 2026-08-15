@@ -20,7 +20,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Abdelaziz Mseddi — Software Engineer",
+  title: "Abdelaziz Mseddi — Software Engineering Student",
   description:
     "Portfolio of Abdelaziz Mseddi — software engineering student, AI engineer, and night owl. Cinema, anime, music, and code.",
 };
