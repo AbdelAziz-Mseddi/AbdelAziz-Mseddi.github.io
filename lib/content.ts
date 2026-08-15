@@ -16,6 +16,12 @@ export type Project = {
   result?: string;
   team?: string[];
   links: { repo?: string; demo?: string };
+  evidence?: {
+    commits: number;
+    additions: number;
+    deletions: number;
+    highlights: string[];
+  };
 };
 
 export type Lane = { id: string; label: string; blurb: string };

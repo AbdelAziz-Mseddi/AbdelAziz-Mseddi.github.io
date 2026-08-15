@@ -57,6 +57,31 @@ export function ProjectDetail({ project }: { project: Project }) {
         </p>
       )}
 
+      {project.evidence && (
+        <div className="mt-10 border-t border-border pt-8">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-dim">
+            {"// what I shipped"}
+          </p>
+          <p className="mt-2 text-sm text-accent-warm">
+            {project.evidence.commits} commits · +{project.evidence.additions}{" "}
+            / -{project.evidence.deletions}
+          </p>
+          <ul className="mt-4 space-y-2">
+            {project.evidence.highlights.map((h) => (
+              <li
+                key={h}
+                className="flex gap-3 text-sm leading-relaxed text-muted"
+              >
+                <span aria-hidden="true" className="text-accent">
+                  —
+                </span>
+                {h}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <ul className="mt-8 flex flex-wrap gap-2">
         {project.stack.map((t) => (
           <li
