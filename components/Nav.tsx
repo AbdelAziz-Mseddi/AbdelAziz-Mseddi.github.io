@@ -2,6 +2,7 @@
 
 import { SoundtrackToggle } from "@/components/SoundtrackToggle";
 import { ChargeLink } from "@/components/eggs/ChargeLink";
+import { TerminalHint } from "@/components/eggs/TerminalHint";
 import { handleSmoothScroll } from "@/lib/smoothScroll";
 
 const links = [
@@ -37,6 +38,7 @@ export function Nav() {
           ))}
         </ul>
         <div className="flex items-center gap-3">
+          <TerminalHint />
           <SoundtrackToggle />
           <a
             href="https://github.com/AbdelAziz-Mseddi"

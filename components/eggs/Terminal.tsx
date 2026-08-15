@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { fireEgg } from "@/lib/eggs/eggBus";
+import { fireEgg, onEgg } from "@/lib/eggs/eggBus";
 import { useKenzProgress } from "@/lib/eggs/kenz";
 import { getMoonPhase, isRamadan } from "@/lib/eggs/moon";
 import { useReducedMotion } from "@/lib/useReducedMotion";
@@ -61,6 +61,13 @@ export function Terminal() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
+
+  useEffect(() => {
+    return onEgg("terminal-open", () => {
+      restoreFocusRef.current = document.activeElement as HTMLElement;
+      setOpen(true);
+    });
+  }, []);
 
   useEffect(() => {
     if (open) inputRef.current?.focus();

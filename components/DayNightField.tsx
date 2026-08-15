@@ -73,6 +73,13 @@ export function DayNightField() {
 
   const starOpacity = nightOpacity;
 
+  // Planets sit far back in the scene — tiny scroll-linked drift for depth,
+  // opacity tied to the night window like the stars. Saturn's rings are two
+  // plain ellipses, not an image asset.
+  const saturnDrift = useTransform(scrollYProgress, [0, 1], [0, -3]);
+  const planetADrift = useTransform(scrollYProgress, [0, 1], [0, 2]);
+  const planetBDrift = useTransform(scrollYProgress, [0, 1], [0, -1.5]);
+
   if (reducedMotion) {
     return (
       <div
@@ -127,6 +134,68 @@ export function DayNightField() {
           />
         ))}
       </motion.div>
+
+      <motion.div
+        className="absolute will-change-transform"
+        style={{
+          opacity: starOpacity,
+          top: "14%",
+          left: "78%",
+          x: saturnDrift,
+        }}
+        aria-hidden="true"
+      >
+        <svg width="52" height="52" viewBox="-26 -26 52 52">
+          <ellipse
+            cx="0"
+            cy="0"
+            rx="24"
+            ry="7"
+            fill="none"
+            stroke="#d9b98a"
+            strokeOpacity="0.55"
+            strokeWidth="2"
+            transform="rotate(-18)"
+          />
+          <circle cx="0" cy="0" r="11" fill="#e3c99a" fillOpacity="0.9" />
+          <ellipse
+            cx="0"
+            cy="0"
+            rx="24"
+            ry="7"
+            fill="none"
+            stroke="#d9b98a"
+            strokeOpacity="0.85"
+            strokeWidth="2"
+            strokeDasharray="30 200"
+            transform="rotate(-18)"
+          />
+        </svg>
+      </motion.div>
+
+      <motion.div
+        className="absolute h-2 w-2 rounded-full will-change-transform"
+        style={{
+          opacity: starOpacity,
+          top: "62%",
+          left: "10%",
+          background: "#8fa3c9",
+          x: planetADrift,
+        }}
+        aria-hidden="true"
+      />
+
+      <motion.div
+        className="absolute h-3.5 w-3.5 rounded-full will-change-transform"
+        style={{
+          opacity: starOpacity,
+          top: "30%",
+          left: "20%",
+          background: "#c98f6f",
+          x: planetBDrift,
+        }}
+        aria-hidden="true"
+      />
 
       <motion.div
         className="absolute left-0 top-0 h-3 w-3 will-change-transform"

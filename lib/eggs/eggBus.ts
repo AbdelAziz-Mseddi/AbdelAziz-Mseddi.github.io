@@ -3,7 +3,7 @@
  * fire `fly` / `kenz` / etc. without importing the components directly —
  * it just dispatches an event, whichever egg is listening reacts.
  */
-export type EggEvent = "fly";
+export type EggEvent = "fly" | "terminal-open";
 
 export function fireEgg(name: EggEvent) {
   if (typeof window === "undefined") return;

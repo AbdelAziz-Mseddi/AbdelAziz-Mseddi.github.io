@@ -4,86 +4,98 @@ import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { onEgg } from "@/lib/eggs/eggBus";
 
-const IDLE_MS = 45_000;
-const CHECK_INTERVAL_MS = 2_000;
-const FLIGHT_MS = 2_100;
-const ACTIVITY_EVENTS = ["scroll", "mousemove", "keydown", "touchstart"];
+const MIN_INTERVAL_MS = 12_000;
+const MAX_INTERVAL_MS = 24_000;
+const MAX_CONCURRENT = 3;
+
+type Flight = {
+  id: number;
+  top: string;
+  duration: number;
+};
+
+function randomFlight(id: number): Flight {
+  return {
+    id,
+    top: `${8 + Math.random() * 70}%`,
+    duration: 1.8 + Math.random() * 0.8,
+  };
+}
 
 export function Flyby() {
   const reducedMotion = useReducedMotion();
-  const [flying, setFlying] = useState(false);
-  const firedRef = useRef(false);
-  const lastActivityRef = useRef<number | null>(null);
+  const [flights, setFlights] = useState<Flight[]>([]);
+  const idRef = useRef(0);
 
-  function launch() {
-    if (firedRef.current) return;
-    firedRef.current = true;
-    setFlying(true);
+  function spawn() {
+    setFlights((prev) => {
+      if (prev.length >= MAX_CONCURRENT) return prev;
+      idRef.current += 1;
+      return [...prev, randomFlight(idRef.current)];
+    });
   }
 
-  // 45s-idle trigger — the one egg allowed to fire unprompted, and only
-  // once per session.
+  function remove(id: number) {
+    setFlights((prev) => prev.filter((f) => f.id !== id));
+  }
+
+  // Recurring ambient traffic — not idle-gated, this one runs continuously
+  // for as long as the tab is open, at a randomized cadence.
   useEffect(() => {
     if (reducedMotion) return;
+    let cancelled = false;
+    let timer: ReturnType<typeof setTimeout>;
 
-    lastActivityRef.current = Date.now();
-
-    function markActivity() {
-      lastActivityRef.current = Date.now();
+    function scheduleNext() {
+      const delay =
+        MIN_INTERVAL_MS + Math.random() * (MAX_INTERVAL_MS - MIN_INTERVAL_MS);
+      timer = setTimeout(() => {
+        if (cancelled) return;
+        spawn();
+        scheduleNext();
+      }, delay);
     }
-    ACTIVITY_EVENTS.forEach((evt) =>
-      window.addEventListener(evt, markActivity, { passive: true })
-    );
-
-    const interval = setInterval(() => {
-      if (firedRef.current) {
-        clearInterval(interval);
-        return;
-      }
-      const lastActivity = lastActivityRef.current ?? Date.now();
-      if (Date.now() - lastActivity >= IDLE_MS) {
-        launch();
-      }
-    }, CHECK_INTERVAL_MS);
+    scheduleNext();
 
     return () => {
-      ACTIVITY_EVENTS.forEach((evt) =>
-        window.removeEventListener(evt, markActivity)
-      );
-      clearInterval(interval);
+      cancelled = true;
+      clearTimeout(timer);
     };
   }, [reducedMotion]);
 
-  // Terminal (`fly` command) trigger — wired in ahead of the terminal
-  // actually existing, since it's just an event dispatch.
+  // Terminal (`fly` command) trigger — spawns one immediately, on top of
+  // the ambient cadence.
   useEffect(() => {
-    return onEgg("fly", launch);
+    return onEgg("fly", spawn);
   }, []);
 
-  if (reducedMotion || !flying) return null;
+  if (reducedMotion || flights.length === 0) return null;
 
   return (
     <div
       className="pointer-events-none fixed inset-0 z-40 overflow-hidden"
       aria-hidden="true"
     >
-      <svg
-        className="craft-flyby absolute"
-        style={{ top: "18%", left: "-60px" }}
-        width="46"
-        height="20"
-        viewBox="0 0 46 20"
-        onAnimationEnd={() => setFlying(false)}
-      >
-        <defs>
-          <linearGradient id="flyby-trail" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#e7ebf5" stopOpacity="0" />
-            <stop offset="100%" stopColor="#e7ebf5" stopOpacity="0.5" />
-          </linearGradient>
-        </defs>
-        <rect x="0" y="9" width="26" height="1.5" fill="url(#flyby-trail)" />
-        <polygon points="26,4 46,10 26,16 31,10" fill="#e7ebf5" opacity="0.85" />
-      </svg>
+      {flights.map((f) => (
+        <svg
+          key={f.id}
+          className="craft-flyby absolute"
+          style={{ top: f.top, left: "-60px", ["--flyby-duration" as string]: `${f.duration}s` }}
+          width="46"
+          height="20"
+          viewBox="0 0 46 20"
+          onAnimationEnd={() => remove(f.id)}
+        >
+          <defs>
+            <linearGradient id={`flyby-trail-${f.id}`} x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="#e7ebf5" stopOpacity="0" />
+              <stop offset="100%" stopColor="#e7ebf5" stopOpacity="0.5" />
+            </linearGradient>
+          </defs>
+          <rect x="0" y="9" width="26" height="1.5" fill={`url(#flyby-trail-${f.id})`} />
+          <polygon points="26,4 46,10 26,16 31,10" fill="#e7ebf5" opacity="0.85" />
+        </svg>
+      ))}
       <style>{`
         @keyframes craft-flyby-move {
           from { transform: translateX(0); opacity: 0; }
@@ -94,7 +106,7 @@ export function Flyby() {
           }px); opacity: 0; }
         }
         .craft-flyby {
-          animation: craft-flyby-move ${FLIGHT_MS}ms ease-in-out forwards;
+          animation: craft-flyby-move var(--flyby-duration, 2.1s) ease-in-out forwards;
         }
       `}</style>
     </div>
