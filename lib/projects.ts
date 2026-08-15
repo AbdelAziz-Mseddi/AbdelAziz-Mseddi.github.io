@@ -79,7 +79,6 @@ export const projects: Project[] = [
     description:
       "A campus life app conceived during TRC 3.0, built to help students discover events, share resources, and stay connected across campus.",
     tech: ["TypeScript", "React"],
-    href: "https://github.com/AbdelAziz-Mseddi/Campus-Connect",
     kind: "hackathon",
     meta: "TRC 3.0",
   },
