@@ -1,0 +1,271 @@
+{
+  "lanes": [
+    { "id": "ai-ml", "label": "AI / ML", "blurb": "Agents, retrieval, models." },
+    { "id": "backend", "label": "Backend", "blurb": "APIs, data, services." },
+    { "id": "devops", "label": "DevOps", "blurb": "Containers, pipelines, observability." },
+    { "id": "low-level", "label": "Low level", "blurb": "Sockets, systems, C/C++." },
+    { "id": "security", "label": "Security", "blurb": "Hardware, fraud, abuse." }
+  ],
+
+  "experience": [
+    {
+      "id": "rem-data-ai",
+      "org": "Rém Data & AI",
+      "location": "Remote",
+      "arc": [
+        { "title": "Software Engineer Intern", "start": "2026-02", "end": "2026-04" },
+        { "title": "Software Engineer, part-time", "start": "2026-05", "end": "2026-06" },
+        { "title": "AI Engineer", "start": "2026-07", "end": null }
+      ],
+      "blurb": "Building agentic AI systems for a startup working on ad intelligence and conversational tooling — agent pipelines, retrieval, and quality monitoring running in production. Intern to full-time AI Engineer in five months.",
+      "stack": ["LangChain", "LangGraph", "Google ADK", "LiteLLM", "FastAPI", "Odoo", "Docker", "Grafana", "Loki", "Nginx"],
+      "lanes": ["ai-ml", "backend", "devops"],
+      "confidential": true
+    }
+  ],
+
+  "projects": [
+    {
+      "id": "qrail",
+      "session": "01",
+      "title": "QRail",
+      "subtitle": "Neural Rail Conductor",
+      "tier": "featured",
+      "kind": "hackathon",
+      "year": 2026,
+      "lanes": ["ai-ml", "backend"],
+      "stack": ["Graph Attention Networks", "Bi-LSTM", "Qdrant", "Python", "XGBoost"],
+      "blurb": "An operational dashboard that helps railway operators resolve incidents in real time, fusing graph attention networks, Bi-LSTM temporal modeling, and Qdrant semantic search over 800+ historical incidents to rank resolutions by predicted success.",
+      "detail": "A conflict-risk classifier improved decision accuracy by 40%. Four-way visual resolution comparison across a 50-station network, checked against 50 verified reference resolutions.",
+      "context": "Vectors in Orbit — GDG on Campus Sup'Com Tunisia + GDG on Campus FST",
+      "result": "Top 11 of 85 teams",
+      "team": ["Nour Chachia", "Aziz Derbel", "Med Aziz Kaouach"],
+      "links": { "repo": "https://github.com/nourchachia/QRail" }
+    },
+    {
+      "id": "grade-pipeline",
+      "session": "02",
+      "title": "PV SP Pipeline",
+      "subtitle": "OCR over a scanned official PDF",
+      "tier": "featured",
+      "kind": "self-directed",
+      "year": 2026,
+      "lanes": ["ai-ml", "backend"],
+      "stack": ["Python", "pdf2image", "pytesseract", "rapidfuzz", "pandas"],
+      "blurb": "Extracted and ranked an entire cohort's grades from a scanned official PDF nobody could search — fuzzy matching to reconcile OCR noise against the class roster.",
+      "detail": "Nobody assigned this. The document existed, it was unusable, so it stopped being unusable.",
+      "links": {}
+    },
+    {
+      "id": "logz-fraudec",
+      "session": "03",
+      "title": "LOGZ FRAUDEC",
+      "subtitle": "Trust scoring for cyber insurance claims",
+      "tier": "featured",
+      "kind": "hackathon",
+      "year": 2026,
+      "lanes": ["ai-ml", "security"],
+      "stack": ["Python", "ML", "on-premise"],
+      "blurb": "An on-premise ML tool that scores fraud risk in cyber insurance claims by spotting tampered logs and impossible incident timelines — can an insurer trust digital evidence at all?",
+      "context": "Hack for Smart Insurance with AI — Université Dauphine Tunis + EY",
+      "team": ["Mohamed Amine Barkati", "Ranim Ben Jemaa", "Nour Chachia", "Aziz Derbel", "Yessine Ben Rejeb"],
+      "links": {}
+    },
+    {
+      "id": "cr3m3-brul33",
+      "session": "04",
+      "title": "CR3M3 BRUL33",
+      "subtitle": "Hardware CTF",
+      "tier": "featured",
+      "kind": "competition",
+      "year": 2026,
+      "lanes": ["security", "low-level"],
+      "stack": ["Saleae Logic", "IoT security", "signal analysis", "protocol debugging"],
+      "blurb": "Won a hardware capture-the-flag at a Securinets workshop on breaking IoT devices — signal analysis and protocol debugging, not software exploitation.",
+      "context": "From Chips to Cyber Threats — Securinets. Instructor: Ichrak Eddor Mnijli",
+      "result": "Won",
+      "team": ["Mayssam Hergli", "Senda Derouiche"],
+      "links": {}
+    },
+    {
+      "id": "drose",
+      "session": "05",
+      "title": "dRose",
+      "subtitle": "CLI, v1.2.0",
+      "tier": "featured",
+      "kind": "personal",
+      "year": 2025,
+      "lanes": ["backend", "devops"],
+      "stack": ["Python", "CLI"],
+      "blurb": "A Python CLI that downloads and manages YouTube Music playlists in one click — built because a music habit deserves better tooling than a browser tab. Tagged releases, real README, actual CI.",
+      "links": { "repo": "https://github.com/AbdelAziz-Mseddi/dRose" }
+    },
+    {
+      "id": "tutoring-manager",
+      "session": "06",
+      "title": "Tutoring Manager API",
+      "tier": "featured",
+      "kind": "project",
+      "year": 2026,
+      "lanes": ["backend"],
+      "stack": ["Java", "Spring Boot", "Spring Security", "JWT", "H2", "Maven"],
+      "blurb": "A REST API for managing students, classes, enrollments, tutoring sessions, and payments — JWT auth, layered service architecture, a schema designed rather than accreted.",
+      "links": { "repo": "https://github.com/AbdelAziz-Mseddi/Tutoring_Manager-Server" }
+    },
+    {
+      "id": "lumen",
+      "session": "07",
+      "title": "Lumen",
+      "subtitle": "Content verification",
+      "tier": "featured",
+      "kind": "hackathon",
+      "year": 2026,
+      "lanes": ["ai-ml", "backend"],
+      "stack": ["Next.js", "Supabase", "Cloudflare R2", "TypeScript"],
+      "blurb": "A three-engine content verification platform — authenticity, context, and credibility scored separately rather than collapsed into one number.",
+      "context": "Menacraft Hackathon 2026",
+      "links": { "repo": "https://github.com/khaledbaccour/lumen" }
+    },
+    {
+      "id": "sockets-tp",
+      "session": "08",
+      "title": "TCP/UDP Client-Server",
+      "tier": "featured",
+      "kind": "coursework",
+      "year": 2026,
+      "lanes": ["low-level"],
+      "stack": ["C", "BSD sockets", "Unix"],
+      "blurb": "Client-server over raw BSD sockets, both transports, no framework in the way.",
+      "links": { "repo": "https://github.com/aminebarkati/networkingProject-sockets-interface" }
+    },
+    {
+      "id": "driveguard-ai",
+      "session": "09",
+      "title": "DriveGuardAI",
+      "subtitle": "Telematics scoring",
+      "tier": "standard",
+      "kind": "hackathon",
+      "year": 2026,
+      "lanes": ["ai-ml", "backend"],
+      "stack": ["Next.js", "Tailwind", "Flask", "Python"],
+      "blurb": "An insurance telematics dashboard scoring drivers on braking, acceleration, and fatigue signals for bonus/malus pricing.",
+      "context": "Hack For Good 4.0 — Junior Entreprise INSAT",
+      "result": "Top 10 finalist",
+      "team": ["Seif Bhiri", "Oussema Ben Arfa", "Aziz Derbel", "Amir Bannani"],
+      "links": {}
+    },
+    {
+      "id": "pharmacy-management",
+      "session": "10",
+      "title": "Pharmacy Management System",
+      "tier": "standard",
+      "kind": "coursework",
+      "year": 2026,
+      "lanes": ["backend"],
+      "stack": ["Java", "MySQL", "UML"],
+      "blurb": "Group project. Inventory, prescriptions, and stock movement over a relational schema.",
+      "links": { "repo": "https://github.com/AbdelAziz-Mseddi/Pharmacy-Management-System-PMS-" }
+    },
+    {
+      "id": "insativity",
+      "session": "11",
+      "title": "INSATivity",
+      "tier": "standard",
+      "kind": "project",
+      "year": 2025,
+      "lanes": ["backend"],
+      "stack": ["PHP", "Composer", "Symfony", "MySQL"],
+      "blurb": "A campus events platform, written first in vanilla PHP and then rewritten on Symfony — the rewrite was the point.",
+      "links": { "repo": "https://github.com/AbdelAziz-Mseddi/INSATivity-Symfony" }
+    },
+    {
+      "id": "campus-connect",
+      "session": "12",
+      "title": "Campus Connect",
+      "tier": "standard",
+      "kind": "hackathon",
+      "year": 2025,
+      "lanes": ["backend"],
+      "stack": ["TypeScript", "React"],
+      "blurb": "A campus life app built at TRC 3.0, one of several concepts explored that round.",
+      "links": {}
+    },
+    {
+      "id": "archivers",
+      "session": "13",
+      "title": "Pinterest and Instagram Archivers",
+      "tier": "standard",
+      "kind": "personal",
+      "year": 2025,
+      "lanes": ["backend", "devops"],
+      "stack": ["Python", "Docker"],
+      "blurb": "Two small tools for pulling saved media out of platforms that would rather keep it — same pattern as dRose: personal annoyance, shipped fix.",
+      "links": {}
+    },
+    {
+      "id": "cpp-inventory",
+      "session": "14",
+      "title": "CPP Inventory Management",
+      "tier": "standard",
+      "kind": "coursework",
+      "year": 2025,
+      "lanes": ["low-level"],
+      "stack": ["C++"],
+      "blurb": "An inventory system in C++ — memory ownership handled by hand rather than by a runtime.",
+      "links": { "repo": "https://github.com/AbdelAziz-Mseddi/CPP-Inventory-Management" }
+    },
+    {
+      "id": "cp-cave",
+      "session": "15",
+      "title": "CP_Cave",
+      "tier": "standard",
+      "kind": "personal",
+      "year": 2025,
+      "lanes": ["low-level"],
+      "stack": ["C++", "algorithms"],
+      "blurb": "Competitive programming solutions, backed by a real competition — Code Quest 3.0, ACM INSAT.",
+      "links": {}
+    },
+    {
+      "id": "docker-ci-labs",
+      "session": "16",
+      "title": "Docker and CI/CD Labs",
+      "tier": "standard",
+      "kind": "coursework",
+      "year": 2025,
+      "lanes": ["devops"],
+      "stack": ["Docker", "docker-compose", "GitHub Actions"],
+      "blurb": "Containerization and pipeline work from GDG on Campus INSAT — the groundwork the Rém Data & AI infra sits on.",
+      "links": { "repo": "https://github.com/AbdelAziz-Mseddi/gdg_ci-cd_task1" }
+    },
+    {
+      "id": "sbiba-poo",
+      "session": "17",
+      "title": "sbiba_poo",
+      "tier": "archive",
+      "kind": "coursework",
+      "year": 2025,
+      "lanes": ["backend"],
+      "stack": ["Java", "Swing"],
+      "blurb": "A dodge game in Swing. OOP coursework that turned into something playable.",
+      "links": {}
+    },
+    {
+      "id": "devify",
+      "session": "18",
+      "title": "DEVIFY",
+      "tier": "archive",
+      "kind": "design",
+      "year": 2026,
+      "lanes": ["backend"],
+      "stack": ["UML", "architecture"],
+      "blurb": "A gamified, collaborative pull-request review platform — designed and specified, never built. Listed as design work, not shipped work.",
+      "links": { "repo": "https://github.com/AbdelAziz-Mseddi/DEVIFY" }
+    }
+  ],
+
+  "excluded": [
+    { "id": "sesame-2026", "reason": "Drafted but never competed. Not a credit to claim." },
+    { "id": "youtube_clone", "reason": "Course exercise, not a project." }
+  ]
+}
