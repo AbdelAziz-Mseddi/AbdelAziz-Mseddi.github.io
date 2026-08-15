@@ -33,16 +33,22 @@ dropped without unpicking the others.
   Two projects (Campus-Connect, Lumen) deliberately have no such section:
   their git history doesn't back an honest "what I did" claim (see commit
   427e276 for the reasoning).
-- Single-take mode (#3) is the highest-risk item — it's a scroll-driven
-  camera mechanic sitting on top of a page that already needed real
-  performance work (spring-smoothed scroll values, compositor-only
-  properties, no per-frame layout reads) to stop the day/night background
-  from janking under fast input. Building it is deferred until the base
-  eggs + a pages/no-pages winner are stable, and it ships as its own
-  with/without comparison rather than a single unreviewable commit.
+- Single-take mode (#3) shipped scoped down from the original "scroll-driven
+  camera pan" idea: the site's sections were already anchor-scroll with no
+  cuts, so the only real route changes are Work grid → project page and
+  back. Uses the View Transitions API where supported (`navigateWithTransition`
+  in `lib/eggs/navigateWithTransition.ts`), falls back to a manual opacity
+  crossfade otherwise, and skips straight to a plain nav under
+  prefers-reduced-motion. Gated behind Kenz completion per its own spec
+  entry — locked until all 6 glyphs are found, toggled via `plan-sequence`
+  in the terminal or an unmarked mark in the footer.
 - `content/projects.json` is live on `main` as of this branch's base commit
   — lanes, tiers, session order, real repo links (several TODOs turned out
   to be private repos and were left unlinked rather than guessed).
+- All six eggs (#1–#6) are now built on `feat/easter-eggs`, which absorbed
+  the winning Kenz-pages variant and is the sole active branch. Remaining
+  from the original spec: the print/résumé view (rule 5), explicitly
+  deferred by request.
 
 ## Build order
 
