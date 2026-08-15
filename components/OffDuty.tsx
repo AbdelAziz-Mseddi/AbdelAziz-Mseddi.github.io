@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useTransform } from "motion/react";
 import { useLocalProgress } from "@/lib/useLocalProgress";
+import { OffDutyTheme } from "@/components/eggs/OffDutyTheme";
 
 export function OffDuty() {
   const ref = useRef<HTMLDivElement>(null);
@@ -17,6 +18,7 @@ export function OffDuty() {
       ref={ref}
       className="relative flex h-[90vh] items-center justify-end px-6 sm:px-16"
     >
+      <OffDutyTheme progress={progress} />
       <motion.div
         style={{ opacity, y }}
         className="max-w-sm text-right will-change-transform"

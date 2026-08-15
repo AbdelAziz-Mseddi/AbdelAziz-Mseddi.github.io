@@ -6,6 +6,7 @@ import { Flyby } from "@/components/eggs/Flyby";
 import { KenzIndicator } from "@/components/eggs/KenzIndicator";
 import { Moon } from "@/components/eggs/Moon";
 import { Terminal } from "@/components/eggs/Terminal";
+import { MainSoundtrack } from "@/components/MainSoundtrack";
 
 const bebas = Bebas_Neue({
   variable: "--font-bebas",
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <KenzIndicator />
         <Moon />
         <Terminal />
+        <MainSoundtrack />
         <div className="grain" />
         {children}
       </body>
