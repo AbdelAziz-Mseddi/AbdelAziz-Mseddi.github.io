@@ -14,8 +14,10 @@ export function Gallery() {
     <section id="gallery" className="border-b border-border py-28">
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
-          <p className="section-num font-mono text-sm text-accent">03</p>
-          <h2 className="mt-3 font-display text-3xl italic text-foreground">
+          <p className="section-num font-mono text-sm text-accent">
+            EP. 03
+          </p>
+          <h2 className="mt-3 font-display text-4xl uppercase text-foreground">
             Frames
           </h2>
           <p className="mt-4 max-w-xl text-muted">

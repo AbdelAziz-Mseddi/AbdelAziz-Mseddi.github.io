@@ -7,8 +7,10 @@ export function About() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <div className="grid gap-12 sm:grid-cols-[1fr_1.4fr] sm:gap-16">
           <Reveal>
-            <p className="section-num font-mono text-sm text-accent">01</p>
-            <h2 className="mt-3 font-display text-3xl italic text-foreground">
+            <p className="section-num font-mono text-sm text-accent">
+              EP. 01
+            </p>
+            <h2 className="mt-3 font-display text-4xl uppercase text-foreground">
               About
             </h2>
           </Reveal>
@@ -23,10 +25,15 @@ export function About() {
               data into something a model can reason about.
             </p>
             <p className="text-lg leading-relaxed text-muted">
-              Outside of that: I chase good cinema, keep a running mental
-              tier list of anime, and I&apos;m happiest writing code after
-              midnight when the city goes quiet — preferably in winter, with
-              a camera nearby.
+              Outside of that, I&apos;m on a permanent rewatch loop of{" "}
+              <span className="text-foreground">Cowboy Bebop</span>,{" "}
+              <span className="text-foreground">BoJack Horseman</span>, and{" "}
+              <span className="text-foreground">Dragon Ball</span> — a jazzy
+              space noir, a horse with an existential crisis, and a guy who
+              yells for five episodes straight. Somehow that&apos;s the whole
+              range of my personality. I&apos;m happiest writing code after
+              midnight when the city goes quiet, preferably in winter, camera
+              within reach.
             </p>
 
             <ul className="mt-8 flex flex-wrap gap-3">

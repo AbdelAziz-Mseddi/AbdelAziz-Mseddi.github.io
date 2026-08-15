@@ -13,6 +13,7 @@
   --accent: #9db8e8;
   --accent-bright: #c3d6fb;
   --accent-warm: #d9a066;
+  --accent-sunset: #e8623d;
   --shadow-color: 220 60% 2%;
 }
 
@@ -29,9 +30,10 @@
   --color-accent: var(--accent);
   --color-accent-bright: var(--accent-bright);
   --color-accent-warm: var(--accent-warm);
-  --font-display: var(--font-playfair);
-  --font-sans: var(--font-inter);
-  --font-mono: var(--font-geist-mono);
+  --color-accent-sunset: var(--accent-sunset);
+  --font-display: var(--font-bebas);
+  --font-sans: var(--font-space-grotesk);
+  --font-mono: var(--font-jetbrains-mono);
 }
 
 * {
@@ -115,8 +117,30 @@ body {
   opacity: 1;
 }
 
+.font-display {
+  letter-spacing: 0.015em;
+  line-height: 0.95;
+}
+
 .section-num {
   font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+}
+
+@keyframes ki-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(217, 160, 102, 0.45), 0 0 0 0 rgba(232, 98, 61, 0);
+  }
+  50% {
+    box-shadow: 0 0 22px 4px rgba(217, 160, 102, 0.35),
+      0 0 40px 10px rgba(232, 98, 61, 0.12);
+  }
+}
+
+.ki-glow:hover,
+.ki-glow:focus-visible {
+  animation: ki-pulse 1.6s ease-in-out infinite;
 }
 
 ::selection {

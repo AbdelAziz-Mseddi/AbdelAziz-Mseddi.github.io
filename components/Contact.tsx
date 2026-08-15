@@ -11,8 +11,10 @@ export function Contact() {
     <section id="contact" className="py-28">
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
-          <p className="section-num font-mono text-sm text-accent">04</p>
-          <h2 className="mt-3 font-display text-balance text-4xl italic text-foreground sm:text-5xl">
+          <p className="section-num font-mono text-sm text-accent">
+            EP. 04
+          </p>
+          <h2 className="mt-3 font-display text-balance text-5xl uppercase text-foreground sm:text-6xl">
             Let&apos;s talk, preferably late.
           </h2>
           <p className="mt-6 max-w-lg text-lg text-muted">

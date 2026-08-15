@@ -17,14 +17,14 @@ export async function GithubStats() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
           <div>
-            <p className="text-xs uppercase tracking-[0.2em] text-muted-dim">
-              Live from GitHub
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-dim">
+              {"// Live from GitHub"}
             </p>
             <a
               href={`https://github.com/${GITHUB_USERNAME}`}
               target="_blank"
               rel="noreferrer"
-              className="mt-2 inline-block font-display text-2xl italic text-foreground hover:text-accent-bright"
+              className="mt-2 inline-block font-display text-3xl uppercase text-foreground hover:text-accent-bright"
             >
               @{GITHUB_USERNAME}
             </a>

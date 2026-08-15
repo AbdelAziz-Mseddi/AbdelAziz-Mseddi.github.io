@@ -21,7 +21,7 @@ export function ProjectCard({ project }: { project: Project }) {
         )}
       </div>
 
-      <h3 className="mt-4 font-display text-2xl text-foreground">
+      <h3 className="mt-4 font-display text-2xl uppercase text-foreground">
         {project.title}
       </h3>
       <p className="mt-1 text-sm text-accent-bright/80">{project.tagline}</p>
