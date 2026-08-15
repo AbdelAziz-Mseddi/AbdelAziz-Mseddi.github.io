@@ -4,6 +4,8 @@ import "./globals.css";
 import { DayNightField } from "@/components/DayNightField";
 import { Flyby } from "@/components/eggs/Flyby";
 import { KenzIndicator } from "@/components/eggs/KenzIndicator";
+import { Moon } from "@/components/eggs/Moon";
+import { Terminal } from "@/components/eggs/Terminal";
 
 const bebas = Bebas_Neue({
   variable: "--font-bebas",
@@ -37,6 +39,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <DayNightField />
         <Flyby />
         <KenzIndicator />
+        <Moon />
+        <Terminal />
         <div className="grain" />
         {children}
       </body>
