@@ -15,8 +15,8 @@ export const projects: Project[] = [
     title: "Rém Data & AI",
     tagline: "AI Engineer · currently",
     description:
-      "Started as an intern, then part-time, now full-time AI Engineer — five months to earn the title. Building AI systems for a startup working on ad intelligence and conversational tooling: context extraction pipelines, quality monitoring, chat integrations running in production.",
-    tech: ["Python", "LLMs", "Vector Search", "FastAPI", "Docker"],
+      "Started as an intern, then part-time, now full-time AI Engineer — five months to earn the title. Building agentic AI systems for a startup working on ad intelligence and conversational tooling: LangGraph/Google ADK agent pipelines, Qdrant-backed retrieval, Odoo integrations, quality monitoring running in production.",
+    tech: ["Python", "LangChain", "LangGraph", "Google ADK", "Qdrant", "Docker"],
     kind: "experience",
     meta: "Intern → Full-time, 2026",
   },
