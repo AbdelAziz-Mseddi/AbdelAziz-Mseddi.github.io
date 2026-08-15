@@ -21,14 +21,18 @@ dropped without unpicking the others.
 
 ## Decisions made 2026-08-15 (source of truth for conflicts with this doc)
 
-- Kenz (#4) needs somewhere to put six glyphs. Two variants are being built
-  side by side to decide, each in its own worktree:
-  - `feat/easter-eggs-pages` — real per-project detail pages exist; glyphs
-    live there.
-  - `feat/easter-eggs-nopages` — no new pages; glyphs redistribute across
-    the existing single-page sections (Work cards, Frames, Off Duty, etc.).
-  Eggs #1, #2, #5, #6 are page-structure-agnostic and are built once on this
-  shared base branch, then both variants fork from here.
+- Kenz (#4) needs somewhere to put six glyphs. Two variants were built side
+  by side to decide, each in its own worktree — `feat/easter-eggs-pages`
+  (real per-project detail pages) vs. `feat/easter-eggs-nopages` (glyphs
+  redistributed across existing single-page sections). **Decided: pages.**
+  The pages variant merged back into this branch (`feat/easter-eggs`), which
+  is now the active line of development; `feat/easter-eggs-nopages` is
+  retired. Real per-project detail pages also picked up a "what I shipped"
+  section — commit counts/line stats and hand-written highlights pulled
+  from actual `gh api` commit history, author-filtered on team repos.
+  Two projects (Campus-Connect, Lumen) deliberately have no such section:
+  their git history doesn't back an honest "what I did" claim (see commit
+  427e276 for the reasoning).
 - Single-take mode (#3) is the highest-risk item — it's a scroll-driven
   camera mechanic sitting on top of a page that already needed real
   performance work (spring-smoothed scroll values, compositor-only
