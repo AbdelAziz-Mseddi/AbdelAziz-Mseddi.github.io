@@ -1,3 +1,5 @@
+import { SoundtrackToggle } from "@/components/SoundtrackToggle";
+
 const links = [
   { href: "#about", label: "About" },
   { href: "#work", label: "Work" },
@@ -28,14 +30,17 @@ export function Nav() {
             </li>
           ))}
         </ul>
-        <a
-          href="https://github.com/AbdelAziz-Mseddi"
-          target="_blank"
-          rel="noreferrer"
-          className="rounded-full border border-border-strong px-4 py-1.5 text-sm text-foreground transition-colors hover:border-accent hover:text-accent-bright"
-        >
-          GitHub
-        </a>
+        <div className="flex items-center gap-3">
+          <SoundtrackToggle />
+          <a
+            href="https://github.com/AbdelAziz-Mseddi"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-border-strong px-4 py-1.5 text-sm text-foreground transition-colors hover:border-accent hover:text-accent-bright"
+          >
+            GitHub
+          </a>
+        </div>
       </nav>
     </header>
   );
