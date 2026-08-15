@@ -3,6 +3,7 @@ import { Bebas_Neue, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { DayNightField } from "@/components/DayNightField";
 import { Flyby } from "@/components/eggs/Flyby";
+import { KenzIndicator } from "@/components/eggs/KenzIndicator";
 
 const bebas = Bebas_Neue({
   variable: "--font-bebas",
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <DayNightField />
         <Flyby />
+        <KenzIndicator />
         <div className="grain" />
         {children}
       </body>
