@@ -1,4 +1,7 @@
+"use client";
+
 import { AuraButton } from "@/components/AuraButton";
+import { handleSmoothScroll } from "@/lib/smoothScroll";
 
 export function Hero() {
   return (
@@ -29,6 +32,7 @@ export function Hero() {
           </AuraButton>
           <a
             href="#contact"
+            onClick={handleSmoothScroll}
             className="rounded-full border border-border-strong px-6 py-3 text-sm text-foreground transition-colors hover:border-accent hover:text-accent-bright"
           >
             Get in touch

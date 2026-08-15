@@ -1,4 +1,7 @@
+"use client";
+
 import { SoundtrackToggle } from "@/components/SoundtrackToggle";
+import { handleSmoothScroll } from "@/lib/smoothScroll";
 
 const links = [
   { href: "#about", label: "About" },
@@ -14,6 +17,7 @@ export function Nav() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
         <a
           href="#top"
+          onClick={handleSmoothScroll}
           className="font-display text-2xl uppercase tracking-wide text-foreground transition-transform hover:-skew-x-6"
         >
           A. Mseddi
@@ -23,6 +27,7 @@ export function Nav() {
             <li key={link.href}>
               <a
                 href={link.href}
+                onClick={handleSmoothScroll}
                 className="transition-colors hover:text-accent-bright"
               >
                 {link.label}

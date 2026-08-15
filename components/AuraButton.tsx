@@ -1,4 +1,7 @@
+"use client";
+
 import type { ReactNode } from "react";
+import { handleSmoothScroll } from "@/lib/smoothScroll";
 
 const SHARDS = [
   "M2 20 L-6 4",
@@ -19,7 +22,11 @@ export function AuraButton({
   className?: string;
 }) {
   return (
-    <a href={href} className={`group relative inline-flex ${className}`}>
+    <a
+      href={href}
+      onClick={handleSmoothScroll}
+      className={`group relative inline-flex ${className}`}
+    >
       <svg
         className="pointer-events-none absolute -inset-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         viewBox="-10 -18 72 46"
