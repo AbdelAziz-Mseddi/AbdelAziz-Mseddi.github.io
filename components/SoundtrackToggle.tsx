@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-const TRACK_URI = "spotify:track:6Bg7MznA9X0dIhlAsLyBYj";
+const TRACK_URI = "spotify:track:1yslmgUcM2AOkOPS4sl3QV";
 
 type SpotifyController = {
   play: () => void;
@@ -83,7 +83,7 @@ export function SoundtrackToggle() {
         title={
           playing
             ? "Pause soundtrack"
-            : "Play soundtrack — Ghost Town, Kanye West (30s preview)"
+            : "Play soundtrack — Bohemian Rhapsody, Queen (30s preview)"
         }
         className="flex h-9 w-9 items-center justify-center rounded-full border border-border-strong text-foreground transition-colors hover:border-accent hover:text-accent-bright"
       >
