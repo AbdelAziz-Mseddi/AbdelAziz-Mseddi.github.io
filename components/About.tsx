@@ -27,7 +27,7 @@ export function About() {
               in IoT/hardware security.
             </p>
             <p className="text-lg leading-relaxed text-muted">
-              Outside class I&apos;m active with the{" "}
+              Outside class I was active with the{" "}
               <span className="text-foreground">
                 Google Developer Group on Campus
               </span>{" "}
