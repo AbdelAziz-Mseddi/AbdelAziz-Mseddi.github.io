@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useTransform } from "motion/react";
+import { useLocalProgress } from "@/lib/useLocalProgress";
 
 export function ChapterTitle({
   kicker,
@@ -11,18 +12,11 @@ export function ChapterTitle({
   title: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 0.85", "end 0.25"],
-  });
+  const progress = useLocalProgress(ref, 0.85, 0.25);
 
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.35, 0.75, 1],
-    [0, 1, 1, 0]
-  );
+  const opacity = useTransform(progress, [0, 0.35, 0.75, 1], [0, 1, 1, 0]);
   const scale = useTransform(
-    scrollYProgress,
+    progress,
     [0, 0.35, 0.75, 1],
     [0.92, 1, 1, 0.96]
   );

@@ -1,21 +1,15 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useTransform } from "motion/react";
+import { useLocalProgress } from "@/lib/useLocalProgress";
 
 export function OffDuty() {
   const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"],
-  });
+  const progress = useLocalProgress(ref, 1, 0);
 
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.7, 1],
-    [0, 1, 1, 0]
-  );
-  const y = useTransform(scrollYProgress, [0, 0.5, 1], [40, 0, -40]);
+  const opacity = useTransform(progress, [0, 0.3, 0.7, 1], [0, 1, 1, 0]);
+  const y = useTransform(progress, [0, 0.5, 1], [40, 0, -40]);
 
   return (
     <section
@@ -25,7 +19,7 @@ export function OffDuty() {
     >
       <motion.div
         style={{ opacity, y }}
-        className="max-w-sm text-right"
+        className="max-w-sm text-right will-change-transform"
       >
         <p className="font-display text-3xl uppercase leading-tight text-foreground sm:text-4xl">
           Some nights it&apos;s code.

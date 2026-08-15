@@ -124,14 +124,14 @@ export function DayNightField() {
           className="absolute inset-0 rounded-full bg-[#e8623d] will-change-[opacity]"
           style={{
             opacity: warmOrbOpacity,
-            filter: "drop-shadow(0 0 50px #e8623d) drop-shadow(0 0 100px #e8623d)",
+            boxShadow: "0 0 50px 16px #e8623d, 0 0 100px 32px #e8623d66",
           }}
         />
         <motion.div
           className="absolute inset-0 rounded-full bg-[#e7ebf5] will-change-[opacity]"
           style={{
             opacity: nightOpacity,
-            filter: "drop-shadow(0 0 50px #e7ebf5) drop-shadow(0 0 100px #e7ebf5)",
+            boxShadow: "0 0 50px 16px #e7ebf5, 0 0 100px 32px #e7ebf566",
           }}
         />
       </motion.div>
