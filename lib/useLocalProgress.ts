@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type RefObject } from "react";
-import { useScroll, useTransform } from "motion/react";
+import { useScroll, useSpring, useTransform } from "motion/react";
 
 /**
  * Progress (0-1) of a target element passing through the viewport, driven by
@@ -17,7 +17,12 @@ export function useLocalProgress(
   startFrac = 0.85,
   endFrac = 0.25
 ) {
-  const { scrollY } = useScroll();
+  const { scrollY: rawScrollY } = useScroll();
+  const scrollY = useSpring(rawScrollY, {
+    stiffness: 120,
+    damping: 26,
+    restDelta: 0.5,
+  });
   const [bounds, setBounds] = useState<{ start: number; end: number } | null>(
     null
   );

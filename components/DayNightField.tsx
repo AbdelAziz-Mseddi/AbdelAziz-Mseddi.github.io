@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { SnowField } from "@/components/SnowField";
 import { useIsClient, useReducedMotion } from "@/lib/useReducedMotion";
 
@@ -13,9 +13,21 @@ function pseudoRandom(seed: number) {
 }
 
 export function DayNightField() {
-  const { scrollYProgress } = useScroll();
+  const { scrollYProgress: rawProgress } = useScroll();
   const reducedMotion = useReducedMotion();
   const isClient = useIsClient();
+
+  // Fast/bursty wheel scrolling jumps the raw scroll position in big discrete
+  // steps between animation frames — following it directly makes the
+  // background/orb visibly skip rather than glide. Spring-smoothing the
+  // driver value fixes that: the compositor still scrolls the actual page
+  // instantly, but everything tied to this smoothed value continuously
+  // eases toward the target instead of snapping to it.
+  const scrollYProgress = useSpring(rawProgress, {
+    stiffness: 120,
+    damping: 26,
+    restDelta: 0.001,
+  });
 
   const stars = useMemo<Star[]>(() => {
     if (!isClient) return [];
