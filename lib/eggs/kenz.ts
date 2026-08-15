@@ -27,12 +27,13 @@ function subscribe(callback: () => void) {
   };
 }
 
+const EMPTY_SNAPSHOT: string[] = [];
 function getServerSnapshot(): string[] {
-  return [];
+  return EMPTY_SNAPSHOT;
 }
 
-let cachedSnapshot: string[] | null = null;
-let cachedRaw: string | null = null;
+let cachedSnapshot: string[] = EMPTY_SNAPSHOT;
+let cachedRaw: string | null | undefined;
 function getSnapshot(): string[] {
   const raw =
     typeof window === "undefined"
@@ -40,9 +41,9 @@ function getSnapshot(): string[] {
       : window.localStorage.getItem(STORAGE_KEY);
   if (raw !== cachedRaw) {
     cachedRaw = raw;
-    cachedSnapshot = readFound();
+    cachedSnapshot = raw ? readFound() : EMPTY_SNAPSHOT;
   }
-  return cachedSnapshot ?? [];
+  return cachedSnapshot;
 }
 
 function persist(next: string[]) {
