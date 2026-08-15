@@ -6,13 +6,14 @@ import { fadeMainTo, isUserPaused } from "@/lib/audio/mainTrack";
 
 // The official Mia & Sebastian's Theme, Justin Hurwitz, from La La Land
 // (Original Motion Picture Soundtrack), 2016 — verified against the
-// album's actual track listing, not guessed. Anonymous Spotify embeds
-// cap playback at a ~30s preview; there's no way around that from this
-// side, so the "theme" here is necessarily just its opening.
+// album's actual track listing, not guessed. Once triggered, it plays
+// through regardless of scroll position — leaving the section doesn't
+// cut it off. Anonymous Spotify embeds cap playback at a ~30s preview
+// with no volume control exposed by their API, so it hard-stops there;
+// the only fade that's actually possible is the main track easing back
+// in afterward.
 const TRACK_URI = "spotify:track:1Vk4yRsz0iBzDiZEoFMQyv";
 const ENTER_THRESHOLD = 0.15;
-const EXIT_THRESHOLD_LOW = 0.05;
-const EXIT_THRESHOLD_HIGH = 0.95;
 
 type SpotifyController = {
   play: () => void;
@@ -81,18 +82,12 @@ export function OffDutyTheme({ progress }: { progress: MotionValue<number> }) {
 
   useEffect(() => {
     return progress.on("change", (v) => {
-      if (!firedRef.current && v > ENTER_THRESHOLD && !isUserPaused()) {
+      if (firedRef.current) return;
+      if (v > ENTER_THRESHOLD && !isUserPaused()) {
         firedRef.current = true;
         activeRef.current = true;
         fadeMainTo(0.05, 500);
         window.setTimeout(() => controllerRef.current?.play(), 500);
-        return;
-      }
-      if (
-        activeRef.current &&
-        (v < EXIT_THRESHOLD_LOW || v > EXIT_THRESHOLD_HIGH)
-      ) {
-        restoreMain();
       }
     });
   }, [progress]);
