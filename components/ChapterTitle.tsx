@@ -26,19 +26,16 @@ export function ChapterTitle({
     [0, 0.35, 0.75, 1],
     [0.92, 1, 1, 0.96]
   );
-  const blur = useTransform(
-    scrollYProgress,
-    [0, 0.35, 0.75, 1],
-    [10, 0, 0, 8]
-  );
-  const filter = useTransform(blur, (b) => `blur(${b}px)`);
 
   return (
     <div
       ref={ref}
       className="relative flex h-[70vh] items-center justify-center px-6 text-center"
     >
-      <motion.div style={{ opacity, scale, filter }}>
+      <motion.div
+        style={{ opacity, scale }}
+        className="will-change-transform"
+      >
         <p className="font-mono text-xs uppercase tracking-[0.4em] text-muted-dim">
           {kicker}
         </p>

@@ -1,43 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import {
-  motion,
-  useMotionTemplate,
-  useScroll,
-  useTransform,
-} from "motion/react";
+import { motion, useScroll, useTransform } from "motion/react";
 import { SnowField } from "@/components/SnowField";
 import { useIsClient, useReducedMotion } from "@/lib/useReducedMotion";
-
-const PROGRESS_STOPS = [0, 0.18, 0.42, 0.58, 0.82, 1];
-
-const SKY_TOP = [
-  "#180d16", // dusk — plum
-  "#0f0c1a", // dusk deepening
-  "#05060c", // full night
-  "#05060c", // full night (hold)
-  "#0a0e1e", // pre-dawn
-  "#12101f", // dawn — soft indigo
-];
-
-const SKY_BOTTOM = [
-  "#3a1a12", // dusk — ember horizon
-  "#241220", // dusk fading
-  "#0a0f1a", // night horizon
-  "#0a0f1a", // night horizon (hold)
-  "#171a2c", // pre-dawn horizon
-  "#3a2438", // dawn — rose horizon
-];
-
-const ORB_COLOR = [
-  "#e8623d", // setting sun — ember
-  "#d9a066", // low warm glow
-  "#e7ebf5", // moon — pale
-  "#e7ebf5", // moon (hold)
-  "#d9a3a0", // pre-dawn blush
-  "#e8623d", // rising sun — ember
-];
 
 type Star = { x: number; y: number; r: number; delay: number };
 
@@ -61,35 +27,46 @@ export function DayNightField() {
     }));
   }, [isClient]);
 
-  const skyTop = useTransform(scrollYProgress, PROGRESS_STOPS, SKY_TOP);
-  const skyBottom = useTransform(
+  // Three static gradient layers, crossfaded via opacity only — opacity is
+  // GPU-compositable, so this stays smooth during fast scrolling. Animating
+  // the gradient's colors directly (the previous approach) forces a full
+  // repaint of the whole viewport on every scroll pixel, which the browser
+  // can't keep up with — that's what read as "waits for scroll to stop."
+  const duskOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+  const nightOpacity = useTransform(
     scrollYProgress,
-    PROGRESS_STOPS,
-    SKY_BOTTOM
+    [0.15, 0.35, 0.65, 0.85],
+    [0, 1, 1, 0]
   );
-  const background = useMotionTemplate`linear-gradient(180deg, ${skyTop} 0%, ${skyBottom} 100%)`;
+  const dawnOpacity = useTransform(scrollYProgress, [0.7, 1], [0, 1]);
 
-  const orbColor = useTransform(scrollYProgress, PROGRESS_STOPS, ORB_COLOR);
-  const orbGlow = useMotionTemplate`drop-shadow(0 0 50px ${orbColor}) drop-shadow(0 0 100px ${orbColor})`;
-  const orbLeft = useTransform(scrollYProgress, [0, 1], ["8%", "88%"]);
-  const orbTop = useTransform(scrollYProgress, (p) => {
+  // Orb position via transform (compositor-only) instead of left/top.
+  const orbX = useTransform(scrollYProgress, [0, 1], [8, 88]);
+  const orbY = useTransform(scrollYProgress, (p) => {
     const arc = Math.sin(Math.min(Math.max(p, 0), 1) * Math.PI);
-    return `${82 - arc * 58}%`;
+    return 82 - arc * 58;
   });
-
-  const starOpacity = useTransform(
-    scrollYProgress,
-    [0, 0.3, 0.42, 0.62, 0.75, 1],
-    [0, 0, 1, 1, 0, 0]
+  const orbTransform = useTransform(
+    [orbX, orbY],
+    ([x, y]: number[]) => `translate3d(${x}vw, ${y}vh, 0)`
   );
+
+  // Warm (ember) orb visible at dusk/dawn, cool (moon) orb visible at night —
+  // crossfaded the same way as the sky layers, each a single static color.
+  const warmOrbOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.25, 0.4, 0.6, 0.75, 1],
+    [1, 1, 0, 0, 1, 1]
+  );
+
+  const starOpacity = nightOpacity;
 
   if (reducedMotion) {
     return (
       <div
         className="fixed inset-0 -z-10"
         style={{
-          background:
-            "linear-gradient(180deg, #0f0c1a 0%, #0a0f1a 100%)",
+          background: "linear-gradient(180deg, #0f0c1a 0%, #0a0f1a 100%)",
         }}
         aria-hidden="true"
       />
@@ -98,10 +75,30 @@ export function DayNightField() {
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
-      <motion.div className="absolute inset-0" style={{ background }} />
+      <motion.div
+        className="absolute inset-0 will-change-[opacity]"
+        style={{
+          opacity: duskOpacity,
+          background: "linear-gradient(180deg, #180d16 0%, #3a1a12 100%)",
+        }}
+      />
+      <motion.div
+        className="absolute inset-0 will-change-[opacity]"
+        style={{
+          opacity: nightOpacity,
+          background: "linear-gradient(180deg, #05060c 0%, #0a0f1a 100%)",
+        }}
+      />
+      <motion.div
+        className="absolute inset-0 will-change-[opacity]"
+        style={{
+          opacity: dawnOpacity,
+          background: "linear-gradient(180deg, #12101f 0%, #3a2438 100%)",
+        }}
+      />
 
       <motion.div
-        className="absolute inset-0"
+        className="absolute inset-0 will-change-[opacity]"
         style={{ opacity: starOpacity }}
       >
         {stars.map((s, i) => (
@@ -120,14 +117,24 @@ export function DayNightField() {
       </motion.div>
 
       <motion.div
-        className="absolute h-3 w-3 rounded-full"
-        style={{
-          left: orbLeft,
-          top: orbTop,
-          backgroundColor: orbColor,
-          filter: orbGlow,
-        }}
-      />
+        className="absolute left-0 top-0 h-3 w-3 will-change-transform"
+        style={{ transform: orbTransform }}
+      >
+        <motion.div
+          className="absolute inset-0 rounded-full bg-[#e8623d] will-change-[opacity]"
+          style={{
+            opacity: warmOrbOpacity,
+            filter: "drop-shadow(0 0 50px #e8623d) drop-shadow(0 0 100px #e8623d)",
+          }}
+        />
+        <motion.div
+          className="absolute inset-0 rounded-full bg-[#e7ebf5] will-change-[opacity]"
+          style={{
+            opacity: nightOpacity,
+            filter: "drop-shadow(0 0 50px #e7ebf5) drop-shadow(0 0 100px #e7ebf5)",
+          }}
+        />
+      </motion.div>
 
       <SnowField />
     </div>
