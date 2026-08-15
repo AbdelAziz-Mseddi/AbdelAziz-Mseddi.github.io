@@ -1,12 +1,14 @@
 import { Reveal } from "@/components/Reveal";
 
 const frames = [
-  "The moon, most nights",
-  "A cat, unbothered",
-  "Sunrise, still awake",
-  "City block, 2am",
-  "Sunset, from the balcony",
-  "Sky, no reason",
+  { src: "/frames/cat-balcony.jpg", caption: "Paw forward, blue sky" },
+  { src: "/frames/cat-hallway.jpg", caption: "Watching the door" },
+  { src: "/frames/kairouan-mosque.jpg", caption: "Kairouan, after dark" },
+  { src: "/frames/alley-sunset.jpg", caption: "Sunset, down the block" },
+  { src: "/frames/beach-dusk.jpg", caption: "The sea, dusk" },
+  { src: "/frames/cat-golden-hour.jpg", caption: "Golden hour, unbothered" },
+  { src: "/frames/moon-clouds.jpg", caption: "Moon, through the clouds" },
+  { src: "/frames/carport-light.jpg", caption: "One light, no reason" },
 ];
 
 export function Gallery() {
@@ -15,26 +17,24 @@ export function Gallery() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="mx-auto max-w-xl text-center text-muted">
-            Cats, the moon, the sky at odd hours — this grid is waiting on
-            the real shots.
+            Cats, the moon, the sky at odd hours.
           </p>
         </Reveal>
 
         <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3">
-          {frames.map((caption, i) => (
-            <Reveal key={caption} delay={(i % 3) * 80}>
-              <div
-                className="group relative flex aspect-[4/5] items-end overflow-hidden rounded-xl border border-border"
-                style={{
-                  background:
-                    "linear-gradient(155deg, #0d1220 0%, #05070c 60%, #0a1424 100%)",
-                }}
-              >
-                <div className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-                  <SnowTexture id={`grain-${i}`} />
-                </div>
-                <p className="relative z-10 w-full bg-gradient-to-t from-black/60 to-transparent p-4 text-xs text-muted">
-                  {caption}
+          {frames.map((frame, i) => (
+            <Reveal key={frame.src} delay={(i % 3) * 80}>
+              <div className="group relative flex aspect-[4/5] items-end overflow-hidden rounded-xl border border-border">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={frame.src}
+                  alt={frame.caption}
+                  loading="lazy"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/0 to-black/0" />
+                <p className="relative z-10 w-full p-4 text-xs text-foreground">
+                  {frame.caption}
                 </p>
               </div>
             </Reveal>
@@ -42,21 +42,5 @@ export function Gallery() {
         </div>
       </div>
     </section>
-  );
-}
-
-function SnowTexture({ id }: { id: string }) {
-  return (
-    <svg className="h-full w-full" aria-hidden="true">
-      <filter id={id}>
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.6"
-          numOctaves="2"
-          stitchTiles="stitch"
-        />
-      </filter>
-      <rect width="100%" height="100%" filter={`url(#${id})`} opacity="0.12" />
-    </svg>
   );
 }
