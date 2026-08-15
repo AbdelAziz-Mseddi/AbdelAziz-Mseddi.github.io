@@ -1,6 +1,12 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { Project } from "@/lib/content";
 import { Glyph } from "@/components/eggs/Glyph";
+import { useSingleTakeMode } from "@/lib/eggs/singleTake";
+import { navigateWithTransition } from "@/lib/eggs/navigateWithTransition";
+import { useReducedMotion } from "@/lib/useReducedMotion";
 
 // Six of eighteen project pages carry a glyph — spread across tiers and
 // lanes rather than clustered on the obvious featured ones.
@@ -15,11 +21,21 @@ const GLYPH_PROJECT_IDS = new Set([
 
 export function ProjectDetail({ project }: { project: Project }) {
   const hasGlyph = GLYPH_PROJECT_IDS.has(project.id);
+  const router = useRouter();
+  const singleTake = useSingleTakeMode();
+  const reducedMotion = useReducedMotion();
+
+  function onBackClick(e: React.MouseEvent) {
+    if (!singleTake) return;
+    e.preventDefault();
+    navigateWithTransition(router, "/#work", reducedMotion);
+  }
 
   return (
     <article className="mx-auto max-w-3xl px-6 pb-28 sm:px-10">
       <Link
         href="/#work"
+        onClick={onBackClick}
         className="font-mono text-xs uppercase tracking-[0.2em] text-muted-dim transition-colors hover:text-accent-bright"
       >
         {"← back to work"}

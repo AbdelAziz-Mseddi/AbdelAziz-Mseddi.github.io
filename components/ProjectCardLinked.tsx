@@ -1,5 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { Project } from "@/lib/content";
+import { useSingleTakeMode } from "@/lib/eggs/singleTake";
+import { navigateWithTransition } from "@/lib/eggs/navigateWithTransition";
+import { useReducedMotion } from "@/lib/useReducedMotion";
 
 const kindLabel: Record<string, string> = {
   hackathon: "Hackathon",
@@ -12,9 +18,21 @@ const kindLabel: Record<string, string> = {
 };
 
 export function ProjectCardLinked({ project }: { project: Project }) {
+  const router = useRouter();
+  const singleTake = useSingleTakeMode();
+  const reducedMotion = useReducedMotion();
+  const href = `/work/${project.id}`;
+
+  function onClick(e: React.MouseEvent) {
+    if (!singleTake) return;
+    e.preventDefault();
+    navigateWithTransition(router, href, reducedMotion);
+  }
+
   return (
     <Link
-      href={`/work/${project.id}`}
+      href={href}
+      onClick={onClick}
       className="card-glow group relative flex h-full flex-col rounded-2xl border border-border bg-surface p-7 transition-colors hover:bg-surface-hover"
     >
       <div className="flex items-start justify-between gap-4">

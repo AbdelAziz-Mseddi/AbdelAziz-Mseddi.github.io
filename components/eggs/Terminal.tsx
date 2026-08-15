@@ -5,6 +5,7 @@ import { fireEgg } from "@/lib/eggs/eggBus";
 import { useKenzProgress } from "@/lib/eggs/kenz";
 import { getMoonPhase, isRamadan } from "@/lib/eggs/moon";
 import { useReducedMotion } from "@/lib/useReducedMotion";
+import { useSingleTakeMode, setSingleTake } from "@/lib/eggs/singleTake";
 
 type Line = { type: "input" | "output"; text: string };
 
@@ -37,7 +38,8 @@ export function Terminal() {
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const restoreFocusRef = useRef<HTMLElement | null>(null);
-  const { foundCount, total } = useKenzProgress();
+  const { foundCount, total, allFound } = useKenzProgress();
+  const singleTake = useSingleTakeMode();
 
   function close() {
     setOpen(false);
@@ -97,10 +99,19 @@ export function Terminal() {
         print("// scrambling.");
         break;
       case "kenz":
-        print(`kenz — ${foundCount}/${total} found`);
+        print(
+          allFound
+            ? `kenz — ${foundCount}/${total} found. single-take unlocked.`
+            : `kenz — ${foundCount}/${total} found`
+        );
         break;
       case "plan-sequence":
-        print("// still storyboarding this one.");
+        if (!allFound) {
+          print("// still locked. six pieces, remember?");
+        } else {
+          setSingleTake(!singleTake);
+          print(`// single-take: ${!singleTake ? "on" : "off"}.`);
+        }
         break;
       case "moon": {
         const { name } = getMoonPhase(new Date());
