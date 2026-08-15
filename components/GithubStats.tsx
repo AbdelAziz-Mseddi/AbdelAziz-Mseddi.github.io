@@ -13,7 +13,7 @@ export async function GithubStats() {
   ];
 
   return (
-    <section className="border-b border-border py-20">
+    <section className="py-20">
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal className="flex flex-col justify-between gap-8 sm:flex-row sm:items-end">
           <div>

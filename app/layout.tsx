@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Bebas_Neue, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { DayNightField } from "@/components/DayNightField";
 
 const bebas = Bebas_Neue({
   variable: "--font-bebas",
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${bebas.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <DayNightField />
         <div className="grain" />
         {children}
       </body>

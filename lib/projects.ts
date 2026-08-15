@@ -118,15 +118,6 @@ export const projects: Project[] = [
   },
 ];
 
-export const interests = [
-  "Cinema",
-  "Anime",
-  "Music",
-  "Photography",
-  "Night owl",
-  "Winter",
-];
-
 export const certifications = [
   {
     title: "Vectors in Orbit Hackathon",

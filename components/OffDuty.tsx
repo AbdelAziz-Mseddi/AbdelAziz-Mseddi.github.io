@@ -1,78 +1,42 @@
-import { Reveal } from "@/components/Reveal";
-import { screen, music } from "@/lib/taste";
+"use client";
+
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "motion/react";
 
 export function OffDuty() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.3, 0.7, 1],
+    [0, 1, 1, 0]
+  );
+  const y = useTransform(scrollYProgress, [0, 0.5, 1], [40, 0, -40]);
+
   return (
-    <section id="off-duty" className="border-b border-border py-28">
-      <div className="mx-auto max-w-6xl px-6 sm:px-10">
-        <Reveal>
-          <p className="section-num font-mono text-sm text-accent">
-            EP. 03
-          </p>
-          <h2 className="mt-3 font-display text-4xl uppercase text-foreground">
-            Off Duty
-          </h2>
-          <p className="mt-4 max-w-2xl text-muted">
-            Movies about people who refuse to be average at what they do,
-            and a soundtrack that swings from Queen&apos;s grandeur to
-            Rilès&apos;s ambition without ever picking a lane.
-          </p>
-        </Reveal>
-
-        <div className="mt-14 grid gap-12 sm:grid-cols-2">
-          <Reveal delay={80}>
-            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-muted-dim">
-              Screen
-            </h3>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {screen.shows.map((s) => (
-                <li
-                  key={s}
-                  className="rounded-full border border-border-strong px-4 py-1.5 text-sm text-foreground"
-                >
-                  {s}
-                </li>
-              ))}
-            </ul>
-
-            <p className="mt-6 text-sm text-muted-dim">
-              Directors: {screen.directors.join(" · ")}
-            </p>
-            <ul className="mt-3 space-y-1.5 text-sm text-muted">
-              {screen.films.map((f) => (
-                <li key={f}>{f}</li>
-              ))}
-            </ul>
-          </Reveal>
-
-          <Reveal delay={160}>
-            <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-muted-dim">
-              Music
-            </h3>
-            <ul className="mt-4 flex flex-wrap gap-2">
-              {music.artists.map((a) => (
-                <li
-                  key={a}
-                  className="rounded-full border border-border-strong px-4 py-1.5 text-sm text-foreground"
-                >
-                  {a}
-                </li>
-              ))}
-            </ul>
-
-            <p className="mt-6 text-sm text-muted-dim">On repeat</p>
-            <ul className="mt-3 space-y-1.5 text-sm text-muted">
-              {music.songs.map((s) => (
-                <li key={s.title}>
-                  <span className="text-foreground">{s.title}</span>
-                  {" — "}
-                  {s.by}
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
-      </div>
+    <section
+      id="off-duty"
+      ref={ref}
+      className="relative flex h-[90vh] items-center justify-end px-6 sm:px-16"
+    >
+      <motion.div
+        style={{ opacity, y }}
+        className="max-w-sm text-right"
+      >
+        <p className="font-display text-3xl uppercase leading-tight text-foreground sm:text-4xl">
+          Some nights it&apos;s code.
+          <br />
+          Some nights it&apos;s just the sky.
+        </p>
+        <p className="mt-6 text-sm leading-relaxed text-muted-dim">
+          Whatever&apos;s loud enough to sit with me until 3am —
+          that&apos;s the rest of the story. Not a list. Just company.
+        </p>
+      </motion.div>
     </section>
   );
 }

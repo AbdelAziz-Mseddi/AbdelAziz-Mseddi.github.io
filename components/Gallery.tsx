@@ -11,16 +11,10 @@ const frames = [
 
 export function Gallery() {
   return (
-    <section id="gallery" className="border-b border-border py-28">
+    <section id="gallery" className="py-16">
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
-          <p className="section-num font-mono text-sm text-accent">
-            EP. 04
-          </p>
-          <h2 className="mt-3 font-display text-4xl uppercase text-foreground">
-            Frames
-          </h2>
-          <p className="mt-4 max-w-xl text-muted">
+          <p className="mx-auto max-w-xl text-center text-muted">
             Cats, the moon, the sky at odd hours — this grid is waiting on
             the real shots.
           </p>

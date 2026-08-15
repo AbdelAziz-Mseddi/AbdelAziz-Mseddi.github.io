@@ -1,5 +1,6 @@
 import { Nav } from "@/components/Nav";
 import { Hero } from "@/components/Hero";
+import { ChapterTitle } from "@/components/ChapterTitle";
 import { About } from "@/components/About";
 import { Projects } from "@/components/Projects";
 import { GithubStats } from "@/components/GithubStats";
@@ -14,11 +15,19 @@ export default function Home() {
       <Nav />
       <main className="flex-1">
         <Hero />
+
+        <ChapterTitle kicker="Ep. 01" title="About" />
         <About />
+
+        <ChapterTitle kicker="Ep. 02" title="Work" />
         <Projects />
         <GithubStats />
+
         <OffDuty />
+
+        <ChapterTitle kicker="Ep. 04" title="Frames" />
         <Gallery />
+
         <Contact />
       </main>
       <Footer />

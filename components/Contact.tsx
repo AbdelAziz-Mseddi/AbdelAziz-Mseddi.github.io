@@ -1,4 +1,5 @@
 import { Reveal } from "@/components/Reveal";
+import { community, certifications } from "@/lib/projects";
 
 const socials = [
   { label: "GitHub", href: "https://github.com/AbdelAziz-Mseddi" },
@@ -12,10 +13,7 @@ export function Contact() {
     <section id="contact" className="py-28">
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
-          <p className="section-num font-mono text-sm text-accent">
-            EP. 05
-          </p>
-          <h2 className="mt-3 font-display text-balance text-5xl uppercase text-foreground sm:text-6xl">
+          <h2 className="font-display text-balance text-5xl uppercase text-foreground sm:text-6xl">
             Let&apos;s talk, preferably late.
           </h2>
           <p className="mt-6 max-w-lg text-lg text-muted">
@@ -36,6 +34,12 @@ export function Contact() {
               </a>
             ))}
           </div>
+
+          <p className="mt-16 max-w-lg text-xs leading-relaxed text-muted-dim">
+            {community.map((c) => c.org).join(" · ")}
+            {" — "}
+            {certifications.map((c) => c.title).join(" · ")}
+          </p>
         </Reveal>
       </div>
     </section>

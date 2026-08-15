@@ -1,5 +1,15 @@
 @import "tailwindcss";
 
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 :root {
   --background: #05070c;
   --background-alt: #090d16;
@@ -141,6 +151,32 @@ body {
 .ki-glow:hover,
 .ki-glow:focus-visible {
   animation: ki-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes crackle {
+  0% {
+    stroke-dashoffset: 24;
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.85;
+  }
+}
+
+.group:hover .aura-shard {
+  animation: crackle 480ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .group:hover .aura-shard {
+    animation: none;
+    opacity: 0.85;
+    stroke-dashoffset: 0;
+  }
 }
 
 ::selection {

@@ -4,16 +4,10 @@ import { projects } from "@/lib/projects";
 
 export function Projects() {
   return (
-    <section id="work" className="border-b border-border py-28">
+    <section id="work" className="py-16">
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
-          <p className="section-num font-mono text-sm text-accent">
-            EP. 02
-          </p>
-          <h2 className="mt-3 font-display text-4xl uppercase text-foreground">
-            Work
-          </h2>
-          <p className="mt-4 max-w-xl text-muted">
+          <p className="mx-auto max-w-xl text-center text-muted">
             A mix of what pays the bills, what won at hackathons, and what I
             built for myself at 2am with a soundtrack on loop.
           </p>
