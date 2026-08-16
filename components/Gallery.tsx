@@ -4,10 +4,8 @@ const frames = [
   { src: "/frames/cat-balcony.jpg", caption: "Paw forward, blue sky" },
   { src: "/frames/cat-hallway.jpg", caption: "Watching the door" },
   { src: "/frames/kairouan-mosque.jpg", caption: "Kairouan, after dark" },
-  { src: "/frames/alley-sunset.jpg", caption: "Sunset, down the block" },
   { src: "/frames/beach-dusk.jpg", caption: "The sea, dusk" },
   { src: "/frames/cat-golden-hour.jpg", caption: "Golden hour, unbothered" },
-  { src: "/frames/moon-clouds.jpg", caption: "Moon, through the clouds" },
   { src: "/frames/carport-light.jpg", caption: "One light, no reason" },
 ];
 
