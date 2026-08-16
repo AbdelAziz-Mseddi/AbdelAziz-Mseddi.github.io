@@ -8,6 +8,13 @@ import type { ReactNode } from "react";
  * running at once), a child anchored to its edge sweeps around with it,
  * and an inner counter-rotation cancels that spin so the content itself
  * stays upright instead of tumbling.
+ *
+ * The whole thing traces a perfect circle by construction. To get the
+ * tilted-ellipse look of a real orbit diagram instead, an outer wrapper
+ * squashes that circle vertically (scaleY), and an inner wrapper
+ * un-squashes just the rendered content (scaleY the inverse) so the
+ * planet/moon itself doesn't come out looking flattened — only its
+ * path does.
  */
 export function Orbit({
   radius,
@@ -15,6 +22,7 @@ export function Orbit({
   reducedMotion,
   staticAngle = 0,
   paused = false,
+  ellipseRatio = 1,
   children,
 }: {
   radius: number;
@@ -27,12 +35,14 @@ export function Orbit({
    * paused by hovering content nested inside it, which a pure descendant
    * selector can't reach upward to do. */
   paused?: boolean;
+  /** ry/rx of the orbit path. 1 = circle, <1 = flattened ellipse. */
+  ellipseRatio?: number;
   children: ReactNode;
 }) {
   if (reducedMotion) {
     const rad = (staticAngle * Math.PI) / 180;
     const x = Math.cos(rad) * radius;
-    const y = Math.sin(rad) * radius;
+    const y = Math.sin(rad) * radius * ellipseRatio;
     return (
       <div
         className="absolute left-1/2 top-1/2"
@@ -54,30 +64,37 @@ export function Orbit({
 
   return (
     <div
-      className="pointer-events-none absolute left-1/2 top-1/2 will-change-transform"
-      style={{
-        width: radius * 2,
-        height: radius * 2,
-        marginLeft: -radius,
-        marginTop: -radius,
-        animation: `orbit-spin ${seconds}s linear infinite`,
-        animationDelay: `${delay}s`,
-        animationPlayState: playState,
-      }}
+      className="pointer-events-none absolute left-1/2 top-1/2"
+      style={{ transform: `scaleY(${ellipseRatio})`, transformOrigin: "center" }}
     >
       <div
-        className="pointer-events-none absolute left-1/2 top-0 will-change-transform"
+        className="pointer-events-none absolute left-0 top-0 will-change-transform"
         style={{
-          animation: `orbit-spin ${seconds}s linear infinite reverse`,
+          width: radius * 2,
+          height: radius * 2,
+          marginLeft: -radius,
+          marginTop: -radius,
+          animation: `orbit-spin ${seconds}s linear infinite`,
           animationDelay: `${delay}s`,
           animationPlayState: playState,
         }}
       >
         <div
-          className="pointer-events-auto"
-          style={{ transform: "translate(-50%, -50%)" }}
+          className="pointer-events-none absolute left-1/2 top-0 will-change-transform"
+          style={{
+            animation: `orbit-spin ${seconds}s linear infinite reverse`,
+            animationDelay: `${delay}s`,
+            animationPlayState: playState,
+          }}
         >
-          {children}
+          <div style={{ transform: `scaleY(${1 / ellipseRatio})` }}>
+            <div
+              className="pointer-events-auto"
+              style={{ transform: "translate(-50%, -50%)" }}
+            >
+              {children}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -18,6 +18,9 @@ const MAX_RADIUS = Math.max(...STACK_PLANETS.map((p) => p.orbitRadius));
 const MOON_ORBIT_BASE = 10;
 const MOON_ORBIT_SPREAD = 20;
 const FOCUS_SCALE = 2.6;
+// ry/rx of every orbit path — the tilted, perspective look of a real solar
+// system diagram instead of a flat top-down view.
+const ELLIPSE_RATIO = 0.42;
 
 // Cycled per moon index so labels on the same planet don't all stack on
 // the same side — four directions cuts collision odds roughly in half
@@ -57,6 +60,7 @@ function PlanetView({
       reducedMotion={reducedMotion}
       staticAngle={staticAngle}
       paused={frozen}
+      ellipseRatio={ELLIPSE_RATIO}
     >
       <div
         className="group flex cursor-pointer flex-col items-center gap-2 p-1 transition-opacity"
@@ -84,7 +88,7 @@ function PlanetView({
           <div
             className="absolute inset-0 rounded-full transition-transform group-hover:scale-125"
             style={{
-              background: planet.color,
+              background: `radial-gradient(circle at 32% 28%, ${planet.color}ff, ${planet.color}ff 45%, ${planet.color}99 75%, ${planet.color}55 100%)`,
               boxShadow: `0 0 ${planet.size * 1.6}px ${planet.color}66`,
             }}
           />
@@ -99,6 +103,7 @@ function PlanetView({
               reducedMotion={reducedMotion}
               staticAngle={(i / planet.moons.length) * 360}
               paused={frozen}
+              ellipseRatio={ELLIPSE_RATIO}
             >
               <div className="group/moon relative p-1">
                 <div
@@ -179,10 +184,10 @@ export function StackOrbit() {
               className="pointer-events-none absolute left-1/2 top-1/2 rounded-full border border-border-strong"
               style={{
                 width: p.orbitRadius * 2,
-                height: p.orbitRadius * 2,
+                height: p.orbitRadius * 2 * ELLIPSE_RATIO,
                 marginLeft: -p.orbitRadius,
-                marginTop: -p.orbitRadius,
-                opacity: 0.18,
+                marginTop: -p.orbitRadius * ELLIPSE_RATIO,
+                opacity: 0.25,
               }}
               aria-hidden="true"
             />
@@ -191,10 +196,12 @@ export function StackOrbit() {
           <div
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
-              width: 32,
-              height: 32,
-              background: "#f5eee0",
-              boxShadow: "0 0 50px 16px #f5eee099, 0 0 110px 36px #f5eee033",
+              width: 42,
+              height: 42,
+              background:
+                "radial-gradient(circle at 35% 30%, #fffef2, #ffe9a8 45%, #f5c56a 75%, #e0a458 100%)",
+              boxShadow:
+                "0 0 60px 20px #ffe9a8cc, 0 0 130px 44px #f5c56a55, 0 0 220px 70px #e0a45822",
             }}
             aria-hidden="true"
           />
