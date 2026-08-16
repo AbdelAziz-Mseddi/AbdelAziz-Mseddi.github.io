@@ -194,54 +194,15 @@ export function StackOrbit() {
             />
           ))}
 
-          {/* Gargantua-style black hole: an accretion disk (elliptical,
-              gradient-stroked, deliberately brighter on one side to nod at
-              relativistic beaming) with the event horizon's void punched
-              through the middle. Original rendering — no copied stills or
-              assets, just the same real astrophysics the film referenced. */}
-          <svg
-            className="absolute left-1/2 top-1/2"
-            style={{ transform: "translate(-50%, -50%)", overflow: "visible" }}
-            width="220"
-            height="100"
-            viewBox="-110 -50 220 100"
-            aria-hidden="true"
-          >
-            <defs>
-              <linearGradient id="disk-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#fffaf0" stopOpacity="1" />
-                <stop offset="30%" stopColor="#ffd98f" stopOpacity="0.95" />
-                <stop offset="60%" stopColor="#ff9d4d" stopOpacity="0.7" />
-                <stop offset="100%" stopColor="#7a4a2a" stopOpacity="0.25" />
-              </linearGradient>
-            </defs>
-            <ellipse
-              cx="0"
-              cy="-6"
-              rx="88"
-              ry="16"
-              fill="none"
-              stroke="url(#disk-grad)"
-              strokeWidth="4"
-              opacity="0.6"
-            />
-            <ellipse
-              cx="0"
-              cy="0"
-              rx="100"
-              ry="34"
-              fill="none"
-              stroke="url(#disk-grad)"
-              strokeWidth="11"
-            />
-          </svg>
           <div
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
-              width: 46,
-              height: 46,
-              background: "radial-gradient(circle at 40% 35%, #0a0a0a, #000 70%)",
-              boxShadow: "0 0 2px 1px #ffe9c088, 0 0 90px 30px #00000000",
+              width: 42,
+              height: 42,
+              background:
+                "radial-gradient(circle at 35% 30%, #fffef2, #ffe9a8 45%, #f5c56a 75%, #e0a458 100%)",
+              boxShadow:
+                "0 0 60px 20px #ffe9a8cc, 0 0 130px 44px #f5c56a55, 0 0 220px 70px #e0a45822",
             }}
             aria-hidden="true"
           />

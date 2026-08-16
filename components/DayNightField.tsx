@@ -186,16 +186,35 @@ export function DayNightField() {
       />
 
       <motion.div
-        className="absolute h-3.5 w-3.5 rounded-full will-change-transform"
+        className="absolute will-change-transform"
         style={{
           opacity: starOpacity,
           top: "30%",
           left: "20%",
-          background: "#c98f6f",
           x: planetBDrift,
         }}
         aria-hidden="true"
-      />
+      >
+        <svg width="28" height="16" viewBox="-14 -8 28 16" style={{ overflow: "visible" }}>
+          <defs>
+            <linearGradient id="daynight-disk-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#fff6e0" stopOpacity="0.95" />
+              <stop offset="45%" stopColor="#ffbd6b" stopOpacity="0.7" />
+              <stop offset="100%" stopColor="#7a4a2a" stopOpacity="0.15" />
+            </linearGradient>
+          </defs>
+          <ellipse
+            cx="0"
+            cy="0"
+            rx="13"
+            ry="4"
+            fill="none"
+            stroke="url(#daynight-disk-grad)"
+            strokeWidth="1.6"
+          />
+          <circle cx="0" cy="0" r="4.5" fill="#000" />
+        </svg>
+      </motion.div>
 
       <motion.div
         className="absolute left-0 top-0 h-3 w-3 will-change-transform"
