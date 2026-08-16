@@ -14,7 +14,11 @@ import type { ReactNode } from "react";
  * squashes that circle vertically (scaleY), and an inner wrapper
  * un-squashes just the rendered content (scaleY the inverse) so the
  * planet/moon itself doesn't come out looking flattened — only its
- * path does.
+ * path does. The squash wrapper is explicitly sized and centered the
+ * same way the pivot is (not left to an implicit 0-size box with a
+ * `center` transform-origin keyword) so its origin point is exact —
+ * an ambiguous origin here is what caused orbits to trace off-center
+ * from their drawn guide rings.
  */
 export function Orbit({
   radius,
@@ -65,15 +69,17 @@ export function Orbit({
   return (
     <div
       className="pointer-events-none absolute left-1/2 top-1/2"
-      style={{ transform: `scaleY(${ellipseRatio})`, transformOrigin: "center" }}
+      style={{
+        width: radius * 2,
+        height: radius * 2,
+        marginLeft: -radius,
+        marginTop: -radius,
+        transform: `scaleY(${ellipseRatio})`,
+      }}
     >
       <div
-        className="pointer-events-none absolute left-0 top-0 will-change-transform"
+        className="pointer-events-none absolute inset-0 will-change-transform"
         style={{
-          width: radius * 2,
-          height: radius * 2,
-          marginLeft: -radius,
-          marginTop: -radius,
           animation: `orbit-spin ${seconds}s linear infinite`,
           animationDelay: `${delay}s`,
           animationPlayState: playState,

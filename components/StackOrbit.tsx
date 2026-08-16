@@ -63,8 +63,13 @@ function PlanetView({
       ellipseRatio={ELLIPSE_RATIO}
     >
       <div
-        className="group flex cursor-pointer flex-col items-center gap-2 p-1 transition-opacity"
-        style={{ opacity: dimmed ? 0.25 : 1, zIndex: focused ? 20 : undefined }}
+        className="group relative cursor-pointer p-1 transition-opacity"
+        style={{
+          width: planet.size,
+          height: planet.size,
+          opacity: dimmed ? 0.25 : 1,
+          zIndex: focused ? 20 : undefined,
+        }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onClick={onToggleFocus}
@@ -78,12 +83,8 @@ function PlanetView({
         }}
       >
         <div
-          className="relative transition-transform duration-500 ease-out"
-          style={{
-            width: planet.size,
-            height: planet.size,
-            transform: `scale(${focused ? FOCUS_SCALE : 1})`,
-          }}
+          className="relative h-full w-full transition-transform duration-500 ease-out"
+          style={{ transform: `scale(${focused ? FOCUS_SCALE : 1})` }}
         >
           <div
             className="absolute inset-0 rounded-full transition-transform group-hover:scale-125"
@@ -120,7 +121,7 @@ function PlanetView({
             </Orbit>
           ))}
         </div>
-        <span className="whitespace-nowrap font-mono text-[10px] uppercase tracking-wider text-muted-dim opacity-70 transition-opacity group-hover:text-accent-bright group-hover:opacity-100">
+        <span className="pointer-events-none absolute left-1/2 top-full mt-1.5 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] uppercase tracking-wider text-muted-dim opacity-70 transition-opacity group-hover:text-accent-bright group-hover:opacity-100">
           {planet.label}
         </span>
       </div>
@@ -134,7 +135,7 @@ export function StackOrbit() {
   const reducedMotion = useReducedMotion();
   const [focusedId, setFocusedId] = useState<string | null>(null);
 
-  const zoom = useTransform(progress, [0, 0.4, 1], [1.6, 0.95, 0.95]);
+  const zoom = useTransform(progress, [0, 0.4, 1], [1.9, 1.15, 1.15]);
   const scale = reducedMotion ? 1 : zoom;
 
   const diameter = MAX_RADIUS * 2 + 80;
@@ -193,15 +194,54 @@ export function StackOrbit() {
             />
           ))}
 
+          {/* Gargantua-style black hole: an accretion disk (elliptical,
+              gradient-stroked, deliberately brighter on one side to nod at
+              relativistic beaming) with the event horizon's void punched
+              through the middle. Original rendering — no copied stills or
+              assets, just the same real astrophysics the film referenced. */}
+          <svg
+            className="absolute left-1/2 top-1/2"
+            style={{ transform: "translate(-50%, -50%)", overflow: "visible" }}
+            width="220"
+            height="100"
+            viewBox="-110 -50 220 100"
+            aria-hidden="true"
+          >
+            <defs>
+              <linearGradient id="disk-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#fffaf0" stopOpacity="1" />
+                <stop offset="30%" stopColor="#ffd98f" stopOpacity="0.95" />
+                <stop offset="60%" stopColor="#ff9d4d" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#7a4a2a" stopOpacity="0.25" />
+              </linearGradient>
+            </defs>
+            <ellipse
+              cx="0"
+              cy="-6"
+              rx="88"
+              ry="16"
+              fill="none"
+              stroke="url(#disk-grad)"
+              strokeWidth="4"
+              opacity="0.6"
+            />
+            <ellipse
+              cx="0"
+              cy="0"
+              rx="100"
+              ry="34"
+              fill="none"
+              stroke="url(#disk-grad)"
+              strokeWidth="11"
+            />
+          </svg>
           <div
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
-              width: 42,
-              height: 42,
-              background:
-                "radial-gradient(circle at 35% 30%, #fffef2, #ffe9a8 45%, #f5c56a 75%, #e0a458 100%)",
-              boxShadow:
-                "0 0 60px 20px #ffe9a8cc, 0 0 130px 44px #f5c56a55, 0 0 220px 70px #e0a45822",
+              width: 46,
+              height: 46,
+              background: "radial-gradient(circle at 40% 35%, #0a0a0a, #000 70%)",
+              boxShadow: "0 0 2px 1px #ffe9c088, 0 0 90px 30px #00000000",
             }}
             aria-hidden="true"
           />
