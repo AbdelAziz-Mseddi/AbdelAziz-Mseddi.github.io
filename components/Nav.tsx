@@ -8,7 +8,7 @@ import { handleSmoothScroll } from "@/lib/smoothScroll";
 const links = [
   { href: "#about", label: "About" },
   { href: "#work", label: "Work" },
-  { href: "#off-duty", label: "Off Duty" },
+  { href: "#stack", label: "Stack" },
   { href: "#gallery", label: "Frames" },
   { href: "#contact", label: "Contact" },
 ];
