@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useTransform } from "motion/react";
 import { useLocalProgress } from "@/lib/useLocalProgress";
 import { useReducedMotion } from "@/lib/useReducedMotion";
-import { OffDutyTheme } from "@/components/eggs/OffDutyTheme";
 import { Orbit } from "@/components/Orbit";
 import { STACK_PLANETS, type Planet } from "@/lib/stack";
 
@@ -155,8 +154,6 @@ export function StackOrbit() {
       ref={ref}
       className="relative flex h-[140vh] items-center justify-center overflow-hidden px-6"
     >
-      <OffDutyTheme progress={progress} />
-
       <div className="pointer-events-none absolute left-6 top-10 sm:left-10">
         <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-dim">
           {"// the stack"}
