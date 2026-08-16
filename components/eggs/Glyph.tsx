@@ -5,10 +5,13 @@ import { useKenzProgress } from "@/lib/eggs/kenz";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 
 /**
- * One of six unmarked glyphs. Deliberately styled to read as a stray
- * decorative dot rather than a UI element — no hover affordance, no
- * cursor change, nothing that signposts it. Found state persists via
- * localStorage (lib/eggs/kenz.ts) and is per-glyph idempotent.
+ * One of six glyphs. Still unlabelled — nothing on the page says "collect
+ * these" — but no longer invisible: it's a small amber mote that breathes
+ * slowly, brightens and shows a cursor on hover, and gives a clear burst
+ * when taken. The original 3px, no-affordance version was technically
+ * "findable but not signposted" and practically impossible to notice.
+ * Found state persists via localStorage (lib/eggs/kenz.ts), per-glyph
+ * idempotent.
  */
 export function Glyph({ id, className = "" }: { id: string; className?: string }) {
   const { found, markFound } = useKenzProgress();
@@ -28,12 +31,38 @@ export function Glyph({ id, className = "" }: { id: string; className?: string }
     <button
       type="button"
       onClick={handleClick}
-      aria-hidden="true"
-      tabIndex={-1}
-      className={`inline-block h-[3px] w-[3px] rounded-full bg-current opacity-40 transition-opacity hover:opacity-40 ${
-        justFound ? "scale-150 opacity-90" : ""
-      } ${className}`}
-      style={{ transition: reducedMotion ? "none" : undefined }}
-    />
+      aria-label="A glyph"
+      title="?"
+      className={`group/glyph relative inline-flex h-4 w-4 cursor-pointer items-center justify-center align-middle ${className}`}
+    >
+      {/* halo */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 rounded-full transition-opacity duration-300 group-hover/glyph:opacity-100"
+        style={{
+          background:
+            "radial-gradient(circle, var(--accent-warm) 0%, transparent 68%)",
+          opacity: justFound ? 0.95 : 0.42,
+          transform: justFound ? "scale(2.1)" : undefined,
+          transition: reducedMotion ? "none" : "transform 400ms ease-out, opacity 300ms",
+        }}
+      />
+      {/* core */}
+      <span
+        aria-hidden="true"
+        className="relative rounded-full"
+        style={{
+          width: justFound ? 9 : 5,
+          height: justFound ? 9 : 5,
+          background: "var(--accent-warm)",
+          boxShadow: "0 0 6px 1px var(--accent-warm)",
+          animation:
+            reducedMotion || justFound
+              ? undefined
+              : "glyph-breathe 2.6s ease-in-out infinite",
+          transition: reducedMotion ? "none" : "width 300ms, height 300ms",
+        }}
+      />
+    </button>
   );
 }

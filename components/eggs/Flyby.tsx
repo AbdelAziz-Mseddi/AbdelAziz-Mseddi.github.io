@@ -8,18 +8,113 @@ const MIN_INTERVAL_MS = 12_000;
 const MAX_INTERVAL_MS = 24_000;
 const MAX_CONCURRENT = 3;
 
+// Same colour stages as the charge egg's aura.
+const AURA_COLORS = ["#ffffff", "#ffd535", "#ff2b2b", "#3871ff", "#ebe1ff"];
+
 type Flight = {
   id: number;
   top: string;
   duration: number;
+  kind: "craft" | "aura";
+  color: string;
 };
 
 function randomFlight(id: number): Flight {
+  // Mostly craft, occasionally something faster with an aura behind it.
+  const kind = Math.random() < 0.35 ? "aura" : "craft";
   return {
     id,
     top: `${8 + Math.random() * 70}%`,
-    duration: 1.8 + Math.random() * 0.8,
+    duration:
+      kind === "aura" ? 1.1 + Math.random() * 0.5 : 1.8 + Math.random() * 0.8,
+    kind,
+    color: AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)],
   };
+}
+
+/**
+ * An original single-seat craft: long nose, bubble canopy, swept forward
+ * wings, twin engine bells with a hot exhaust bloom. Built in the spirit of
+ * the site's jazz-noir/space-western mood, but drawn from scratch — the eggs
+ * spec forbids copying any show's actual ship design, so this is a silhouette
+ * of the same genre rather than a reproduction of a specific one.
+ */
+function Craft() {
+  return (
+    <svg width="78" height="30" viewBox="0 0 78 30" style={{ overflow: "visible" }}>
+      <defs>
+        <linearGradient id="craft-trail" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#ffb066" stopOpacity="0" />
+          <stop offset="100%" stopColor="#ffb066" stopOpacity="0.75" />
+        </linearGradient>
+        <linearGradient id="craft-body" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#f2f4fa" />
+          <stop offset="55%" stopColor="#cfd6e4" />
+          <stop offset="100%" stopColor="#8b93a5" />
+        </linearGradient>
+      </defs>
+
+      {/* exhaust plume */}
+      <rect x="0" y="14.2" width="30" height="2" fill="url(#craft-trail)" />
+      <ellipse cx="31" cy="15.2" rx="5" ry="2.1" fill="#ffb066" opacity="0.75" />
+
+      {/* swept wings */}
+      <polygon points="40,15 50,4 57,5 48,15" fill="#b04a34" />
+      <polygon points="40,15 50,26 57,25 48,15" fill="#8e3a28" />
+
+      {/* engine housings */}
+      <rect x="31" y="11.6" width="12" height="3" rx="1.4" fill="#9aa2b4" />
+      <rect x="31" y="15.6" width="12" height="3" rx="1.4" fill="#7c8496" />
+
+      {/* fuselage + long nose */}
+      <path d="M 36 12 L 66 13.4 L 76 15.2 L 66 17 L 36 18 Z" fill="url(#craft-body)" />
+
+      {/* canopy */}
+      <path d="M 52 12.4 L 61 13.2 L 61 15 L 52 15.2 Z" fill="#3d566e" opacity="0.95" />
+
+      {/* tail fin */}
+      <polygon points="37,12 34,6.5 40,11.4" fill="#b04a34" />
+    </svg>
+  );
+}
+
+/**
+ * A figure streaking past inside its own aura — the charge egg's colour
+ * stages, airborne. Deliberately an abstract silhouette with a comet trail,
+ * not any character: same rule as the craft, reference the technique, don't
+ * reproduce the art.
+ */
+function AuraFlyer({ color }: { color: string }) {
+  return (
+    <svg width="70" height="26" viewBox="0 0 70 26" style={{ overflow: "visible" }}>
+      <defs>
+        <linearGradient id={`aura-trail-${color.slice(1)}`} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor={color} stopOpacity="0" />
+          <stop offset="70%" stopColor={color} stopOpacity="0.55" />
+          <stop offset="100%" stopColor={color} stopOpacity="0.9" />
+        </linearGradient>
+      </defs>
+
+      {/* comet trail */}
+      <path
+        d="M 0 13 Q 26 8.5 48 12 Q 26 17.5 0 13 Z"
+        fill={`url(#aura-trail-${color.slice(1)})`}
+      />
+
+      {/* aura envelope */}
+      <ellipse cx="53" cy="13" rx="11" ry="7" fill={color} opacity="0.28" />
+      <ellipse cx="54" cy="13" rx="6.5" ry="4.6" fill={color} opacity="0.5" />
+
+      {/* figure: head, torso, trailing limbs — leaning into the flight */}
+      <circle cx="58.4" cy="10.6" r="1.9" fill={color} />
+      <path d="M 57.6 12.2 L 55 15.4 L 52.2 14.6 L 55.4 12.6 Z" fill={color} />
+      <path d="M 55.2 13.4 L 49.5 16.2" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M 56.8 12.2 L 51.8 10.4" stroke={color} strokeWidth="1.2" strokeLinecap="round" opacity="0.85" />
+
+      {/* leading spark */}
+      <circle cx="62" cy="12.4" r="1.1" fill="#fff" opacity="0.85" />
+    </svg>
+  );
 }
 
 export function Flyby() {
@@ -77,24 +172,18 @@ export function Flyby() {
       aria-hidden="true"
     >
       {flights.map((f) => (
-        <svg
+        <div
           key={f.id}
           className="craft-flyby absolute"
-          style={{ top: f.top, left: "-60px", ["--flyby-duration" as string]: `${f.duration}s` }}
-          width="46"
-          height="20"
-          viewBox="0 0 46 20"
+          style={{
+            top: f.top,
+            left: "-90px",
+            ["--flyby-duration" as string]: `${f.duration}s`,
+          }}
           onAnimationEnd={() => remove(f.id)}
         >
-          <defs>
-            <linearGradient id={`flyby-trail-${f.id}`} x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#e7ebf5" stopOpacity="0" />
-              <stop offset="100%" stopColor="#e7ebf5" stopOpacity="0.5" />
-            </linearGradient>
-          </defs>
-          <rect x="0" y="9" width="26" height="1.5" fill={`url(#flyby-trail-${f.id})`} />
-          <polygon points="26,4 46,10 26,16 31,10" fill="#e7ebf5" opacity="0.85" />
-        </svg>
+          {f.kind === "craft" ? <Craft /> : <AuraFlyer color={f.color} />}
+        </div>
       ))}
       <style>{`
         @keyframes craft-flyby-move {
@@ -102,11 +191,12 @@ export function Flyby() {
           8% { opacity: 1; }
           92% { opacity: 1; }
           to { transform: translateX(${
-            typeof window !== "undefined" ? window.innerWidth + 120 : 1600
+            typeof window !== "undefined" ? window.innerWidth + 160 : 1600
           }px); opacity: 0; }
         }
         .craft-flyby {
           animation: craft-flyby-move var(--flyby-duration, 2.1s) ease-in-out forwards;
+          will-change: transform;
         }
       `}</style>
     </div>

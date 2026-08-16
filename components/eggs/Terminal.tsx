@@ -37,6 +37,7 @@ export function Terminal() {
   const [lines, setLines] = useState<Line[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const logRef = useRef<HTMLDivElement>(null);
   const restoreFocusRef = useRef<HTMLElement | null>(null);
   const { foundCount, total, allFound } = useKenzProgress();
   const singleTake = useSingleTakeMode();
@@ -82,14 +83,41 @@ export function Terminal() {
         return;
       }
       if (e.key === "Tab") {
-        // Only the input is focusable in here — keep focus trapped on it.
+        // Tab completes rather than moving focus — the input is the only
+        // focusable thing in here anyway, so there's nowhere to tab to.
         e.preventDefault();
         inputRef.current?.focus();
+        setValue((current) => {
+          const prefix = current.trim().toLowerCase();
+          if (!prefix) return current;
+          const matches = COMMANDS.filter((c) => c.startsWith(prefix));
+          if (matches.length === 1) return matches[0];
+          if (matches.length > 1) {
+            // Fill in as far as the matches agree, then show the options.
+            let common = matches[0];
+            for (const m of matches) {
+              while (!m.startsWith(common)) common = common.slice(0, -1);
+            }
+            setLines((prev) => [
+              ...prev,
+              { type: "output", text: matches.join("  ") },
+            ]);
+            return common;
+          }
+          return current;
+        });
       }
     }
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [open]);
+
+  // Keep the newest output in view — the log is a fixed-height scroll box,
+  // so without this it silently grows past the bottom edge.
+  useEffect(() => {
+    const log = logRef.current;
+    if (log) log.scrollTop = log.scrollHeight;
+  }, [lines]);
 
   function print(text: string) {
     setLines((prev) => [...prev, { type: "output", text }]);
@@ -129,9 +157,7 @@ export function Terminal() {
         print("// reading power level... sensor fried. try again never.");
         break;
       case "whoami":
-        print(
-          "Abdelaziz Mseddi — software engineering student, AI engineer, night owl."
-        );
+        print("Abdelaziz Mseddi — software engineering student, AI engineer.");
         break;
       case "help":
         print(`available: ${COMMANDS.join(", ")}`);
@@ -167,7 +193,7 @@ export function Terminal() {
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-lg rounded-xl border border-border-strong bg-surface p-4 font-mono text-sm shadow-2xl"
       >
-        <div className="max-h-64 overflow-y-auto">
+        <div ref={logRef} className="max-h-64 overflow-y-auto">
           {lines.map((l, i) => (
             <p
               key={i}

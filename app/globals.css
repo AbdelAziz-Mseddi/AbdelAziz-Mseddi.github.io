@@ -19,6 +19,18 @@
   }
 }
 
+@keyframes glyph-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.86);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
 @keyframes story-fade {
   from {
     opacity: 0;
