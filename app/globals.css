@@ -28,6 +28,87 @@
   }
 }
 
+/* Filmstrip: frames sit dim and desaturated until they reach the centre of
+   the strip, where they "develop" into full colour. Driven by a scroll
+   view-timeline so it runs on the compositor rather than as another
+   per-frame JS scroll subscriber — this page has a history of scroll jank
+   and doesn't need more work on the main thread.
+   Guarded by @supports because an unsupported `animation-timeline` would
+   otherwise fall back to the document timeline and just play once on load. */
+@keyframes frame-develop {
+  0%,
+  100% {
+    filter: grayscale(1) brightness(0.5);
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    filter: grayscale(0) brightness(1);
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@supports (animation-timeline: view(x)) {
+  .film-frame {
+    animation: frame-develop linear both;
+    animation-timeline: view(x);
+    animation-range: entry 0% exit 100%;
+  }
+}
+
+/* Film advance: the outgoing frame is pulled out of the gate and the next
+   drops in, with a small mechanical overshoot as it seats. */
+@keyframes gate-advance-fwd {
+  0% {
+    transform: translateY(42%);
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  82% {
+    transform: translateY(-1.6%);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes gate-advance-back {
+  0% {
+    transform: translateY(-42%);
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  82% {
+    transform: translateY(1.6%);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slow documentary drift on whatever frame is being held. */
+@keyframes ken-burns {
+  from {
+    transform: scale(1.03) translate3d(-0.5%, -0.35%, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(0.5%, 0.45%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-frame {
+    animation: none;
+  }
+}
+
 @keyframes blink {
   0%,
   49% {

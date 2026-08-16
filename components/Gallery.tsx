@@ -55,6 +55,8 @@ const frames = [
   },
 ];
 
+const SWIPE_THRESHOLD_PX = 45;
+
 type SpotifyController = {
   play: () => void;
   pause: () => void;
@@ -101,12 +103,39 @@ function Craft({ flip = false }: { flip?: boolean }) {
   );
 }
 
+/** Film perforations running along the strip. */
+function Perforations() {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-2.5 w-full shrink-0"
+      style={{
+        backgroundImage:
+          "repeating-linear-gradient(90deg, rgba(231,235,245,0.16) 0 11px, transparent 11px 30px)",
+      }}
+    />
+  );
+}
+
 export function Gallery() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const stripRef = useRef<HTMLDivElement>(null);
   const controllerRef = useRef<SpotifyController | null>(null);
   const reducedMotion = useReducedMotion();
+
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [isPaused, setIsPaused] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
+
+  // Assigned in effects (never during render) so the Spotify listener, which
+  // is registered once, can always reach the current handlers.
+  const advanceRef = useRef<(delta: number) => void>(() => {});
+  const isOpenRef = useRef(false);
+
+  useEffect(() => {
+    isOpenRef.current = activeIndex !== null;
+  }, [activeIndex]);
 
   useEffect(() => {
     window.onSpotifyIframeApiReady = (IFrameAPI) => {
@@ -117,12 +146,16 @@ export function Gallery() {
         (controller) => {
           controllerRef.current = controller as SpotifyController;
           controller.addListener("playback_update", (e) => {
+            const { position, duration } = e.data;
+            if (duration > 0) setProgress(Math.min(1, position / duration));
             // Spotify's embed has no distinct "ended" event — at the end of
-            // the 30s preview it freezes with isPaused still false, so the
-            // end has to be detected from position vs. duration.
-            const ended =
-              e.data.duration > 0 && e.data.position >= e.data.duration;
-            if (ended) setIsPaused(true);
+            // the preview it freezes with isPaused still false, so the end
+            // has to be inferred from position vs. duration.
+            const ended = duration > 0 && position >= duration;
+            if (ended) {
+              if (isOpenRef.current) advanceRef.current(1);
+              else setIsPaused(true);
+            }
           });
         }
       );
@@ -139,11 +172,13 @@ export function Gallery() {
     controller.loadUri(`spotify:track:${frames[index].trackId}`);
     controller.play();
     setIsPaused(false);
+    setProgress(0);
     fadeMainTo(0.05, 400);
   }, []);
 
   const open = useCallback(
     (index: number) => {
+      setDirection(1);
       setActiveIndex(index);
       playIndex(index);
     },
@@ -154,11 +189,13 @@ export function Gallery() {
     setActiveIndex(null);
     controllerRef.current?.pause();
     setIsPaused(false);
+    setProgress(0);
     if (!isUserPaused()) fadeMainTo(1, 700);
   }, []);
 
   const step = useCallback(
     (delta: number) => {
+      setDirection(delta >= 0 ? 1 : -1);
       setActiveIndex((prev) => {
         if (prev === null) return prev;
         const next = (prev + delta + frames.length) % frames.length;
@@ -168,6 +205,10 @@ export function Gallery() {
     },
     [playIndex]
   );
+
+  useEffect(() => {
+    advanceRef.current = step;
+  }, [step]);
 
   function togglePlay() {
     const controller = controllerRef.current;
@@ -183,6 +224,15 @@ export function Gallery() {
     }
   }
 
+  function scrollStrip(delta: number) {
+    const strip = stripRef.current;
+    if (!strip) return;
+    strip.scrollBy({
+      left: delta * strip.clientWidth * 0.6,
+      behavior: reducedMotion ? "auto" : "smooth",
+    });
+  }
+
   // Keyboard: arrows to surf, Escape to leave.
   useEffect(() => {
     if (activeIndex === null) return;
@@ -195,9 +245,9 @@ export function Gallery() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [activeIndex, close, step]);
 
-  // Wheel/trackpad surfs between frames instead of scrolling the page
-  // behind the overlay. Needs a non-passive listener to be able to
-  // preventDefault, which React's onWheel prop can't guarantee.
+  // Wheel/trackpad surfs between frames instead of scrolling the page behind
+  // the overlay. Needs a non-passive listener to preventDefault, which
+  // React's onWheel prop can't guarantee.
   useEffect(() => {
     if (activeIndex === null) return;
     let cooling = false;
@@ -210,10 +260,38 @@ export function Gallery() {
       step(delta > 0 ? 1 : -1);
       window.setTimeout(() => {
         cooling = false;
-      }, 420);
+      }, 460);
     }
     window.addEventListener("wheel", onWheel, { passive: false });
     return () => window.removeEventListener("wheel", onWheel);
+  }, [activeIndex, step]);
+
+  // Touch: swipe horizontally (or vertically, matching the film's own
+  // direction of travel) to surf.
+  useEffect(() => {
+    if (activeIndex === null) return;
+    let startX = 0;
+    let startY = 0;
+
+    function onTouchStart(e: TouchEvent) {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    }
+    function onTouchEnd(e: TouchEvent) {
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      const horizontal = Math.abs(dx) > Math.abs(dy);
+      const travel = horizontal ? dx : dy;
+      if (Math.abs(travel) < SWIPE_THRESHOLD_PX) return;
+      step(travel < 0 ? 1 : -1);
+    }
+
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
   }, [activeIndex, step]);
 
   const active = activeIndex === null ? null : frames[activeIndex];
@@ -225,48 +303,77 @@ export function Gallery() {
         className="pointer-events-none fixed -left-[9999px] top-0 h-2 w-2 opacity-0"
         aria-hidden="true"
       />
+
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="mx-auto max-w-xl text-center text-muted">
             Cats, the sea, the sky at odd hours — each with what was playing.
           </p>
         </Reveal>
+      </div>
 
-        <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-3">
+      <div className="relative mt-12">
+        <Perforations />
+
+        <div
+          ref={stripRef}
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto px-[12vw] py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
           {frames.map((frame, i) => (
-            <Reveal key={frame.src} delay={(i % 3) * 80}>
-              <button
-                type="button"
-                onClick={() => open(i)}
-                aria-label={`Open ${frame.caption}, plays ${frame.title} by ${frame.artist}`}
-                className="group relative flex aspect-[4/5] w-full items-end overflow-hidden rounded-xl border border-border text-left"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={frame.src}
-                  alt={frame.caption}
-                  loading="lazy"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/0 to-black/0" />
+            <button
+              key={frame.src}
+              type="button"
+              onClick={() => open(i)}
+              aria-label={`Open ${frame.caption}, plays ${frame.title} by ${frame.artist}`}
+              className="film-frame group relative flex aspect-[4/5] w-[62vw] shrink-0 snap-center items-end overflow-hidden rounded-xl border border-border text-left will-change-transform sm:w-[38vw] lg:w-[24vw]"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={frame.src}
+                alt={frame.caption}
+                loading="lazy"
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/0 to-black/0" />
 
-                <span className="pointer-events-none absolute right-2 top-2 z-20 flex max-w-[85%] items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-2.5 py-1 backdrop-blur-md">
-                  <span aria-hidden="true" className="text-[10px] leading-none text-white">
-                    ♪
-                  </span>
-                  <span className="truncate font-mono text-[9px] leading-tight text-white/90">
-                    {frame.title}
-                    <span className="text-white/55"> · {frame.artist}</span>
-                  </span>
+              <span className="pointer-events-none absolute right-2 top-2 z-20 flex max-w-[85%] items-center gap-1.5 rounded-full border border-white/20 bg-black/55 px-2.5 py-1 backdrop-blur-md">
+                <span aria-hidden="true" className="text-[10px] leading-none text-white">
+                  ♪
                 </span>
+                <span className="truncate font-mono text-[9px] leading-tight text-white/90">
+                  {frame.title}
+                  <span className="text-white/55"> · {frame.artist}</span>
+                </span>
+              </span>
 
-                <p className="relative z-10 w-full p-4 text-xs text-foreground">
-                  {frame.caption}
-                </p>
-              </button>
-            </Reveal>
+              <p className="relative z-10 w-full p-4 text-xs text-foreground">
+                {frame.caption}
+              </p>
+            </button>
           ))}
         </div>
+
+        <Perforations />
+
+        {/* Deliberately not hijacking vertical wheel into horizontal scroll —
+            the eggs spec bans scroll-jacking, so mouse users get explicit
+            controls instead of a strip that traps the page. */}
+        <button
+          type="button"
+          onClick={() => scrollStrip(-1)}
+          aria-label="Scroll frames left"
+          className="absolute left-2 top-1/2 -translate-y-1/2 p-2 text-muted-dim transition-colors hover:text-accent-bright sm:left-4"
+        >
+          <Craft flip />
+        </button>
+        <button
+          type="button"
+          onClick={() => scrollStrip(1)}
+          aria-label="Scroll frames right"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-2 text-muted-dim transition-colors hover:text-accent-bright sm:right-4"
+        >
+          <Craft />
+        </button>
       </div>
 
       {active && (
@@ -276,12 +383,21 @@ export function Gallery() {
           aria-modal="true"
           aria-label={active.caption}
           onClick={close}
-          style={
-            reducedMotion
-              ? undefined
-              : { animation: "story-fade 180ms ease-out" }
-          }
+          style={reducedMotion ? undefined : { animation: "story-fade 180ms ease-out" }}
         >
+          {/* Preview progress — makes the story framing literal and shows
+              when it'll hand off to the next frame. */}
+          <div className="absolute inset-x-0 top-0 h-0.5 bg-border">
+            <div
+              className="h-full bg-accent-warm"
+              style={{
+                width: `${progress * 100}%`,
+                transition: reducedMotion ? "none" : "width 240ms linear",
+              }}
+              aria-hidden="true"
+            />
+          </div>
+
           <button
             type="button"
             onClick={(e) => {
@@ -298,12 +414,32 @@ export function Gallery() {
             className="flex max-h-[86vh] max-w-[86vw] flex-col items-center gap-4"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={active.src}
-              alt={active.caption}
-              className="max-h-[68vh] max-w-full rounded-xl border border-border-strong object-contain"
-            />
+            <div
+              key={active.src}
+              className="overflow-hidden rounded-xl border border-border-strong"
+              style={
+                reducedMotion
+                  ? undefined
+                  : {
+                      animation: `${
+                        direction === 1 ? "gate-advance-fwd" : "gate-advance-back"
+                      } 520ms cubic-bezier(0.2, 0.9, 0.25, 1) both`,
+                    }
+              }
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={active.src}
+                alt={active.caption}
+                className="max-h-[64vh] max-w-full object-contain will-change-transform"
+                style={
+                  reducedMotion
+                    ? undefined
+                    : { animation: "ken-burns 19s ease-in-out infinite alternate" }
+                }
+              />
+            </div>
+
             <figcaption className="flex flex-col items-center gap-2 text-center">
               <p className="text-sm text-foreground">{active.caption}</p>
               <button
@@ -318,9 +454,7 @@ export function Gallery() {
               >
                 <span
                   aria-hidden="true"
-                  className={`text-[11px] leading-none text-accent-warm ${
-                    !isPaused && !reducedMotion ? "animate-pulse" : ""
-                  }`}
+                  className="text-[11px] leading-none text-accent-warm"
                 >
                   {isPaused ? "▶" : "❚❚"}
                 </span>
@@ -330,8 +464,8 @@ export function Gallery() {
                 </span>
               </button>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-dim">
-                {activeIndex! + 1} / {frames.length} · scroll or fly to surf ·
-                esc to exit
+                {(activeIndex ?? 0) + 1} / {frames.length} · scroll, swipe or fly
+                · esc to exit
               </p>
             </figcaption>
           </figure>
