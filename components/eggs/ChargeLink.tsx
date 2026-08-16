@@ -60,7 +60,6 @@ function buildShards(): Shard[] {
 
 const CHARGE_MS = 1300;
 const MAX_READOUT = 9001; // it's always over 9000, quietly
-const OVER_NINE_THOUSAND_HOLD_MS = 550;
 
 // Aura color progression as charge climbs: white -> yellow -> red -> blue,
 // settling on a pale violet-white for the final stretch. Reference to the
@@ -111,11 +110,9 @@ export function ChargeLink({
   const reducedMotion = useReducedMotion();
   const [charge, setCharge] = useState(0); // 0..1
   const [maxed, setMaxed] = useState(false);
-  const [showOverNine, setShowOverNine] = useState(false);
   const rafRef = useRef<number | null>(null);
   const startRef = useRef<number | null>(null);
   const directionRef = useRef<1 | -1>(1);
-  const maxedAtRef = useRef<number | null>(null);
 
   function step(timestamp: number) {
     if (startRef.current === null) startRef.current = timestamp;
@@ -124,20 +121,9 @@ export function ChargeLink({
 
     setCharge((prev) => {
       const next = Math.min(1, Math.max(0, prev + delta));
-      if (next >= 1) {
-        setMaxed(true);
-        if (maxedAtRef.current === null) maxedAtRef.current = timestamp;
-      } else {
-        setMaxed(false);
-        maxedAtRef.current = null;
-      }
+      setMaxed(next >= 1);
       return next;
     });
-
-    setShowOverNine(
-      maxedAtRef.current !== null &&
-        timestamp - maxedAtRef.current < OVER_NINE_THOUSAND_HOLD_MS
-    );
 
     startRef.current = timestamp;
     rafRef.current = requestAnimationFrame(step);
@@ -237,7 +223,7 @@ export function ChargeLink({
           className="pointer-events-none absolute left-0 top-full mt-1 font-mono text-[10px] tabular-nums text-accent-warm"
           aria-hidden="true"
         >
-          {maxed ? (showOverNine ? "IT'S OVER 9000" : "// limit exceeded") : readout}
+          {maxed ? "IT'S OVER 9000" : readout}
         </span>
       )}
     </span>

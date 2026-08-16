@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useTransform } from "motion/react";
 import { useLocalProgress } from "@/lib/useLocalProgress";
 import { useReducedMotion } from "@/lib/useReducedMotion";
@@ -10,17 +10,25 @@ import { STACK_PLANETS, type Planet } from "@/lib/stack";
 
 const MAX_RADIUS = Math.max(...STACK_PLANETS.map((p) => p.orbitRadius));
 const MOON_ORBIT_BASE = 16;
+const FOCUS_SCALE = 3.2;
 
 function PlanetView({
   planet,
   reducedMotion,
   staticAngle,
+  focused,
+  dimmed,
+  onToggleFocus,
 }: {
   planet: Planet;
   reducedMotion: boolean;
   staticAngle: number;
+  focused: boolean;
+  dimmed: boolean;
+  onToggleFocus: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
+  const frozen = hovered || focused;
 
   return (
     <Orbit
@@ -28,16 +36,30 @@ function PlanetView({
       seconds={planet.orbitSeconds}
       reducedMotion={reducedMotion}
       staticAngle={staticAngle}
-      paused={hovered}
+      paused={frozen}
     >
       <div
-        className="group flex flex-col items-center gap-2 p-3"
+        className="group flex cursor-pointer flex-col items-center gap-2 p-3 transition-opacity"
+        style={{ opacity: dimmed ? 0.25 : 1, zIndex: focused ? 20 : undefined }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
+        onClick={onToggleFocus}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            onToggleFocus();
+          }
+        }}
       >
         <div
-          className="relative"
-          style={{ width: planet.size, height: planet.size }}
+          className="relative transition-transform duration-500 ease-out"
+          style={{
+            width: planet.size,
+            height: planet.size,
+            transform: `scale(${focused ? FOCUS_SCALE : 1})`,
+          }}
         >
           <div
             className="absolute inset-0 rounded-full transition-transform group-hover:scale-125"
@@ -53,14 +75,17 @@ function PlanetView({
               seconds={4 + i * 1.4}
               reducedMotion={reducedMotion}
               staticAngle={(i / planet.moons.length) * 360}
-              paused={hovered}
+              paused={frozen}
             >
               <div className="group/moon relative p-2">
                 <div
                   className="rounded-full bg-white/80"
                   style={{ width: 3, height: 3 }}
                 />
-                <span className="pointer-events-none absolute left-1/2 top-full z-10 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded border border-border-strong bg-background/90 px-1.5 py-0.5 font-mono text-[9px] text-muted opacity-0 backdrop-blur-sm transition-opacity group-hover/moon:opacity-100">
+                <span
+                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded border border-border-strong bg-background/90 px-1.5 py-0.5 font-mono text-[9px] text-muted backdrop-blur-sm transition-opacity group-hover/moon:opacity-100"
+                  style={{ opacity: focused ? 1 : 0 }}
+                >
                   {moon.name}
                 </span>
               </div>
@@ -79,11 +104,21 @@ export function StackOrbit() {
   const ref = useRef<HTMLDivElement>(null);
   const progress = useLocalProgress(ref, 1, 0);
   const reducedMotion = useReducedMotion();
+  const [focusedId, setFocusedId] = useState<string | null>(null);
 
-  const zoom = useTransform(progress, [0, 0.35, 1], [2.4, 1, 1]);
+  const zoom = useTransform(progress, [0, 0.4, 1], [3.4, 1.8, 1.8]);
   const scale = reducedMotion ? 1 : zoom;
 
   const diameter = MAX_RADIUS * 2 + 80;
+
+  useEffect(() => {
+    if (!focusedId) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") setFocusedId(null);
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [focusedId]);
 
   return (
     <section
@@ -99,13 +134,20 @@ export function StackOrbit() {
         </p>
         <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-dim">
           Everything I actually build with, grouped by how it&apos;s used —
-          not a list, a system.
+          not a list, a system. Click a planet to look closer.
         </p>
       </div>
 
-      <div className="scale-[0.4] sm:scale-[0.6] md:scale-[0.8] lg:scale-100">
+      <div
+        className="pointer-events-none absolute inset-0"
+        onClick={() => setFocusedId(null)}
+        style={{ pointerEvents: focusedId ? "auto" : "none" }}
+        aria-hidden="true"
+      />
+
+      <div className="pointer-events-none scale-[0.4] sm:scale-[0.6] md:scale-[0.8] lg:scale-100">
         <motion.div
-          className="relative"
+          className="pointer-events-none relative"
           style={{ width: diameter, height: diameter, scale }}
         >
           {STACK_PLANETS.map((p) => (
@@ -140,6 +182,11 @@ export function StackOrbit() {
               planet={planet}
               reducedMotion={reducedMotion}
               staticAngle={(i / STACK_PLANETS.length) * 360}
+              focused={focusedId === planet.id}
+              dimmed={focusedId !== null && focusedId !== planet.id}
+              onToggleFocus={() =>
+                setFocusedId((prev) => (prev === planet.id ? null : planet.id))
+              }
             />
           ))}
         </motion.div>
