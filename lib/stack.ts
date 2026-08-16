@@ -16,7 +16,7 @@ export const STACK_PLANETS: Planet[] = [
     id: "ai-agents",
     label: "AI & Agents",
     color: "#e0a458",
-    orbitRadius: 90,
+    orbitRadius: 55,
     orbitSeconds: 26,
     size: 13,
     moons: [
@@ -32,7 +32,7 @@ export const STACK_PLANETS: Planet[] = [
     id: "ml-retrieval",
     label: "ML & Retrieval",
     color: "#a78bfa",
-    orbitRadius: 135,
+    orbitRadius: 82,
     orbitSeconds: 34,
     size: 11,
     moons: [
@@ -46,7 +46,7 @@ export const STACK_PLANETS: Planet[] = [
     id: "backend-java",
     label: "Backend — Java",
     color: "#c9784f",
-    orbitRadius: 180,
+    orbitRadius: 109,
     orbitSeconds: 42,
     size: 12,
     moons: [
@@ -61,7 +61,7 @@ export const STACK_PLANETS: Planet[] = [
     id: "backend-web",
     label: "Backend — Web",
     color: "#5fb8a8",
-    orbitRadius: 225,
+    orbitRadius: 136,
     orbitSeconds: 50,
     size: 11,
     moons: [
@@ -76,7 +76,7 @@ export const STACK_PLANETS: Planet[] = [
     id: "frontend",
     label: "Frontend",
     color: "#5b8fd4",
-    orbitRadius: 270,
+    orbitRadius: 163,
     orbitSeconds: 58,
     size: 12,
     moons: [
@@ -90,7 +90,7 @@ export const STACK_PLANETS: Planet[] = [
     id: "infra-data",
     label: "Infra & Data",
     color: "#8fa3c9",
-    orbitRadius: 315,
+    orbitRadius: 190,
     orbitSeconds: 66,
     size: 13,
     moons: [
@@ -108,7 +108,7 @@ export const STACK_PLANETS: Planet[] = [
     id: "systems-hardware",
     label: "Systems & Hardware",
     color: "#c98f6f",
-    orbitRadius: 360,
+    orbitRadius: 215,
     orbitSeconds: 74,
     size: 11,
     moons: [

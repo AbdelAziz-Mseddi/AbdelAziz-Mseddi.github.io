@@ -10,7 +10,17 @@ import { STACK_PLANETS, type Planet } from "@/lib/stack";
 
 const MAX_RADIUS = Math.max(...STACK_PLANETS.map((p) => p.orbitRadius));
 const MOON_ORBIT_BASE = 16;
-const FOCUS_SCALE = 3.2;
+const FOCUS_SCALE = 2.6;
+
+// Cycled per moon index so labels on the same planet don't all stack on
+// the same side — four directions cuts collision odds roughly in half
+// again versus a simple above/below alternation.
+const LABEL_POSITIONS = [
+  "left-1/2 top-full mt-1 -translate-x-1/2",
+  "left-1/2 bottom-full mb-1 -translate-x-1/2",
+  "right-full top-1/2 mr-1 -translate-y-1/2",
+  "left-full top-1/2 ml-1 -translate-y-1/2",
+];
 
 function PlanetView({
   planet,
@@ -28,7 +38,10 @@ function PlanetView({
   onToggleFocus: () => void;
 }) {
   const [hovered, setHovered] = useState(false);
-  const frozen = hovered || focused;
+  // Focus enlarges and labels a planet's moons, but doesn't stop them —
+  // the system stays alive. Only an explicit hover (reading one specific
+  // moon's name) freezes motion, and only briefly.
+  const frozen = hovered;
 
   return (
     <Orbit
@@ -71,7 +84,7 @@ function PlanetView({
           {planet.moons.map((moon, i) => (
             <Orbit
               key={moon.name}
-              radius={MOON_ORBIT_BASE + i * 5}
+              radius={MOON_ORBIT_BASE + i * 9}
               seconds={4 + i * 1.4}
               reducedMotion={reducedMotion}
               staticAngle={(i / planet.moons.length) * 360}
@@ -83,7 +96,7 @@ function PlanetView({
                   style={{ width: 3, height: 3 }}
                 />
                 <span
-                  className="pointer-events-none absolute left-1/2 top-full z-10 mt-1.5 -translate-x-1/2 whitespace-nowrap rounded border border-border-strong bg-background/90 px-1.5 py-0.5 font-mono text-[9px] text-muted backdrop-blur-sm transition-opacity group-hover/moon:opacity-100"
+                  className={`pointer-events-none absolute z-10 whitespace-nowrap rounded border border-border-strong bg-background/90 px-1 py-px font-mono text-[7px] leading-tight text-muted backdrop-blur-sm transition-opacity group-hover/moon:opacity-100 ${LABEL_POSITIONS[i % LABEL_POSITIONS.length]}`}
                   style={{ opacity: focused ? 1 : 0 }}
                 >
                   {moon.name}
@@ -106,7 +119,7 @@ export function StackOrbit() {
   const reducedMotion = useReducedMotion();
   const [focusedId, setFocusedId] = useState<string | null>(null);
 
-  const zoom = useTransform(progress, [0, 0.4, 1], [3.4, 1.8, 1.8]);
+  const zoom = useTransform(progress, [0, 0.4, 1], [2.2, 1.3, 1.3]);
   const scale = reducedMotion ? 1 : zoom;
 
   const diameter = MAX_RADIUS * 2 + 80;
