@@ -65,7 +65,8 @@ export function fadeMainTo(targetVolume: number, ms: number) {
 
   function step(now: number) {
     const t = Math.min(1, (now - startTime) / ms);
-    el.volume = start + (targetVolume - start) * t;
+    const next = start + (targetVolume - start) * t;
+    el.volume = Math.min(1, Math.max(0, next));
     if (t < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);

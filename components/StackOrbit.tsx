@@ -9,7 +9,14 @@ import { Orbit } from "@/components/Orbit";
 import { STACK_PLANETS, type Planet } from "@/lib/stack";
 
 const MAX_RADIUS = Math.max(...STACK_PLANETS.map((p) => p.orbitRadius));
-const MOON_ORBIT_BASE = 16;
+// Moon orbit radius is capped to this fixed range regardless of how many
+// moons a planet has — a planet with 8 moons and an unbounded per-moon
+// step (base + i * step) reaches far enough to intrude into the next
+// planet's own click area, especially for the tightly-spaced inner
+// orbits. Distributing across a fixed span keeps every planet's moons
+// contained near it no matter the count.
+const MOON_ORBIT_BASE = 10;
+const MOON_ORBIT_SPREAD = 20;
 const FOCUS_SCALE = 2.6;
 
 // Cycled per moon index so labels on the same planet don't all stack on
@@ -52,7 +59,7 @@ function PlanetView({
       paused={frozen}
     >
       <div
-        className="group flex cursor-pointer flex-col items-center gap-2 p-3 transition-opacity"
+        className="group flex cursor-pointer flex-col items-center gap-2 p-1 transition-opacity"
         style={{ opacity: dimmed ? 0.25 : 1, zIndex: focused ? 20 : undefined }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -84,13 +91,16 @@ function PlanetView({
           {planet.moons.map((moon, i) => (
             <Orbit
               key={moon.name}
-              radius={MOON_ORBIT_BASE + i * 9}
+              radius={
+                MOON_ORBIT_BASE +
+                (i / Math.max(1, planet.moons.length - 1)) * MOON_ORBIT_SPREAD
+              }
               seconds={4 + i * 1.4}
               reducedMotion={reducedMotion}
               staticAngle={(i / planet.moons.length) * 360}
               paused={frozen}
             >
-              <div className="group/moon relative p-2">
+              <div className="group/moon relative p-1">
                 <div
                   className="rounded-full bg-white/80"
                   style={{ width: 3, height: 3 }}
@@ -119,7 +129,7 @@ export function StackOrbit() {
   const reducedMotion = useReducedMotion();
   const [focusedId, setFocusedId] = useState<string | null>(null);
 
-  const zoom = useTransform(progress, [0, 0.4, 1], [2.2, 1.3, 1.3]);
+  const zoom = useTransform(progress, [0, 0.4, 1], [1.6, 0.95, 0.95]);
   const scale = reducedMotion ? 1 : zoom;
 
   const diameter = MAX_RADIUS * 2 + 80;
@@ -181,10 +191,10 @@ export function StackOrbit() {
           <div
             className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
             style={{
-              width: 24,
-              height: 24,
+              width: 32,
+              height: 32,
               background: "#f5eee0",
-              boxShadow: "0 0 40px 12px #f5eee099, 0 0 90px 30px #f5eee033",
+              boxShadow: "0 0 50px 16px #f5eee099, 0 0 110px 36px #f5eee033",
             }}
             aria-hidden="true"
           />

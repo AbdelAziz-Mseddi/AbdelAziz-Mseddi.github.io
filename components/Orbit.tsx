@@ -44,6 +44,13 @@ export function Orbit({
   }
 
   const playState = paused ? "paused" : "running";
+  // A CSS animation always starts at its 0% keyframe regardless of props —
+  // staticAngle alone does nothing here. A negative delay scrubs the
+  // animation forward to where it would already be, so orbits actually
+  // start spread apart instead of all bunched at the same angle for the
+  // first many seconds (which, before this, also caused their hit-areas
+  // to overlap and made clicks land on the wrong planet).
+  const delay = -(staticAngle / 360) * seconds;
 
   return (
     <div
@@ -54,6 +61,7 @@ export function Orbit({
         marginLeft: -radius,
         marginTop: -radius,
         animation: `orbit-spin ${seconds}s linear infinite`,
+        animationDelay: `${delay}s`,
         animationPlayState: playState,
       }}
     >
@@ -61,6 +69,7 @@ export function Orbit({
         className="pointer-events-none absolute left-1/2 top-0 will-change-transform"
         style={{
           animation: `orbit-spin ${seconds}s linear infinite reverse`,
+          animationDelay: `${delay}s`,
           animationPlayState: playState,
         }}
       >
