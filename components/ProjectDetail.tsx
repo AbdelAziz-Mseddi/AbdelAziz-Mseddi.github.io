@@ -9,14 +9,17 @@ import { navigateWithTransition } from "@/lib/eggs/navigateWithTransition";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 
 // Six of eighteen project pages carry a glyph — spread across tiers and
-// lanes rather than clustered on the obvious featured ones.
+// lanes rather than clustered on the obvious featured ones. (grade-pipeline,
+// docker-ci-labs, cp-cave used to hold three of these before those projects
+// were removed from the site; relocated to drose, tutoring-manager, and
+// devify to keep the hunt at exactly six findable glyphs.)
 const GLYPH_PROJECT_IDS = new Set([
   "qrail",
-  "grade-pipeline",
   "cr3m3-brul33",
   "sockets-tp",
-  "docker-ci-labs",
-  "cp-cave",
+  "drose",
+  "tutoring-manager",
+  "devify",
 ]);
 
 export function ProjectDetail({ project }: { project: Project }) {
