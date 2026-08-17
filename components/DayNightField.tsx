@@ -73,6 +73,9 @@ export function DayNightField() {
   );
 
   const starOpacity = nightOpacity;
+  // The galaxy belongs to the night only: over the dusk and dawn washes it
+  // would be screening light onto an orange sky, which reads wrong.
+  const galaxyOpacity = useTransform(nightOpacity, (v) => v * 0.85);
 
   // Planets sit far back in the scene — tiny scroll-linked drift for depth,
   // opacity tied to the night window like the stars. Saturn's rings are two
@@ -119,7 +122,7 @@ export function DayNightField() {
         }}
       />
 
-      <Galaxy />
+      <Galaxy opacity={galaxyOpacity} />
 
 
       <motion.div

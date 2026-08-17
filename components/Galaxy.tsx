@@ -1,6 +1,6 @@
 "use client";
 
-import { useReducedMotion } from "@/lib/useReducedMotion";
+import { motion, type MotionValue } from "motion/react";
 
 /**
  * Andromeda (M31), centred behind the whole site.
@@ -18,15 +18,23 @@ import { useReducedMotion } from "@/lib/useReducedMotion";
  * lets the rim fade be a CSS mask rather than baked alpha, keeping the asset
  * a 139 KB JPEG instead of a 448 KB PNG.
  */
-export function Galaxy() {
-  const reducedMotion = useReducedMotion();
-
+/**
+ * `opacity` is applied to this element directly rather than to a wrapper.
+ * A wrapper carrying opacity would form a stacking context, and the screen
+ * blend below would then composite against that group instead of against
+ * the page, which is exactly the dark-disc problem this is avoiding.
+ */
+export function Galaxy({ opacity }: { opacity?: MotionValue<number> }) {
   return (
-    <div
-      className="pointer-events-none absolute left-1/2 top-1/2"
+    <motion.div
+      className="pointer-events-none absolute"
       aria-hidden="true"
       style={{
-        width: "min(96vh, 88vw)",
+        // Sits low and to the right, large enough that the arms run off the
+        // bottom edge rather than ending inside the frame.
+        left: "70%",
+        top: "86%",
+        width: "min(132vh, 104vw)",
         aspectRatio: "1 / 1",
         // Centring lives entirely in this transform. Tailwind's
         // -translate-x-1/2 utilities are NOT used here: v4 emits them as the
@@ -37,7 +45,7 @@ export function Galaxy() {
         backgroundSize: "contain",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
-        opacity: 0.85,
+        opacity: opacity ?? 0.85,
         // The image's black is #000 while the page sits at #05070c, so drawn
         // normally it reads as a dark hole punched in the background with a
         // halo at its edge. `screen` makes black contribute nothing at all,
@@ -45,11 +53,8 @@ export function Galaxy() {
         // to see.
         mixBlendMode: "screen",
         // Still masked, so the square frame's corners never clip in.
-        maskImage: "radial-gradient(circle, #000 42%, transparent 72%)",
-        WebkitMaskImage: "radial-gradient(circle, #000 42%, transparent 72%)",
-        animation: reducedMotion
-          ? undefined
-          : "galaxy-spin 420s linear infinite",
+        maskImage: "radial-gradient(circle, #000 46%, transparent 78%)",
+        WebkitMaskImage: "radial-gradient(circle, #000 46%, transparent 78%)",
       }}
     />
   );

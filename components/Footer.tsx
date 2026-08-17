@@ -25,7 +25,12 @@ export function Footer() {
             className="ml-2 inline-block h-[3px] w-[3px] rounded-full bg-current opacity-30 hover:opacity-30"
           />
         </p>
-        <p className="font-mono opacity-70 transition-opacity hover:opacity-100">
+        {/* The same red the flyby craft's wings are painted in, so the
+            sign-off and the jet are literally the same colour. */}
+        <p
+          className="font-mono opacity-80 transition-opacity hover:opacity-100"
+          style={{ color: "#c2452f" }}
+        >
           {"// see you, space cowboy."}
         </p>
       </div>
