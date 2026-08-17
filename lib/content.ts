@@ -26,6 +26,17 @@ export type Project = {
 
 export type Lane = { id: string; label: string; blurb: string };
 
+/** Lane accent colours, shared by the work index and anything else that
+ *  needs to tag a project by discipline. Kept next to the lane type rather
+ *  than in a component so the two can't drift apart. */
+export const LANE_COLOR: Record<string, string> = {
+  "ai-ml": "#e0a458",
+  backend: "#5fb8a8",
+  devops: "#8fa3c9",
+  "low-level": "#b0a06a",
+  security: "#d1544f",
+};
+
 export function getAllProjects(): Project[] {
   return data.projects as Project[];
 }
