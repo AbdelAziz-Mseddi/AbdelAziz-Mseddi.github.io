@@ -56,11 +56,12 @@ Ship 1 and 2 first — they are self-contained and cheap. 3 is the substantial
 one. 4+ only after the site is live.
 
 ### 1. Flyby
-Trigger: 45s idle, or `fly` in the terminal.
-Behaviour: original craft silhouette (SVG, ~46x20, simple angular polygon —
+Trigger: ambient, every 12-24s at random, or `fly` in the terminal.
+Behaviour: original craft silhouette (SVG, ~78x30, drawn from scratch —
 NOT a recognizable ship from any franchise) crosses the viewport once, left to
-right, ~2.1s, ease-in-out, thin contrail fading behind it. Rendered above
-content, pointer-events: none.
+right, ~1.8-2.6s, ease-in-out, thin contrail fading behind it. Up to 3 in the
+air at once, each with its own gradient ids. Rendered above content,
+pointer-events: none.
 Done: fires once, cleans up, never reflows layout.
 
 ### 2. Charge

@@ -8,30 +8,17 @@ const MIN_INTERVAL_MS = 12_000;
 const MAX_INTERVAL_MS = 24_000;
 const MAX_CONCURRENT = 3;
 
-// Same colour stages as the charge egg's aura.
-const AURA_COLORS = ["#ffffff", "#ffd535", "#ff2b2b", "#3871ff", "#ebe1ff"];
-
 type Flight = {
   id: number;
   top: string;
   duration: number;
-  kind: "craft" | "aura";
-  color: string;
 };
 
 function randomFlight(id: number): Flight {
-  const kind = Math.random() < 0.35 ? "aura" : "craft";
   return {
     id,
     top: `${8 + Math.random() * 70}%`,
-    // The aura figures cross slowly enough to actually read as a figure;
-    // the craft still streaks past.
-    duration:
-      kind === "aura" ? 4.2 + Math.random() * 1.8 : 1.8 + Math.random() * 0.8,
-    kind,
-    // Picked once, at spawn — a given figure keeps this colour for its
-    // whole crossing.
-    color: AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)],
+    duration: 1.8 + Math.random() * 0.8,
   };
 }
 
@@ -82,46 +69,6 @@ function Craft({ uid }: { uid: number }) {
 
       {/* tail fin */}
       <polygon points="37,12 34,6.5 40,11.4" fill="#b04a34" />
-    </svg>
-  );
-}
-
-/**
- * A figure streaking past inside its own aura — the charge egg's colour
- * stages, airborne. Deliberately an abstract silhouette with a comet trail,
- * not any character: same rule as the craft, reference the technique, don't
- * reproduce the art.
- */
-function AuraFlyer({ uid, color }: { uid: number; color: string }) {
-  // Keyed by flight id, not by colour: two figures can draw the same colour,
-  // and a colour-keyed id would let the first to land strip the other's trail.
-  const trail = `aura-trail-${uid}`;
-
-  return (
-    <svg width="70" height="26" viewBox="0 0 70 26" style={{ overflow: "visible" }}>
-      <defs>
-        <linearGradient id={trail} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor={color} stopOpacity="0" />
-          <stop offset="70%" stopColor={color} stopOpacity="0.55" />
-          <stop offset="100%" stopColor={color} stopOpacity="0.9" />
-        </linearGradient>
-      </defs>
-
-      {/* comet trail */}
-      <path d="M 0 13 Q 26 8.5 48 12 Q 26 17.5 0 13 Z" fill={`url(#${trail})`} />
-
-      {/* aura envelope */}
-      <ellipse cx="53" cy="13" rx="11" ry="7" fill={color} opacity="0.28" />
-      <ellipse cx="54" cy="13" rx="6.5" ry="4.6" fill={color} opacity="0.5" />
-
-      {/* figure: head, torso, trailing limbs — leaning into the flight */}
-      <circle cx="58.4" cy="10.6" r="1.9" fill={color} />
-      <path d="M 57.6 12.2 L 55 15.4 L 52.2 14.6 L 55.4 12.6 Z" fill={color} />
-      <path d="M 55.2 13.4 L 49.5 16.2" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-      <path d="M 56.8 12.2 L 51.8 10.4" stroke={color} strokeWidth="1.2" strokeLinecap="round" opacity="0.85" />
-
-      {/* leading spark */}
-      <circle cx="62" cy="12.4" r="1.1" fill="#fff" opacity="0.85" />
     </svg>
   );
 }
@@ -191,11 +138,7 @@ export function Flyby() {
           }}
           onAnimationEnd={() => remove(f.id)}
         >
-          {f.kind === "craft" ? (
-            <Craft uid={f.id} />
-          ) : (
-            <AuraFlyer uid={f.id} color={f.color} />
-          )}
+          <Craft uid={f.id} />
         </div>
       ))}
       <style>{`
