@@ -24,7 +24,11 @@ import { motion, type MotionValue } from "motion/react";
  * blend below would then composite against that group instead of against
  * the page, which is exactly the dark-disc problem this is avoiding.
  */
-export function Galaxy({ opacity }: { opacity?: MotionValue<number> }) {
+export function Galaxy({
+  opacity,
+}: {
+  opacity?: MotionValue<number> | number;
+}) {
   return (
     <motion.div
       className="pointer-events-none absolute"

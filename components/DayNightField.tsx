@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { usePathname } from "next/navigation";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { Galaxy } from "@/components/Galaxy";
 import { SnowField } from "@/components/SnowField";
@@ -17,6 +18,11 @@ export function DayNightField() {
   const { scrollYProgress: rawProgress } = useScroll();
   const reducedMotion = useReducedMotion();
   const isClient = useIsClient();
+  const pathname = usePathname();
+  // Project pages are for reading. They keep the night sky, but none of
+  // the scroll-driven day/night cycle: no dusk orange, no dawn purple, no
+  // travelling orb, and no scroll subscribers running behind the text.
+  const staticSky = pathname?.startsWith("/work/") ?? false;
 
   // Fast/bursty wheel scrolling jumps the raw scroll position in big discrete
   // steps between animation frames — following it directly makes the
@@ -84,16 +90,36 @@ export function DayNightField() {
   const planetADrift = useTransform(scrollYProgress, [0, 1], [0, 2]);
   const planetBDrift = useTransform(scrollYProgress, [0, 1], [0, -1.5]);
 
-  if (reducedMotion) {
+  if (reducedMotion || staticSky) {
     return (
-      <div className="fixed inset-0 -z-10" aria-hidden="true">
+      <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
         <div
           className="absolute inset-0"
           style={{
-            background: "linear-gradient(180deg, #0f0c1a 0%, #0a0f1a 100%)",
+            background: staticSky
+              ? "linear-gradient(180deg, #05060c 0%, #0a0f1a 100%)"
+              : "linear-gradient(180deg, #0f0c1a 0%, #0a0f1a 100%)",
           }}
         />
-        <Galaxy />
+        <Galaxy opacity={staticSky ? 0.45 : undefined} />
+        {staticSky && !reducedMotion && (
+          <div className="absolute inset-0">
+            {stars.map((s, i) => (
+              <div
+                key={i}
+                className="absolute rounded-full bg-white"
+                style={{
+                  left: `${s.x}%`,
+                  top: `${s.y}%`,
+                  width: `${s.r}px`,
+                  height: `${s.r}px`,
+                  opacity: 0.75,
+                  animation: `twinkle 3.5s ease-in-out ${s.delay}s infinite`,
+                }}
+              />
+            ))}
+          </div>
+        )}
       </div>
     );
   }
