@@ -72,10 +72,24 @@ Done: no audio, no screen shake, decays cleanly on mouseleave and touchend.
 
 ### 3. Single-take mode
 Trigger: `plan-sequence` in the terminal, or an unmarked mark in the footer.
-Behaviour: navigation stops cutting. All sections laid out in one coordinate
-space; moving between them is a continuous camera pan/push with no fade, no
-route transition, no discrete page swap. Uses the View Transitions API where
-supported, falls back to a scroll-driven transform otherwise.
+Behaviour: navigation stops cutting, and the camera says so.
+
+A viewfinder appears bottom-left: a red REC dot, a timecode running at 24fps
+(HH:MM:SS:FF, film rate not video's 30), and the take number. The clock
+deliberately survives navigation - moving from the work index to a project
+page and back does not reset it, because in this mode that move is not a cut
+but the same shot continuing, and the running timecode is the proof. Cutting
+and rolling again starts take 2.
+
+The navigation itself is a match cut rather than a crossfade. The session
+number and title carry paired `view-transition-name` values on both the index
+row and the project page, so the browser animates those two elements between
+their old and new positions instead of dissolving the whole document. The
+camera stays on the subject through the move.
+
+Falls back to a manual opacity crossfade where View Transitions are
+unsupported, and to plain navigation with no HUD animation under
+prefers-reduced-motion.
 Reference: sequence-shot direction. Homage to technique, zero assets involved.
 Done: every section reachable in the mode, no dropped frames on mid-range
 hardware, exits back to normal navigation cleanly.

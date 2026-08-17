@@ -5,6 +5,7 @@ import { DayNightField } from "@/components/DayNightField";
 import { Flyby } from "@/components/eggs/Flyby";
 import { KenzIndicator } from "@/components/eggs/KenzIndicator";
 import { Moon } from "@/components/eggs/Moon";
+import { TakeHUD } from "@/components/eggs/TakeHUD";
 import { Terminal } from "@/components/eggs/Terminal";
 import { MainSoundtrack } from "@/components/MainSoundtrack";
 
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <KenzIndicator />
         <Moon />
         <Terminal />
+        <TakeHUD />
         <MainSoundtrack />
         <div className="grain" />
         {children}

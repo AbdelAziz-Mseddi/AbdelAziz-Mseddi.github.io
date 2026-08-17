@@ -145,7 +145,11 @@ export function Terminal() {
           print("// still locked. six pieces, remember?");
         } else {
           setSingleTake(!singleTake);
-          print(`// single-take: ${!singleTake ? "on" : "off"}.`);
+          print(
+            !singleTake
+              ? "// rolling. the clock keeps running across pages."
+              : "// cut."
+          );
         }
         break;
       case "moon": {

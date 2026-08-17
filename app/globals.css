@@ -369,3 +369,35 @@ body {
   border-radius: 999px;
 }
 
+
+/* Single-take mode. The paired view-transition-names on the work index and
+   the project page mean the browser animates those two elements between
+   their old and new positions, rather than crossfading the whole document.
+   Slower than a default transition on purpose: a match cut you can follow. */
+::view-transition-group(*) {
+  animation-duration: 520ms;
+  animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 380ms;
+}
+
+@keyframes rec-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}

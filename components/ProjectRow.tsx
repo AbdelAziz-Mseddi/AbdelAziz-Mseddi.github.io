@@ -67,8 +67,17 @@ export function ProjectRow({ project }: { project: Project }) {
       {/* Hairline that draws across on hover, in place of a panel lighting up. */}
       <span aria-hidden="true" className="work-rule" />
 
+      {/* Paired with the same names on the project page so the View
+          Transition carries these two elements across the navigation instead
+          of crossfading the whole document. That is the "single take": the
+          camera stays on the subject through the move. */}
       <span
         aria-hidden="true"
+        style={
+          singleTake
+            ? ({ viewTransitionName: `take-num-${project.id}` } as React.CSSProperties)
+            : undefined
+        }
         className={`font-display leading-[0.85] text-muted-dim transition-colors duration-300 group-hover:text-accent-warm ${t.num}`}
       >
         {project.session}
@@ -76,6 +85,11 @@ export function ProjectRow({ project }: { project: Project }) {
 
       <span className="block">
         <span
+          style={
+            singleTake
+              ? ({ viewTransitionName: `take-title-${project.id}` } as React.CSSProperties)
+              : undefined
+          }
           className={`block font-display uppercase leading-[0.92] ${t.title}`}
         >
           {project.title}

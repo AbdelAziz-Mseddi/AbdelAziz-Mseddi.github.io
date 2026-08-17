@@ -45,7 +45,14 @@ export function ProjectDetail({ project }: { project: Project }) {
       </Link>
 
       <div className="mt-8 flex items-start justify-between gap-4">
-        <p className="section-num font-mono text-sm text-accent">
+        <p
+          className="section-num font-mono text-sm text-accent"
+          style={
+            singleTake
+              ? ({ viewTransitionName: `take-num-${project.id}` } as React.CSSProperties)
+              : undefined
+          }
+        >
           Session {project.session}
         </p>
         {project.result && (
@@ -53,7 +60,14 @@ export function ProjectDetail({ project }: { project: Project }) {
         )}
       </div>
 
-      <h1 className="mt-3 font-display text-balance text-5xl uppercase leading-none text-foreground sm:text-6xl">
+      <h1
+        className="mt-3 font-display text-balance text-5xl uppercase leading-none text-foreground sm:text-6xl"
+        style={
+          singleTake
+            ? ({ viewTransitionName: `take-title-${project.id}` } as React.CSSProperties)
+            : undefined
+        }
+      >
         {project.title}
         {hasGlyph && <Glyph id={project.id} className="ml-3 align-middle" />}
       </h1>
