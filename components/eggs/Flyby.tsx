@@ -20,14 +20,17 @@ type Flight = {
 };
 
 function randomFlight(id: number): Flight {
-  // Mostly craft, occasionally something faster with an aura behind it.
   const kind = Math.random() < 0.35 ? "aura" : "craft";
   return {
     id,
     top: `${8 + Math.random() * 70}%`,
+    // The aura figures cross slowly enough to actually read as a figure;
+    // the craft still streaks past.
     duration:
-      kind === "aura" ? 1.1 + Math.random() * 0.5 : 1.8 + Math.random() * 0.8,
+      kind === "aura" ? 4.2 + Math.random() * 1.8 : 1.8 + Math.random() * 0.8,
     kind,
+    // Picked once, at spawn — a given figure keeps this colour for its
+    // whole crossing.
     color: AURA_COLORS[Math.floor(Math.random() * AURA_COLORS.length)],
   };
 }
@@ -39,15 +42,20 @@ function randomFlight(id: number): Flight {
  * spec forbids copying any show's actual ship design, so this is a silhouette
  * of the same genre rather than a reproduction of a specific one.
  */
-function Craft() {
+function Craft({ uid }: { uid: number }) {
+  // SVG ids are document-global, so every concurrent flight needs its own or
+  // the first one to finish takes the shared gradient down with it.
+  const trail = `craft-trail-${uid}`;
+  const body = `craft-body-${uid}`;
+
   return (
     <svg width="78" height="30" viewBox="0 0 78 30" style={{ overflow: "visible" }}>
       <defs>
-        <linearGradient id="craft-trail" x1="0" y1="0" x2="1" y2="0">
+        <linearGradient id={trail} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#ffb066" stopOpacity="0" />
           <stop offset="100%" stopColor="#ffb066" stopOpacity="0.75" />
         </linearGradient>
-        <linearGradient id="craft-body" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={body} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#f2f4fa" />
           <stop offset="55%" stopColor="#cfd6e4" />
           <stop offset="100%" stopColor="#8b93a5" />
@@ -55,7 +63,7 @@ function Craft() {
       </defs>
 
       {/* exhaust plume */}
-      <rect x="0" y="14.2" width="30" height="2" fill="url(#craft-trail)" />
+      <rect x="0" y="14.2" width="30" height="2" fill={`url(#${trail})`} />
       <ellipse cx="31" cy="15.2" rx="5" ry="2.1" fill="#ffb066" opacity="0.75" />
 
       {/* swept wings */}
@@ -67,7 +75,7 @@ function Craft() {
       <rect x="31" y="15.6" width="12" height="3" rx="1.4" fill="#7c8496" />
 
       {/* fuselage + long nose */}
-      <path d="M 36 12 L 66 13.4 L 76 15.2 L 66 17 L 36 18 Z" fill="url(#craft-body)" />
+      <path d="M 36 12 L 66 13.4 L 76 15.2 L 66 17 L 36 18 Z" fill={`url(#${body})`} />
 
       {/* canopy */}
       <path d="M 52 12.4 L 61 13.2 L 61 15 L 52 15.2 Z" fill="#3d566e" opacity="0.95" />
@@ -84,11 +92,15 @@ function Craft() {
  * not any character: same rule as the craft, reference the technique, don't
  * reproduce the art.
  */
-function AuraFlyer({ color }: { color: string }) {
+function AuraFlyer({ uid, color }: { uid: number; color: string }) {
+  // Keyed by flight id, not by colour: two figures can draw the same colour,
+  // and a colour-keyed id would let the first to land strip the other's trail.
+  const trail = `aura-trail-${uid}`;
+
   return (
     <svg width="70" height="26" viewBox="0 0 70 26" style={{ overflow: "visible" }}>
       <defs>
-        <linearGradient id={`aura-trail-${color.slice(1)}`} x1="0" y1="0" x2="1" y2="0">
+        <linearGradient id={trail} x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor={color} stopOpacity="0" />
           <stop offset="70%" stopColor={color} stopOpacity="0.55" />
           <stop offset="100%" stopColor={color} stopOpacity="0.9" />
@@ -96,10 +108,7 @@ function AuraFlyer({ color }: { color: string }) {
       </defs>
 
       {/* comet trail */}
-      <path
-        d="M 0 13 Q 26 8.5 48 12 Q 26 17.5 0 13 Z"
-        fill={`url(#aura-trail-${color.slice(1)})`}
-      />
+      <path d="M 0 13 Q 26 8.5 48 12 Q 26 17.5 0 13 Z" fill={`url(#${trail})`} />
 
       {/* aura envelope */}
       <ellipse cx="53" cy="13" rx="11" ry="7" fill={color} opacity="0.28" />
@@ -182,7 +191,11 @@ export function Flyby() {
           }}
           onAnimationEnd={() => remove(f.id)}
         >
-          {f.kind === "craft" ? <Craft /> : <AuraFlyer color={f.color} />}
+          {f.kind === "craft" ? (
+            <Craft uid={f.id} />
+          ) : (
+            <AuraFlyer uid={f.id} color={f.color} />
+          )}
         </div>
       ))}
       <style>{`
