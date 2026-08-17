@@ -1,13 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useTransform } from "motion/react";
 import { useLocalProgress } from "@/lib/useLocalProgress";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { Orbit } from "@/components/Orbit";
-import { STACK_PLANETS, type Planet } from "@/lib/stack";
+import {
+  STACK_SCHEMES,
+  STACK_MAX_RADIUS,
+  DEFAULT_SCHEME_ID,
+  type Planet,
+} from "@/lib/stack";
 
-const MAX_RADIUS = Math.max(...STACK_PLANETS.map((p) => p.orbitRadius));
+// Fixed rather than derived from the active scheme: every scheme lays its
+// planets out across the same span, so the system keeps its size when you
+// switch grouping and only the spacing between orbits changes.
+const MAX_RADIUS = STACK_MAX_RADIUS;
 // Moon orbit radius is capped to this fixed range regardless of how many
 // moons a planet has — a planet with 8 moons and an unbounded per-moon
 // step (base + i * step) reaches far enough to intrude into the next
@@ -133,6 +141,13 @@ export function StackOrbit() {
   const progress = useLocalProgress(ref, 1, 0);
   const reducedMotion = useReducedMotion();
   const [focusedId, setFocusedId] = useState<string | null>(null);
+  const [schemeId, setSchemeId] = useState(DEFAULT_SCHEME_ID);
+
+  const scheme = useMemo(
+    () => STACK_SCHEMES.find((s) => s.id === schemeId) ?? STACK_SCHEMES[0],
+    [schemeId]
+  );
+  const planets = scheme.planets;
 
   const zoom = useTransform(progress, [0, 0.4, 1], [1.9, 1.15, 1.15]);
   const scale = reducedMotion ? 1 : zoom;
@@ -154,14 +169,54 @@ export function StackOrbit() {
       ref={ref}
       className="relative flex h-[140vh] items-center justify-center overflow-hidden px-6"
     >
-      <div className="pointer-events-none absolute left-6 top-10 sm:left-10">
-        <p className="font-mono text-xs uppercase tracking-[0.3em] text-muted-dim">
+      <div className="absolute left-6 top-10 z-30 sm:left-10">
+        <p className="pointer-events-none font-mono text-xs uppercase tracking-[0.3em] text-muted-dim">
           {"// the stack"}
         </p>
-        <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-dim">
-          Everything I actually build with, grouped by how it&apos;s used.
-          Click a planet to look closer.
+        <p className="pointer-events-none mt-2 max-w-xs text-sm leading-relaxed text-muted-dim">
+          Everything I actually build with. Click a planet to look closer.
         </p>
+
+        {/* The same 70 skills regroup under each scheme; only the grouping
+            changes, never the inventory. */}
+        <div className="mt-4 max-w-xs">
+          <p className="pointer-events-none font-mono text-[9px] uppercase tracking-[0.24em] text-muted-dim/70">
+            group by
+          </p>
+          <div className="mt-1.5 flex flex-wrap gap-1.5">
+            {STACK_SCHEMES.map((s) => {
+              const active = s.id === scheme.id;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => {
+                    setSchemeId(s.id);
+                    setFocusedId(null);
+                  }}
+                  aria-pressed={active}
+                  title={s.blurb}
+                  className={`rounded-full border px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.12em] transition-colors ${
+                    active
+                      ? "border-accent-warm bg-accent-warm/10 text-accent-warm"
+                      : "border-border-strong text-muted-dim hover:border-accent hover:text-accent-bright"
+                  }`}
+                >
+                  {s.label}
+                </button>
+              );
+            })}
+          </div>
+          <p
+            key={scheme.id}
+            className="pointer-events-none mt-2.5 text-[11px] leading-snug text-muted-dim/80"
+          >
+            {scheme.blurb}{" "}
+            <span className="text-muted-dim/60">
+              {scheme.planets.length} planets
+            </span>
+          </p>
+        </div>
       </div>
 
       <div
@@ -176,7 +231,7 @@ export function StackOrbit() {
           className="pointer-events-none relative"
           style={{ width: diameter, height: diameter, scale }}
         >
-          {STACK_PLANETS.map((p) => (
+          {planets.map((p) => (
             <div
               key={p.id}
               className="pointer-events-none absolute left-1/2 top-1/2 rounded-full border border-border-strong"
@@ -204,12 +259,12 @@ export function StackOrbit() {
             aria-hidden="true"
           />
 
-          {STACK_PLANETS.map((planet, i) => (
+          {planets.map((planet, i) => (
             <PlanetView
               key={planet.id}
               planet={planet}
               reducedMotion={reducedMotion}
-              staticAngle={(i / STACK_PLANETS.length) * 360}
+              staticAngle={(i / planets.length) * 360}
               focused={focusedId === planet.id}
               dimmed={focusedId !== null && focusedId !== planet.id}
               onToggleFocus={() =>
