@@ -114,7 +114,7 @@
     },
     {
       "id": "logz-fraudec",
-      "session": "03",
+      "session": "02",
       "title": "LOGZ FRAUDEC",
       "subtitle": "Trust scoring for cyber insurance claims",
       "tier": "featured",
@@ -138,11 +138,21 @@
         "Aziz Derbel",
         "Yessine Ben Rejeb"
       ],
-      "links": {}
+      "links": {
+        "repo": "https://github.com/aminebarkati/FEIV-Project-V1.0"
+      },
+      "evidence": {
+        "commits": 4,
+        "additions": 1390,
+        "deletions": 202,
+        "highlights": [
+          "Built the Streamlit interface the claim fraud scores are reviewed through"
+        ]
+      }
     },
     {
       "id": "cr3m3-brul33",
-      "session": "04",
+      "session": "03",
       "title": "CR3M3 BRUL33",
       "subtitle": "Hardware CTF",
       "tier": "featured",
@@ -169,7 +179,7 @@
     },
     {
       "id": "drose",
-      "session": "05",
+      "session": "04",
       "title": "dRose",
       "subtitle": "CLI, v1.2.0",
       "tier": "featured",
@@ -200,7 +210,7 @@
     },
     {
       "id": "tutoring-manager",
-      "session": "06",
+      "session": "05",
       "title": "Tutoring Manager API",
       "tier": "featured",
       "kind": "project",
@@ -232,7 +242,7 @@
     },
     {
       "id": "lumen",
-      "session": "07",
+      "session": "06",
       "title": "Lumen",
       "subtitle": "Content verification",
       "tier": "featured",
@@ -256,7 +266,7 @@
     },
     {
       "id": "sockets-tp",
-      "session": "08",
+      "session": "07",
       "title": "TCP/UDP Client-Server",
       "tier": "featured",
       "kind": "coursework",
@@ -286,7 +296,7 @@
     },
     {
       "id": "driveguard-ai",
-      "session": "09",
+      "session": "08",
       "title": "DriveGuardAI",
       "subtitle": "Telematics scoring",
       "tier": "standard",
@@ -311,11 +321,23 @@
         "Aziz Derbel",
         "Amir Bannani"
       ],
-      "links": {}
+      "links": {
+        "repo": "https://github.com/seifeddinebhiri-netizen/hackathon-junior-INSAT-elites-"
+      },
+      "evidence": {
+        "commits": 15,
+        "additions": 19282,
+        "deletions": 635,
+        "highlights": [
+          "Built the front-end dashboard, from initial structure through the final UI pass",
+          "Wired the dashboard to real-time telematics data over sockets",
+          "Added the settings page and notifications bar, and set up the back-end structure"
+        ]
+      }
     },
     {
       "id": "pharmacy-management",
-      "session": "10",
+      "session": "09",
       "title": "Pharmacy Management System",
       "tier": "standard",
       "kind": "coursework",
@@ -343,7 +365,7 @@
     },
     {
       "id": "insativity",
-      "session": "11",
+      "session": "10",
       "title": "INSATivity",
       "tier": "standard",
       "kind": "project",
@@ -374,7 +396,7 @@
     },
     {
       "id": "campus-connect",
-      "session": "12",
+      "session": "11",
       "title": "Campus Connect",
       "tier": "standard",
       "kind": "hackathon",
@@ -391,7 +413,7 @@
     },
     {
       "id": "devify",
-      "session": "18",
+      "session": "12",
       "title": "DEVIFY",
       "tier": "archive",
       "kind": "design",

@@ -79,6 +79,7 @@ export const STACK_PLANETS: Planet[] = [
       { name: "FastAPI" },
       { name: "Flask" },
       { name: "Django" },
+      { name: "Odoo" },
       { name: "Uvicorn" },
     ],
   },
@@ -103,7 +104,7 @@ export const STACK_PLANETS: Planet[] = [
     orbitRadius: 230,
     orbitSeconds: 54,
     size: 16,
-    moons: [{ name: "PHP" }, { name: "Symfony" }, { name: "Odoo" }],
+    moons: [{ name: "PHP" }, { name: "Symfony" }],
   },
   {
     id: "frontend",
