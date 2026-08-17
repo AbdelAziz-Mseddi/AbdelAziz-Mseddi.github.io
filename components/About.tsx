@@ -13,15 +13,6 @@ export function About() {
             </span>
             , where I went from intern to full-time in five months.
           </p>
-          <p className="text-lg leading-relaxed text-muted">
-            Outside class I&apos;ve worked with the{" "}
-            <span className="text-foreground">
-              Google Developer Group on Campus
-            </span>{" "}
-            and the{" "}
-            <span className="text-foreground">ACM INSAT Student Chapter</span>
-            , where I helped run a certified NVIDIA workshop.
-          </p>
           <p className="text-lg leading-relaxed text-foreground">
             My goal, stated plainly: become one of the greats.
           </p>
