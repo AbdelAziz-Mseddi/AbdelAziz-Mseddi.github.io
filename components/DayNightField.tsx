@@ -12,6 +12,18 @@ function pseudoRandom(seed: number) {
   return x - Math.floor(x);
 }
 
+const MILKY_WAY_STYLE: React.CSSProperties = {
+  backgroundImage: "url(/milky-way.jpg)",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  opacity: 0.55,
+  // Fades the edges out so the image never ends on a visible seam.
+  maskImage:
+    "radial-gradient(ellipse 120% 90% at 50% 45%, #000 35%, transparent 100%)",
+  WebkitMaskImage:
+    "radial-gradient(ellipse 120% 90% at 50% 45%, #000 35%, transparent 100%)",
+};
+
 export function DayNightField() {
   const { scrollYProgress: rawProgress } = useScroll();
   const reducedMotion = useReducedMotion();
@@ -82,13 +94,15 @@ export function DayNightField() {
 
   if (reducedMotion) {
     return (
-      <div
-        className="fixed inset-0 -z-10"
-        style={{
-          background: "linear-gradient(180deg, #0f0c1a 0%, #0a0f1a 100%)",
-        }}
-        aria-hidden="true"
-      />
+      <div className="fixed inset-0 -z-10" aria-hidden="true">
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(180deg, #0f0c1a 0%, #0a0f1a 100%)",
+          }}
+        />
+        <div className="absolute inset-0" style={MILKY_WAY_STYLE} />
+      </div>
     );
   }
 
@@ -115,6 +129,12 @@ export function DayNightField() {
           background: "linear-gradient(180deg, #12101f 0%, #3a2438 100%)",
         }}
       />
+
+      {/* NASA/JPL-Caltech/ESA/CXC/STScI galactic-centre composite (PIA12348),
+          public domain. Desaturated, darkened and cooled to the site palette
+          so it reads as depth behind the content rather than as a photograph
+          pasted behind the text. */}
+      <div className="absolute inset-0" style={MILKY_WAY_STYLE} />
 
       <motion.div
         className="absolute inset-0 will-change-[opacity]"

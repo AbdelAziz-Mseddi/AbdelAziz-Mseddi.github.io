@@ -20,25 +20,9 @@ export type Scheme = {
 // invented for the visualization, and no scheme may drop or duplicate an
 // entry — lib/stack.test-ish checks in the repo's verify scripts assert that.
 
-const PALETTE = {
-  amber: "#e0a458",
-  violet: "#a78bfa",
-  pink: "#d98fc4",
-  teal: "#5fb8a8",
-  blue: "#5b8fd4",
-  green: "#7fc9a0",
-  slate: "#8fa3c9",
-  olive: "#b0a06a",
-  red: "#d1544f",
-  lilac: "#b8b3d9",
-  rust: "#c9784f",
-  sky: "#6fb1d9",
-};
-
 type PlanetDef = {
   id: string;
   label: string;
-  color: string;
   moons: string[];
 };
 
@@ -53,6 +37,40 @@ const MAX_SECONDS = 84;
 
 export const STACK_MAX_RADIUS = MAX_RADIUS;
 
+// Planet colour is orbital temperature, not a category code. Inner bodies
+// run hot and pale gold, outer ones cool through the site's dusty blue to a
+// cold slate. Two hue families, both already in globals.css, instead of a
+// twelve-hue wheel that appears nowhere else on the site. Deriving it from
+// orbit position also means every scheme is coloured consistently without a
+// single hand-picked value.
+const TEMPERATURE: { t: number; rgb: [number, number, number] }[] = [
+  { t: 0, rgb: [245, 220, 174] },
+  { t: 0.34, rgb: [217, 160, 102] },
+  { t: 0.68, rgb: [157, 184, 232] },
+  { t: 1, rgb: [107, 117, 148] },
+];
+
+function temperatureColor(t: number): string {
+  const clamped = Math.min(1, Math.max(0, t));
+  let lo = TEMPERATURE[0];
+  let hi = TEMPERATURE[TEMPERATURE.length - 1];
+  for (let i = 0; i < TEMPERATURE.length - 1; i++) {
+    if (clamped >= TEMPERATURE[i].t && clamped <= TEMPERATURE[i + 1].t) {
+      lo = TEMPERATURE[i];
+      hi = TEMPERATURE[i + 1];
+      break;
+    }
+  }
+  const span = hi.t - lo.t;
+  const k = span === 0 ? 0 : (clamped - lo.t) / span;
+  const hex = lo.rgb.map((v, i) =>
+    Math.round(v + (hi.rgb[i] - v) * k)
+      .toString(16)
+      .padStart(2, "0")
+  );
+  return `#${hex.join("")}`;
+}
+
 function layout(defs: PlanetDef[]): Planet[] {
   const n = defs.length;
   return defs.map((d, i) => {
@@ -60,7 +78,7 @@ function layout(defs: PlanetDef[]): Planet[] {
     return {
       id: d.id,
       label: d.label,
-      color: d.color,
+      color: temperatureColor(t),
       orbitRadius: Math.round(MIN_RADIUS + t * (MAX_RADIUS - MIN_RADIUS)),
       orbitSeconds: Math.round(MIN_SECONDS + t * (MAX_SECONDS - MIN_SECONDS)),
       // A planet carrying more moons reads as a bigger body, clamped so the
@@ -75,13 +93,11 @@ const LAYERS: PlanetDef[] = [
   {
     id: "ai-agents",
     label: "AI & Agents",
-    color: PALETTE.amber,
     moons: ["LangChain", "LangGraph", "Google ADK", "LiteLLM"],
   },
   {
     id: "ml-retrieval",
     label: "ML & Retrieval",
-    color: PALETTE.violet,
     moons: [
       "Qdrant",
       "XGBoost",
@@ -97,13 +113,11 @@ const LAYERS: PlanetDef[] = [
   {
     id: "data-documents",
     label: "Data & Documents",
-    color: PALETTE.pink,
     moons: ["pytesseract", "pdf2image", "rapidfuzz", "SQLAlchemy", "Alembic"],
   },
   {
     id: "backend",
     label: "Backend",
-    color: PALETTE.teal,
     moons: [
       "Python",
       "FastAPI",
@@ -121,19 +135,16 @@ const LAYERS: PlanetDef[] = [
   {
     id: "frontend",
     label: "Frontend",
-    color: PALETTE.blue,
     moons: ["Next.js", "React", "TypeScript", "Tailwind", "HTML/CSS"],
   },
   {
     id: "databases",
     label: "Databases",
-    color: PALETTE.green,
     moons: ["PostgreSQL", "MySQL", "SQLite", "H2", "PL/SQL"],
   },
   {
     id: "platforms",
     label: "Platforms",
-    color: PALETTE.rust,
     moons: [
       "Odoo",
       "Chatwoot",
@@ -147,7 +158,6 @@ const LAYERS: PlanetDef[] = [
   {
     id: "infra",
     label: "Infra & Observability",
-    color: PALETTE.slate,
     moons: [
       "Docker",
       "docker-compose",
@@ -160,7 +170,6 @@ const LAYERS: PlanetDef[] = [
   {
     id: "systems-networks",
     label: "Systems & Networks",
-    color: PALETTE.olive,
     moons: [
       "C",
       "C++",
@@ -177,7 +186,6 @@ const LAYERS: PlanetDef[] = [
   {
     id: "craft",
     label: "Craft & Tooling",
-    color: PALETTE.lilac,
     moons: [
       "Git",
       "GitHub Copilot",
@@ -195,13 +203,11 @@ const BY_KIND: PlanetDef[] = [
   {
     id: "languages",
     label: "Languages",
-    color: PALETTE.amber,
     moons: ["Python", "Java", "PHP", "TypeScript", "C", "C++", "PL/SQL", "HTML/CSS"],
   },
   {
     id: "frameworks",
     label: "Frameworks",
-    color: PALETTE.teal,
     moons: [
       "FastAPI",
       "Flask",
@@ -220,7 +226,6 @@ const BY_KIND: PlanetDef[] = [
   {
     id: "libraries",
     label: "Libraries",
-    color: PALETTE.violet,
     moons: [
       "PyTorch",
       "XGBoost",
@@ -237,7 +242,6 @@ const BY_KIND: PlanetDef[] = [
   {
     id: "datastores",
     label: "Datastores",
-    color: PALETTE.green,
     moons: [
       "PostgreSQL",
       "MySQL",
@@ -251,7 +255,6 @@ const BY_KIND: PlanetDef[] = [
   {
     id: "services",
     label: "Platforms & Services",
-    color: PALETTE.rust,
     moons: [
       "Odoo",
       "Chatwoot",
@@ -269,7 +272,6 @@ const BY_KIND: PlanetDef[] = [
   {
     id: "techniques",
     label: "Techniques",
-    color: PALETTE.red,
     moons: [
       "Embeddings",
       "MMR",
@@ -286,7 +288,6 @@ const BY_KIND: PlanetDef[] = [
   {
     id: "tools",
     label: "Tools",
-    color: PALETTE.lilac,
     moons: [
       "Git",
       "GitHub Copilot",
@@ -308,7 +309,6 @@ const WHERE_IT_RUNS: PlanetDef[] = [
   {
     id: "in-the-model",
     label: "In the model",
-    color: PALETTE.violet,
     moons: [
       "PyTorch",
       "XGBoost",
@@ -328,7 +328,6 @@ const WHERE_IT_RUNS: PlanetDef[] = [
   {
     id: "on-the-server",
     label: "On the server",
-    color: PALETTE.teal,
     moons: [
       "Python",
       "FastAPI",
@@ -351,13 +350,11 @@ const WHERE_IT_RUNS: PlanetDef[] = [
   {
     id: "in-the-browser",
     label: "In the browser",
-    color: PALETTE.blue,
     moons: ["Next.js", "React", "TypeScript", "Tailwind", "HTML/CSS"],
   },
   {
     id: "in-storage",
     label: "In storage",
-    color: PALETTE.green,
     moons: [
       "PostgreSQL",
       "MySQL",
@@ -371,7 +368,6 @@ const WHERE_IT_RUNS: PlanetDef[] = [
   {
     id: "on-the-metal",
     label: "On the wire & the metal",
-    color: PALETTE.olive,
     moons: [
       "C",
       "C++",
@@ -389,7 +385,6 @@ const WHERE_IT_RUNS: PlanetDef[] = [
   {
     id: "around-it-all",
     label: "Around it all",
-    color: PALETTE.slate,
     moons: [
       "Docker",
       "docker-compose",
@@ -417,7 +412,6 @@ const REQUEST_PATH: PlanetDef[] = [
   {
     id: "arrives",
     label: "Arrives",
-    color: PALETTE.sky,
     moons: [
       "Nginx",
       "Chatwoot",
@@ -433,13 +427,11 @@ const REQUEST_PATH: PlanetDef[] = [
   {
     id: "understood",
     label: "Is understood",
-    color: PALETTE.pink,
     moons: ["pytesseract", "pdf2image", "rapidfuzz", "Embeddings", "Qdrant", "MMR"],
   },
   {
     id: "reasoned",
     label: "Is reasoned about",
-    color: PALETTE.amber,
     moons: [
       "LangChain",
       "LangGraph",
@@ -456,7 +448,6 @@ const REQUEST_PATH: PlanetDef[] = [
   {
     id: "served",
     label: "Is served",
-    color: PALETTE.teal,
     moons: [
       "Python",
       "FastAPI",
@@ -474,7 +465,6 @@ const REQUEST_PATH: PlanetDef[] = [
   {
     id: "stored",
     label: "Is stored",
-    color: PALETTE.green,
     moons: [
       "PostgreSQL",
       "MySQL",
@@ -490,13 +480,11 @@ const REQUEST_PATH: PlanetDef[] = [
   {
     id: "shown",
     label: "Is shown",
-    color: PALETTE.blue,
     moons: ["Next.js", "React", "TypeScript", "Tailwind", "HTML/CSS"],
   },
   {
     id: "shipped",
     label: "Is shipped & watched",
-    color: PALETTE.slate,
     moons: [
       "Docker",
       "docker-compose",
@@ -526,7 +514,6 @@ const BROAD: PlanetDef[] = [
   {
     id: "ai-systems",
     label: "AI Systems",
-    color: PALETTE.amber,
     moons: [
       "LangChain",
       "LangGraph",
@@ -549,7 +536,6 @@ const BROAD: PlanetDef[] = [
   {
     id: "product",
     label: "Product Engineering",
-    color: PALETTE.teal,
     moons: [
       "Python",
       "FastAPI",
@@ -583,7 +569,6 @@ const BROAD: PlanetDef[] = [
   {
     id: "platform-ops",
     label: "Platform & Operations",
-    color: PALETTE.slate,
     moons: [
       "Docker",
       "docker-compose",
@@ -606,7 +591,6 @@ const BROAD: PlanetDef[] = [
   {
     id: "systems-security",
     label: "Systems & Security",
-    color: PALETTE.olive,
     moons: [
       "C",
       "C++",
@@ -627,13 +611,11 @@ const GRANULAR: PlanetDef[] = [
   {
     id: "agent-frameworks",
     label: "Agent Frameworks",
-    color: PALETTE.amber,
     moons: ["LangChain", "LangGraph", "Google ADK", "LiteLLM"],
   },
   {
     id: "modelling",
     label: "Modelling",
-    color: PALETTE.violet,
     moons: [
       "PyTorch",
       "XGBoost",
@@ -646,55 +628,46 @@ const GRANULAR: PlanetDef[] = [
   {
     id: "retrieval",
     label: "Retrieval",
-    color: PALETTE.pink,
     moons: ["Qdrant", "Embeddings", "MMR"],
   },
   {
     id: "documents",
     label: "Documents & OCR",
-    color: PALETTE.rust,
     moons: ["pytesseract", "pdf2image", "rapidfuzz"],
   },
   {
     id: "languages",
     label: "Languages",
-    color: PALETTE.sky,
     moons: ["Python", "Java", "PHP", "TypeScript", "C", "C++", "PL/SQL"],
   },
   {
     id: "web-frameworks",
     label: "Web Frameworks",
-    color: PALETTE.teal,
     moons: ["FastAPI", "Flask", "Django", "Uvicorn", "Spring Boot", "Symfony"],
   },
   {
     id: "frontend",
     label: "Frontend",
-    color: PALETTE.blue,
     moons: ["Next.js", "React", "Tailwind", "HTML/CSS"],
   },
   {
     id: "databases",
     label: "Databases",
-    color: PALETTE.green,
     moons: ["PostgreSQL", "MySQL", "SQLite", "H2"],
   },
   {
     id: "orm",
     label: "ORM & Migrations",
-    color: PALETTE.green,
     moons: ["SQLAlchemy", "Alembic"],
   },
   {
     id: "platforms",
     label: "Platforms",
-    color: PALETTE.rust,
     moons: ["Odoo", "Chatwoot", "CTWA", "OpenRemote", "Supabase"],
   },
   {
     id: "cloud-delivery",
     label: "Cloud & Delivery",
-    color: PALETTE.slate,
     moons: [
       "Docker",
       "docker-compose",
@@ -708,13 +681,11 @@ const GRANULAR: PlanetDef[] = [
   {
     id: "observability",
     label: "Observability",
-    color: PALETTE.slate,
     moons: ["Grafana", "Loki"],
   },
   {
     id: "systems-networking",
     label: "Systems & Networking",
-    color: PALETTE.olive,
     moons: [
       "BSD sockets",
       "Unix",
@@ -730,7 +701,6 @@ const GRANULAR: PlanetDef[] = [
   {
     id: "craft",
     label: "Craft",
-    color: PALETTE.lilac,
     moons: [
       "Git",
       "GitHub Copilot",
