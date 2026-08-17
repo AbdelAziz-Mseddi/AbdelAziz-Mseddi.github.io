@@ -10,8 +10,7 @@ export function Projects() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="mx-auto max-w-xl text-center text-muted">
-            A mix of what pays the bills, what won at hackathons, and what I
-            built for myself at 2am with a soundtrack on loop.
+            Client work, hackathon builds, and side projects.
           </p>
         </Reveal>
 

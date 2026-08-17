@@ -48,7 +48,7 @@
           "end": null
         }
       ],
-      "blurb": "Building agentic AI systems for a startup working on ad intelligence and conversational tooling — agent pipelines, retrieval, and quality monitoring running in production. Intern to full-time AI Engineer in five months.",
+      "blurb": "Building agentic AI systems at a startup working on ad intelligence and conversational tooling. Agent pipelines, retrieval and quality monitoring, all running in production. Intern to full-time AI Engineer in five months.",
       "stack": [
         "LangChain",
         "LangGraph",
@@ -89,9 +89,9 @@
         "Python",
         "XGBoost"
       ],
-      "blurb": "An operational dashboard that helps railway operators resolve incidents in real time, fusing graph attention networks, Bi-LSTM temporal modeling, and Qdrant semantic search over 800+ historical incidents to rank resolutions by predicted success.",
+      "blurb": "A dashboard for railway operators working live incidents. It ranks candidate resolutions by predicted success, using a graph attention network and Bi-LSTM over the incident graph alongside Qdrant search across 800+ past incidents.",
       "detail": "A conflict-risk classifier improved decision accuracy by 40%. Four-way visual resolution comparison across a 50-station network, checked against 50 verified reference resolutions.",
-      "context": "Vectors in Orbit — GDG on Campus Sup'Com Tunisia + GDG on Campus FST",
+      "context": "Vectors in Orbit, GDG on Campus Sup'Com Tunisia + GDG on Campus FST",
       "result": "Top 11 of 85 teams",
       "team": [
         "Nour Chachia",
@@ -129,8 +129,8 @@
         "ML",
         "on-premise"
       ],
-      "blurb": "An on-premise ML tool that scores fraud risk in cyber insurance claims by spotting tampered logs and impossible incident timelines — can an insurer trust digital evidence at all?",
-      "context": "Hack for Smart Insurance with AI — Université Dauphine Tunis + EY",
+      "blurb": "An on-premise ML tool that scores fraud risk in cyber insurance claims by finding tampered logs and incident timelines that could not have happened.",
+      "context": "Hack for Smart Insurance with AI, Université Dauphine Tunis + EY",
       "team": [
         "Mohamed Amine Barkati",
         "Ranim Ben Jemaa",
@@ -158,8 +158,8 @@
         "signal analysis",
         "protocol debugging"
       ],
-      "blurb": "Won a hardware capture-the-flag at a Securinets workshop on breaking IoT devices — signal analysis and protocol debugging, not software exploitation.",
-      "context": "From Chips to Cyber Threats — Securinets. Instructor: Ichrak Eddor Mnijli",
+      "blurb": "Won a hardware capture-the-flag at a Securinets workshop on IoT devices. The work was signal analysis and protocol debugging on the wire.",
+      "context": "From Chips to Cyber Threats, Securinets. Instructor: Ichrak Eddor Mnijli",
       "result": "Won",
       "team": [
         "Mayssam Hergli",
@@ -183,7 +183,7 @@
         "Python",
         "CLI"
       ],
-      "blurb": "A Python CLI that downloads and manages YouTube Music playlists in one click — built because a music habit deserves better tooling than a browser tab. Tagged releases, real README, actual CI.",
+      "blurb": "A Python CLI for downloading and managing YouTube Music playlists. Tagged releases, a real README, and CI that runs.",
       "links": {
         "repo": "https://github.com/AbdelAziz-Mseddi/dRose"
       },
@@ -215,7 +215,7 @@
         "H2",
         "Maven"
       ],
-      "blurb": "A REST API for managing students, classes, enrollments, tutoring sessions, and payments — JWT auth, layered service architecture, a schema designed rather than accreted.",
+      "blurb": "A REST API covering students, classes, enrollments, tutoring sessions and payments, with JWT auth over a layered service architecture.",
       "links": {
         "repo": "https://github.com/AbdelAziz-Mseddi/Tutoring_Manager-Server"
       },
@@ -248,7 +248,7 @@
         "Cloudflare R2",
         "TypeScript"
       ],
-      "blurb": "A three-engine content verification platform — authenticity, context, and credibility scored separately rather than collapsed into one number.",
+      "blurb": "A content verification platform built around three engines. Authenticity, context and credibility each carry their own score.",
       "context": "Menacraft Hackathon 2026",
       "links": {
         "repo": "https://github.com/khaledbaccour/lumen"
@@ -269,7 +269,7 @@
         "BSD sockets",
         "Unix"
       ],
-      "blurb": "Client-server over raw BSD sockets, both transports, no framework in the way.",
+      "blurb": "Client-server communication over raw BSD sockets, implemented for both TCP and UDP.",
       "links": {
         "repo": "https://github.com/aminebarkati/networkingProject-sockets-interface"
       },
@@ -302,8 +302,8 @@
         "Flask",
         "Python"
       ],
-      "blurb": "An insurance telematics dashboard scoring drivers on braking, acceleration, and fatigue signals for bonus/malus pricing.",
-      "context": "Hack For Good 4.0 — Junior Entreprise INSAT",
+      "blurb": "An insurance telematics dashboard that scores drivers on braking, acceleration and fatigue signals to drive bonus/malus pricing.",
+      "context": "Hack For Good 4.0, Junior Entreprise INSAT",
       "result": "Top 10 finalist",
       "team": [
         "Seif Bhiri",
@@ -328,7 +328,7 @@
         "MySQL",
         "UML"
       ],
-      "blurb": "Group project. Inventory, prescriptions, and stock movement over a relational schema.",
+      "blurb": "Group project covering inventory, prescriptions and stock movement over a relational schema.",
       "links": {
         "repo": "https://github.com/AbdelAziz-Mseddi/Pharmacy-Management-System-PMS-"
       },
@@ -357,7 +357,7 @@
         "Symfony",
         "MySQL"
       ],
-      "blurb": "A campus events platform, written first in vanilla PHP and then rewritten on Symfony — the rewrite was the point.",
+      "blurb": "A campus events platform, written first in vanilla PHP and then rewritten on Symfony.",
       "links": {
         "repo": "https://github.com/AbdelAziz-Mseddi/INSATivity-Symfony"
       },
@@ -403,7 +403,7 @@
         "UML",
         "architecture"
       ],
-      "blurb": "A gamified, collaborative pull-request review platform — designed and specified, never built. Listed as design work, not shipped work.",
+      "blurb": "A gamified pull-request review platform. Designed and specified, never built.",
       "links": {
         "repo": "https://github.com/AbdelAziz-Mseddi/DEVIFY"
       },

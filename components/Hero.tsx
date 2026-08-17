@@ -12,7 +12,7 @@ export function Hero() {
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-12 px-6 pt-24 sm:px-10 lg:grid-cols-[1.3fr_0.7fr] lg:gap-8">
         <div>
           <p className="mb-6 font-mono text-xs uppercase tracking-[0.3em] text-muted-dim">
-            {"// Tunisia — session started past midnight"}
+            {"// Tunis, Tunisia"}
           </p>
           <h1 className="font-display text-balance text-6xl uppercase leading-[0.9] text-foreground sm:text-8xl">
             Abdelaziz
@@ -20,9 +20,8 @@ export function Hero() {
             <span className="text-accent-bright">Mseddi</span>
           </h1>
           <p className="mt-8 max-w-xl text-lg text-muted sm:text-xl">
-            Software engineering student, AI engineer. I ship code the way
-            I watch the sky — paying attention to what most people scroll
-            past.
+            Software engineering student, AI engineer. I ship code the way I
+            watch the sky, paying attention to what most people scroll past.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <AuraButton

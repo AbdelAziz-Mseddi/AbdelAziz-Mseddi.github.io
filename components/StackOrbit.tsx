@@ -159,8 +159,8 @@ export function StackOrbit() {
           {"// the stack"}
         </p>
         <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-dim">
-          Everything I actually build with, grouped by how it&apos;s used —
-          not a list, a system. Click a planet to look closer.
+          Everything I actually build with, grouped by how it&apos;s used.
+          Click a planet to look closer.
         </p>
       </div>
 

@@ -136,8 +136,8 @@ export function Terminal() {
       case "kenz":
         print(
           allFound
-            ? `kenz — ${foundCount}/${total} found. single-take unlocked.`
-            : `kenz — ${foundCount}/${total} found`
+            ? `kenz: ${foundCount}/${total} found. single-take unlocked.`
+            : `kenz: ${foundCount}/${total} found`
         );
         break;
       case "plan-sequence":
@@ -157,7 +157,7 @@ export function Terminal() {
         print("// reading power level... sensor fried. try again never.");
         break;
       case "whoami":
-        print("Abdelaziz Mseddi — software engineering student, AI engineer.");
+        print("Abdelaziz Mseddi, software engineering student and AI engineer.");
         break;
       case "help":
         print(`available: ${COMMANDS.join(", ")}`);

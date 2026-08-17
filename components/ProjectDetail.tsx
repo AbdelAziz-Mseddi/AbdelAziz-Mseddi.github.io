@@ -92,7 +92,7 @@ export function ProjectDetail({ project }: { project: Project }) {
                 className="flex gap-3 text-sm leading-relaxed text-muted"
               >
                 <span aria-hidden="true" className="text-accent">
-                  —
+                  ·
                 </span>
                 {h}
               </li>

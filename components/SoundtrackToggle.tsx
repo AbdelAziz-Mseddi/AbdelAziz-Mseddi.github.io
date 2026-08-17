@@ -18,7 +18,7 @@ export function SoundtrackToggle() {
       title={
         playing
           ? "Pause soundtrack"
-          : "Play soundtrack — Nostalgic Old Piano Song"
+          : "Play soundtrack: Nostalgic Old Piano Song"
       }
       className="flex h-9 w-9 items-center justify-center rounded-full border border-border-strong text-foreground transition-colors hover:border-accent hover:text-accent-bright"
     >

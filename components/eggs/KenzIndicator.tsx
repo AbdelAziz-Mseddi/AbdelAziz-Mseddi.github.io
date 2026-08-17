@@ -15,7 +15,7 @@ export function KenzIndicator() {
   return (
     <div
       className="fixed bottom-4 right-4 z-40 flex items-center gap-1.5 rounded-full border border-border-strong bg-background/80 px-3 py-1.5 backdrop-blur-sm"
-      title={allFound ? "kenz — all found" : `kenz — ${foundCount}/${total}`}
+      title={allFound ? "kenz: all found" : `kenz: ${foundCount}/${total}`}
     >
       {Array.from({ length: total }, (_, i) => (
         <span

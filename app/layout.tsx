@@ -25,9 +25,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Abdelaziz Mseddi — Software Engineering Student",
+  title: "Abdelaziz Mseddi, Software Engineering Student",
   description:
-    "Portfolio of Abdelaziz Mseddi — software engineering student, AI engineer, and night owl. Cinema, anime, music, and code.",
+    "Portfolio of Abdelaziz Mseddi, software engineering student at INSAT and AI engineer at Rém Data & AI. Retrieval and agent systems, backend work, and photography.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

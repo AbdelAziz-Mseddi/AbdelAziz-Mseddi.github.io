@@ -69,7 +69,7 @@ export const STACK_PLANETS: Planet[] = [
   },
   {
     id: "backend-python",
-    label: "Backend — Python",
+    label: "Python Backend",
     color: "#5fb8a8",
     orbitRadius: 160,
     orbitSeconds: 42,
@@ -84,7 +84,7 @@ export const STACK_PLANETS: Planet[] = [
   },
   {
     id: "backend-java",
-    label: "Backend — Java",
+    label: "Java Backend",
     color: "#c9784f",
     orbitRadius: 195,
     orbitSeconds: 48,
@@ -98,7 +98,7 @@ export const STACK_PLANETS: Planet[] = [
   },
   {
     id: "backend-php",
-    label: "Backend — PHP",
+    label: "PHP Backend",
     color: "#8f7fd4",
     orbitRadius: 230,
     orbitSeconds: 54,

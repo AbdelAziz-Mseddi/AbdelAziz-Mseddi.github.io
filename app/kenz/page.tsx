@@ -17,7 +17,7 @@ export default function KenzPage() {
               {"// كنز"}
             </p>
             <p className="mt-4 text-lg leading-relaxed text-muted">
-              Kenz — Arabic for treasure. Six pieces, scattered, unmarked. If
+              Kenz, Arabic for treasure. Six pieces, scattered, unmarked. If
               you found all of them, you weren&apos;t skimming.
             </p>
             <p className="mt-4 text-sm text-muted-dim">

@@ -13,10 +13,10 @@ export function Contact() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <h2 className="font-display text-balance text-5xl uppercase text-foreground sm:text-6xl">
-            Let&apos;s talk, preferably late.
+            Let&apos;s talk.
           </h2>
           <p className="mt-6 max-w-lg text-lg text-muted">
-            Open to interesting problems — AI systems, backend work, or just
+            Open to interesting problems: AI systems, backend work, or just
             trading film recommendations.
           </p>
 

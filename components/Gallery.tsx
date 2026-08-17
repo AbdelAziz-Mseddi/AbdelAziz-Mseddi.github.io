@@ -307,7 +307,7 @@ export function Gallery() {
       <div className="mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="mx-auto max-w-xl text-center text-muted">
-            Cats, the sea, the sky at odd hours — each with what was playing.
+            Cats, the sea, the sky at odd hours, each with what was playing.
           </p>
         </Reveal>
       </div>
