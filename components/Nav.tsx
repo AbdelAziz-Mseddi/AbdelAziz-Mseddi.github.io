@@ -1,12 +1,14 @@
 "use client";
 
 import { SoundtrackToggle } from "@/components/SoundtrackToggle";
+import { ChargeLink } from "@/components/eggs/ChargeLink";
+import { TerminalHint } from "@/components/eggs/TerminalHint";
 import { handleSmoothScroll } from "@/lib/smoothScroll";
 
 const links = [
   { href: "#about", label: "About" },
   { href: "#work", label: "Work" },
-  { href: "#off-duty", label: "Off Duty" },
+  { href: "#stack", label: "Stack" },
   { href: "#gallery", label: "Frames" },
   { href: "#contact", label: "Contact" },
 ];
@@ -15,13 +17,13 @@ export function Nav() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/70 backdrop-blur-md">
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10">
-        <a
+        <ChargeLink
           href="#top"
           onClick={handleSmoothScroll}
           className="font-display text-2xl uppercase tracking-wide text-foreground transition-transform hover:-skew-x-6"
         >
           A. Mseddi
-        </a>
+        </ChargeLink>
         <ul className="hidden gap-6 text-sm text-muted lg:flex">
           {links.map((link) => (
             <li key={link.href}>
@@ -36,6 +38,7 @@ export function Nav() {
           ))}
         </ul>
         <div className="flex items-center gap-3">
+          <TerminalHint />
           <SoundtrackToggle />
           <a
             href="https://github.com/AbdelAziz-Mseddi"

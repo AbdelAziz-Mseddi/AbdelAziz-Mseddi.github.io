@@ -20,9 +20,9 @@ export function Hero() {
             <span className="text-accent-bright">Mseddi</span>
           </h1>
           <p className="mt-8 max-w-xl text-lg text-muted sm:text-xl">
-            Software engineering student, AI engineer, certified night owl.
-            I ship code the way I watch the sky — paying attention to what
-            most people scroll past.
+            Software engineering student, AI engineer. I ship code the way
+            I watch the sky — paying attention to what most people scroll
+            past.
           </p>
           <div className="mt-10 flex flex-wrap items-center gap-4">
             <AuraButton

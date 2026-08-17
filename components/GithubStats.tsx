@@ -29,19 +29,6 @@ export async function GithubStats() {
               @{GITHUB_USERNAME}
             </a>
           </div>
-
-          {stats.topLanguages.length > 0 && (
-            <div className="flex flex-wrap gap-2">
-              {stats.topLanguages.map((lang) => (
-                <span
-                  key={lang.name}
-                  className="rounded-full border border-border-strong px-3 py-1 text-xs text-muted"
-                >
-                  {lang.name}
-                </span>
-              ))}
-            </div>
-          )}
         </Reveal>
 
         <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-4">

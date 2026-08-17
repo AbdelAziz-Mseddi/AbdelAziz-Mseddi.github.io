@@ -10,6 +10,142 @@
   }
 }
 
+@keyframes orbit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glyph-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.86);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes story-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Filmstrip: frames sit dim and desaturated until they reach the centre of
+   the strip, where they "develop" into full colour. Driven by a scroll
+   view-timeline so it runs on the compositor rather than as another
+   per-frame JS scroll subscriber — this page has a history of scroll jank
+   and doesn't need more work on the main thread.
+   Guarded by @supports because an unsupported `animation-timeline` would
+   otherwise fall back to the document timeline and just play once on load. */
+@keyframes frame-develop {
+  0%,
+  100% {
+    filter: grayscale(1) brightness(0.5);
+    opacity: 0.45;
+    transform: scale(0.92);
+  }
+  50% {
+    filter: grayscale(0) brightness(1);
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@supports (animation-timeline: view(x)) {
+  .film-frame {
+    animation: frame-develop linear both;
+    animation-timeline: view(x);
+    animation-range: entry 0% exit 100%;
+  }
+}
+
+/* Film advance: the outgoing frame is pulled out of the gate and the next
+   drops in, with a small mechanical overshoot as it seats. */
+@keyframes gate-advance-fwd {
+  0% {
+    transform: translateY(42%);
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  82% {
+    transform: translateY(-1.6%);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes gate-advance-back {
+  0% {
+    transform: translateY(-42%);
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  82% {
+    transform: translateY(1.6%);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slow documentary drift on whatever frame is being held. */
+@keyframes ken-burns {
+  from {
+    transform: scale(1.03) translate3d(-0.5%, -0.35%, 0);
+  }
+  to {
+    transform: scale(1.1) translate3d(0.5%, 0.45%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-frame {
+    animation: none;
+  }
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes aura-shimmer {
+  0%,
+  100% {
+    text-shadow:
+      0 0 22px #ebe1ff,
+      0 0 40px #ebe1ff66;
+  }
+  50% {
+    text-shadow:
+      0 0 22px #a78bfa,
+      0 0 40px #a78bfa66;
+  }
+}
+
 :root {
   --background: #05070c;
   --background-alt: #090d16;
@@ -169,6 +305,16 @@ body {
     animation: none;
     opacity: 0.85;
     stroke-dashoffset: 0;
+  }
+}
+
+@keyframes shard-flicker {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
   }
 }
 

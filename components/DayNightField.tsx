@@ -73,6 +73,13 @@ export function DayNightField() {
 
   const starOpacity = nightOpacity;
 
+  // Planets sit far back in the scene — tiny scroll-linked drift for depth,
+  // opacity tied to the night window like the stars. Saturn's rings are two
+  // plain ellipses, not an image asset.
+  const saturnDrift = useTransform(scrollYProgress, [0, 1], [0, -3]);
+  const planetADrift = useTransform(scrollYProgress, [0, 1], [0, 2]);
+  const planetBDrift = useTransform(scrollYProgress, [0, 1], [0, -1.5]);
+
   if (reducedMotion) {
     return (
       <div
@@ -126,6 +133,130 @@ export function DayNightField() {
             }}
           />
         ))}
+      </motion.div>
+
+      <motion.div
+        className="absolute will-change-transform"
+        style={{
+          opacity: starOpacity,
+          top: "14%",
+          left: "78%",
+          x: saturnDrift,
+        }}
+        aria-hidden="true"
+      >
+        <svg width="52" height="52" viewBox="-26 -26 52 52">
+          <ellipse
+            cx="0"
+            cy="0"
+            rx="24"
+            ry="7"
+            fill="none"
+            stroke="#d9b98a"
+            strokeOpacity="0.55"
+            strokeWidth="2"
+            transform="rotate(-18)"
+          />
+          <circle cx="0" cy="0" r="11" fill="#e3c99a" fillOpacity="0.9" />
+          <ellipse
+            cx="0"
+            cy="0"
+            rx="24"
+            ry="7"
+            fill="none"
+            stroke="#d9b98a"
+            strokeOpacity="0.85"
+            strokeWidth="2"
+            strokeDasharray="30 200"
+            transform="rotate(-18)"
+          />
+        </svg>
+      </motion.div>
+
+      <motion.div
+        className="absolute h-2 w-2 rounded-full will-change-transform"
+        style={{
+          opacity: starOpacity,
+          top: "62%",
+          left: "10%",
+          background: "#8fa3c9",
+          x: planetADrift,
+        }}
+        aria-hidden="true"
+      />
+
+      <motion.div
+        className="absolute will-change-transform"
+        style={{
+          opacity: starOpacity,
+          top: "30%",
+          left: "20%",
+          x: planetBDrift,
+        }}
+        aria-hidden="true"
+      >
+        {/* Gargantua-style rendering, built from the real optics rather than
+            copied imagery: the far side of the accretion disk is gravitationally
+            lensed up and over the shadow (that over-the-top arc is the film's
+            signature look), a thinner lensed arc passes under, a bright photon
+            ring hugs the event horizon, and the disk is brighter on one side
+            for relativistic beaming. */}
+        <svg
+          width="72"
+          height="46"
+          viewBox="-36 -23 72 46"
+          style={{ overflow: "visible" }}
+        >
+          <defs>
+            <linearGradient id="bh-disk" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#fff6e0" stopOpacity="0.95" />
+              <stop offset="30%" stopColor="#ffcf87" stopOpacity="0.8" />
+              <stop offset="65%" stopColor="#ff9a45" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#7a4a2a" stopOpacity="0.14" />
+            </linearGradient>
+            <radialGradient id="bh-halo">
+              <stop offset="0%" stopColor="#ffd08a" stopOpacity="0.30" />
+              <stop offset="55%" stopColor="#ff9a45" stopOpacity="0.08" />
+              <stop offset="100%" stopColor="#ff9a45" stopOpacity="0" />
+            </radialGradient>
+            <filter id="bh-soft" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="0.7" />
+            </filter>
+          </defs>
+
+          <ellipse cx="0" cy="0" rx="34" ry="21" fill="url(#bh-halo)" />
+
+          {/* far side of the disk, lensed up over the top */}
+          <path
+            d="M -26 1 A 26 17 0 0 1 26 1"
+            fill="none"
+            stroke="url(#bh-disk)"
+            strokeWidth="2.6"
+            filter="url(#bh-soft)"
+          />
+
+          {/* photon ring + event horizon */}
+          <circle cx="0" cy="0" r="7.4" fill="none" stroke="#ffe6b8" strokeWidth="0.7" opacity="0.85" />
+          <circle cx="0" cy="0" r="7" fill="#000" />
+
+          {/* near side, passing in front and below the shadow */}
+          <path
+            d="M -26 0 A 26 5 0 0 0 26 0"
+            fill="none"
+            stroke="url(#bh-disk)"
+            strokeWidth="3"
+          />
+
+          {/* thinner lensed arc under the shadow */}
+          <path
+            d="M -20 -1 A 20 12 0 0 0 20 -1"
+            fill="none"
+            stroke="url(#bh-disk)"
+            strokeWidth="1.4"
+            opacity="0.5"
+            filter="url(#bh-soft)"
+          />
+        </svg>
       </motion.div>
 
       <motion.div

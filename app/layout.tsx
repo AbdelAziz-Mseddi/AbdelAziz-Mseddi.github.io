@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Bebas_Neue, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { DayNightField } from "@/components/DayNightField";
+import { Flyby } from "@/components/eggs/Flyby";
+import { KenzIndicator } from "@/components/eggs/KenzIndicator";
+import { Moon } from "@/components/eggs/Moon";
+import { Terminal } from "@/components/eggs/Terminal";
+import { MainSoundtrack } from "@/components/MainSoundtrack";
 
 const bebas = Bebas_Neue({
   variable: "--font-bebas",
@@ -33,6 +38,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <DayNightField />
+        <Flyby />
+        <KenzIndicator />
+        <Moon />
+        <Terminal />
+        <MainSoundtrack />
         <div className="grain" />
         {children}
       </body>
