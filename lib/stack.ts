@@ -59,7 +59,6 @@ export const STACK_PLANETS: Planet[] = [
     orbitSeconds: 36,
     size: 16,
     moons: [
-      { name: "pandas" },
       { name: "pytesseract" },
       { name: "pdf2image" },
       { name: "rapidfuzz" },
@@ -77,7 +76,6 @@ export const STACK_PLANETS: Planet[] = [
     moons: [
       { name: "Java" },
       { name: "Spring Boot" },
-      { name: "Spring Security" },
       { name: "JWT" },
       { name: "Maven" },
       { name: "H2" },
@@ -174,7 +172,6 @@ export const STACK_PLANETS: Planet[] = [
     orbitSeconds: 78,
     size: 16,
     moons: [
-      { name: "IoT Security" },
       { name: "Saleae Logic" },
       { name: "Credential Stuffing Scan" },
       { name: "OpenRemote" },

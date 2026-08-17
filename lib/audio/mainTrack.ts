@@ -2,35 +2,57 @@
 
 import { useSyncExternalStore } from "react";
 
+const STORAGE_KEY = "soundtrack-enabled";
+
 let audioEl: HTMLAudioElement | null = null;
 let playing = false;
-let userPaused = false;
 const listeners = new Set<() => void>();
 
 function notify() {
   listeners.forEach((l) => l());
 }
 
+/**
+ * The soundtrack is opt-in: nothing plays until someone hits the toggle.
+ * The choice is remembered so it carries across page loads — turning it on
+ * once shouldn't mean turning it on again on every project page.
+ */
+export function isEnabled() {
+  if (typeof window === "undefined") return false;
+  return window.localStorage.getItem(STORAGE_KEY) === "1";
+}
+
+function setEnabled(next: boolean) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
+}
+
 export function registerAudioElement(el: HTMLAudioElement) {
   audioEl = el;
 }
 
-export function playMain() {
-  userPaused = false;
+/**
+ * Starts playback and remembers the choice. `remember: false` is for the
+ * restore-on-load path, which is acting on a stored preference rather than
+ * recording a new one.
+ */
+export function playMain(remember = true) {
+  if (remember) setEnabled(true);
   audioEl?.play().catch(() => {
-    // Autoplay blocked until a real user gesture happens somewhere on the
-    // page — the global first-interaction listener in MainSoundtrack
-    // retries this.
+    // Autoplay blocked until a real user gesture. Only relevant when
+    // restoring a stored preference — a click on the toggle is itself the
+    // gesture, so that path never lands here.
   });
 }
 
 export function pauseMain() {
-  userPaused = true;
+  setEnabled(false);
   audioEl?.pause();
 }
 
+/** True when the soundtrack is off — whether never started or turned off. */
 export function isUserPaused() {
-  return userPaused;
+  return !isEnabled();
 }
 
 export function setMainPlaying(next: boolean) {

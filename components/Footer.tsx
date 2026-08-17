@@ -26,7 +26,7 @@ export function Footer() {
           />
         </p>
         <p className="font-mono opacity-70 transition-opacity hover:opacity-100">
-          {"// 3, 2, 1, let's jam."}
+          {"// see you, space cowboy."}
         </p>
       </div>
     </footer>

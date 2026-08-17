@@ -5,16 +5,15 @@ import {
   registerAudioElement,
   playMain,
   setMainPlaying,
-  isUserPaused,
+  isEnabled,
 } from "@/lib/audio/mainTrack";
 
 /**
- * The site's default soundtrack — plays from the start. Browsers block
- * unmuted autoplay before any user gesture, so this attempts play() on
- * mount and again retries on the page's first click/keydown if that
- * first attempt was blocked. Either way, by the time someone reaches for
- * the toggle it should already be going — the toggle's job is to stop it,
- * not start it.
+ * The site's soundtrack. Strictly opt-in — landing on the page is silent,
+ * and nothing plays until the toggle is used. The only thing that starts
+ * playback automatically is a stored preference from a previous visit,
+ * and even then the browser may hold it until the first gesture, so that
+ * case retries once on the page's first click/keydown.
  */
 export function MainSoundtrack() {
   const ref = useRef<HTMLAudioElement>(null);
@@ -33,7 +32,8 @@ export function MainSoundtrack() {
     el.addEventListener("play", onPlay);
     el.addEventListener("pause", onPause);
 
-    playMain();
+    // Restore a previous visit's choice only — never start unasked.
+    if (isEnabled()) playMain(false);
 
     return () => {
       el.removeEventListener("play", onPlay);
@@ -43,7 +43,7 @@ export function MainSoundtrack() {
 
   useEffect(() => {
     function onFirstInteraction() {
-      if (!isUserPaused()) playMain();
+      if (isEnabled()) playMain(false);
       window.removeEventListener("pointerdown", onFirstInteraction);
       window.removeEventListener("keydown", onFirstInteraction);
     }
