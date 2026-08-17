@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LANE_COLOR, getLaneLabel, type Project } from "@/lib/content";
@@ -45,6 +45,8 @@ const TIER = {
   },
 } as const;
 
+const RETURN_KEY = "work-return-row";
+
 function compact(n: number) {
   return n >= 1000 ? `${(n / 1000).toFixed(1).replace(/\.0$/, "")}k` : `${n}`;
 }
@@ -56,6 +58,7 @@ export function ProjectRow({ project }: { project: Project }) {
   const reducedMotion = useReducedMotion();
   const numRef = useRef<HTMLSpanElement>(null);
   const titleRef = useRef<HTMLSpanElement>(null);
+  const rowRef = useRef<HTMLAnchorElement>(null);
   // Only the row the camera is on gets named. Naming all twelve meant a
   // navigation spawned ~390 animations, 22 of them exits for rows that do
   // not exist on the destination, which read as a plain crossfade.
@@ -64,7 +67,21 @@ export function ProjectRow({ project }: { project: Project }) {
   const t = TIER[project.tier] ?? TIER.standard;
   const ev = project.evidence;
 
+  // Coming back from a project page landed at the top of the work section
+  // regardless of how far down the list you had been. Each row remembers
+  // that it was the one opened, and puts itself back under your eye on the
+  // way back. sessionStorage rather than module state so it also survives a
+  // reload on the project page.
+  useEffect(() => {
+    if (sessionStorage.getItem(RETURN_KEY) !== project.id) return;
+    sessionStorage.removeItem(RETURN_KEY);
+    rowRef.current?.scrollIntoView({ block: "center", behavior: "auto" });
+  }, [project.id]);
+
   function onClick(e: React.MouseEvent) {
+    // Recorded on every click, not just in single-take mode, because the
+    // return trip should land in the right place either way.
+    sessionStorage.setItem(RETURN_KEY, project.id);
     if (!singleTake) return;
     e.preventDefault();
     // Applied imperatively because startViewTransition snapshots the page the
@@ -81,6 +98,7 @@ export function ProjectRow({ project }: { project: Project }) {
 
   return (
     <Link
+      ref={rowRef}
       href={href}
       onClick={onClick}
       className={`work-row group relative grid grid-cols-[56px_1fr] items-start gap-x-5 gap-y-3 border-b border-border py-8 sm:grid-cols-[96px_1fr_210px] sm:gap-x-8 ${t.row}`}

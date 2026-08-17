@@ -54,11 +54,15 @@ export function TakeHUD() {
 
   return (
     <div
-      className="pointer-events-none fixed bottom-5 left-5 z-50 flex items-center gap-2.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-dim"
+      // z-[70] puts it above the terminal's own z-[60] dimming overlay, so
+      // the camera readout stays legible while the terminal is open. That is
+      // exactly when you most want to see it: right after typing the command
+      // that started the take.
+      className="pointer-events-none fixed bottom-5 left-5 z-[70] flex items-center gap-2.5 rounded-full border border-border-strong bg-background/70 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted backdrop-blur-sm"
       aria-hidden="true"
     >
       <span
-        className="block h-[7px] w-[7px] rounded-full"
+        className="block h-[8px] w-[8px] rounded-full"
         style={{
           background: "#c2452f",
           boxShadow: "0 0 8px 1px #c2452f",
@@ -66,8 +70,8 @@ export function TakeHUD() {
         }}
       />
       <span style={{ color: "#c2452f" }}>rec</span>
-      <span className="tabular-nums text-foreground/70">{timecode(elapsed)}</span>
-      <span className="text-muted-dim/60">take {takeNumber}</span>
+      <span className="tabular-nums text-foreground">{timecode(elapsed)}</span>
+      <span className="text-muted-dim">take {takeNumber}</span>
     </div>
   );
 }
