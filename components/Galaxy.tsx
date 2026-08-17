@@ -34,13 +34,15 @@ export function Galaxy({ opacity }: { opacity?: MotionValue<number> }) {
         // bottom edge rather than ending inside the frame.
         left: "70%",
         top: "86%",
-        width: "min(132vh, 104vw)",
+        width: "min(94vh, 74vw)",
         aspectRatio: "1 / 1",
         // Centring lives entirely in this transform. Tailwind's
         // -translate-x-1/2 utilities are NOT used here: v4 emits them as the
         // standalone `translate` property, which composes with `transform`
         // instead of being overridden by it, so the shift would land twice.
-        transform: "translate(-50%, -50%)",
+        // scaleX(-1) mirrors the source so the arms sweep up to the
+        // right rather than to the left.
+        transform: "translate(-50%, -50%) scaleX(-1)",
         backgroundImage: "url(/andromeda.jpg)",
         backgroundSize: "contain",
         backgroundPosition: "center",
