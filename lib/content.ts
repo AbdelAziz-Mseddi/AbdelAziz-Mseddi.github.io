@@ -48,3 +48,7 @@ export function getProject(id: string): Project | undefined {
 export function getLanes(): Lane[] {
   return data.lanes as Lane[];
 }
+
+export function getLaneLabel(id: string): string {
+  return getLanes().find((l) => l.id === id)?.label ?? id;
+}

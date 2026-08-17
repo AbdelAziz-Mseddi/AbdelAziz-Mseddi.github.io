@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LANE_COLOR, type Project } from "@/lib/content";
+import { LANE_COLOR, getLaneLabel, type Project } from "@/lib/content";
 import { useSingleTakeMode } from "@/lib/eggs/singleTake";
 import { navigateWithTransition } from "@/lib/eggs/navigateWithTransition";
 import { useReducedMotion } from "@/lib/useReducedMotion";
@@ -96,10 +96,17 @@ export function ProjectRow({ project }: { project: Project }) {
       </span>
 
       <span className="col-start-2 flex flex-col items-start gap-2 pt-1 text-left sm:col-start-3 sm:items-end sm:text-right">
-        <span className="flex gap-1.5" aria-hidden="true">
+        {/* Ticks are decorative on their own; the legend above the list
+            decodes the colours and the sr-only text names them outright. */}
+        <span className="flex gap-1.5">
+          <span className="sr-only">
+            {project.lanes.map(getLaneLabel).join(", ")}
+          </span>
           {project.lanes.map((lane) => (
             <span
               key={lane}
+              aria-hidden="true"
+              title={getLaneLabel(lane)}
               className="block h-[3px] w-[22px] rounded-sm opacity-55 transition-opacity duration-300 group-hover:opacity-100"
               style={{ background: LANE_COLOR[lane] ?? "var(--muted-dim)" }}
             />
