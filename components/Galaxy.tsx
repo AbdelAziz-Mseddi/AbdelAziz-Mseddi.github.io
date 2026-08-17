@@ -41,10 +41,9 @@ export function Galaxy({ opacity }: { opacity?: MotionValue<number> }) {
         // standalone `translate` property, which composes with `transform`
         // instead of being overridden by it, so the shift would land twice.
         // scaleX(-1) mirrors the source so the arms sweep up to the
-        // right rather than to the left. The mirror reverses the visual
-        // sense of the rotation that follows it, so a positive angle here
-        // reads as a counter-clockwise tilt on screen.
-        transform: "translate(-50%, -50%) scaleX(-1) rotate(28deg)",
+        // right rather than to the left. Positive angles here steepen the
+        // disc toward vertical, negative ones flatten it toward a diagonal.
+        transform: "translate(-50%, -50%) scaleX(-1) rotate(-20deg)",
         backgroundImage: "url(/andromeda.jpg)",
         backgroundSize: "contain",
         backgroundPosition: "center",
