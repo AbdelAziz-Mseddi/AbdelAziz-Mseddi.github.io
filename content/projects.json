@@ -211,7 +211,6 @@
       "stack": [
         "Java",
         "Spring Boot",
-        "Spring Security",
         "JWT",
         "H2",
         "Maven"
