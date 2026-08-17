@@ -44,7 +44,7 @@ export function Galaxy({ opacity }: { opacity?: MotionValue<number> }) {
         // right rather than to the left. The mirror reverses the visual
         // sense of the rotation that follows it, so a positive angle here
         // reads as a counter-clockwise tilt on screen.
-        transform: "translate(-50%, -50%) scaleX(-1) rotate(12deg)",
+        transform: "translate(-50%, -50%) scaleX(-1) rotate(28deg)",
         backgroundImage: "url(/andromeda.jpg)",
         backgroundSize: "contain",
         backgroundPosition: "center",
