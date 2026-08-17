@@ -368,3 +368,14 @@ body {
   background: var(--border-strong);
   border-radius: 999px;
 }
+
+/* The background galaxy turns once every few minutes: slow enough to read as
+   drift rather than animation, and compositor-only. */
+@keyframes galaxy-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

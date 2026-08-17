@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
+import { Galaxy } from "@/components/Galaxy";
 import { SnowField } from "@/components/SnowField";
 import { useIsClient, useReducedMotion } from "@/lib/useReducedMotion";
 
@@ -11,18 +12,6 @@ function pseudoRandom(seed: number) {
   const x = Math.sin(seed * 12.9898) * 43758.5453;
   return x - Math.floor(x);
 }
-
-const MILKY_WAY_STYLE: React.CSSProperties = {
-  backgroundImage: "url(/milky-way.jpg)",
-  backgroundSize: "cover",
-  backgroundPosition: "center",
-  opacity: 0.55,
-  // Fades the edges out so the image never ends on a visible seam.
-  maskImage:
-    "radial-gradient(ellipse 120% 90% at 50% 45%, #000 35%, transparent 100%)",
-  WebkitMaskImage:
-    "radial-gradient(ellipse 120% 90% at 50% 45%, #000 35%, transparent 100%)",
-};
 
 export function DayNightField() {
   const { scrollYProgress: rawProgress } = useScroll();
@@ -101,7 +90,7 @@ export function DayNightField() {
             background: "linear-gradient(180deg, #0f0c1a 0%, #0a0f1a 100%)",
           }}
         />
-        <div className="absolute inset-0" style={MILKY_WAY_STYLE} />
+        <Galaxy />
       </div>
     );
   }
@@ -130,11 +119,8 @@ export function DayNightField() {
         }}
       />
 
-      {/* NASA/JPL-Caltech/ESA/CXC/STScI galactic-centre composite (PIA12348),
-          public domain. Desaturated, darkened and cooled to the site palette
-          so it reads as depth behind the content rather than as a photograph
-          pasted behind the text. */}
-      <div className="absolute inset-0" style={MILKY_WAY_STYLE} />
+      <Galaxy />
+
 
       <motion.div
         className="absolute inset-0 will-change-[opacity]"
