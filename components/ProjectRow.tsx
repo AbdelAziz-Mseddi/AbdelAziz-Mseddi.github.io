@@ -1,9 +1,14 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LANE_COLOR, getLaneLabel, type Project } from "@/lib/content";
-import { useSingleTakeMode } from "@/lib/eggs/singleTake";
+import {
+  useSingleTakeMode,
+  useTakeFocus,
+  setTakeFocus,
+} from "@/lib/eggs/singleTake";
 import { navigateWithTransition } from "@/lib/eggs/navigateWithTransition";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 
@@ -47,7 +52,14 @@ function compact(n: number) {
 export function ProjectRow({ project }: { project: Project }) {
   const router = useRouter();
   const singleTake = useSingleTakeMode();
+  const focusedId = useTakeFocus();
   const reducedMotion = useReducedMotion();
+  const numRef = useRef<HTMLSpanElement>(null);
+  const titleRef = useRef<HTMLSpanElement>(null);
+  // Only the row the camera is on gets named. Naming all twelve meant a
+  // navigation spawned ~390 animations, 22 of them exits for rows that do
+  // not exist on the destination, which read as a plain crossfade.
+  const named = singleTake && focusedId === project.id;
   const href = `/work/${project.id}`;
   const t = TIER[project.tier] ?? TIER.standard;
   const ev = project.evidence;
@@ -55,6 +67,15 @@ export function ProjectRow({ project }: { project: Project }) {
   function onClick(e: React.MouseEvent) {
     if (!singleTake) return;
     e.preventDefault();
+    // Applied imperatively because startViewTransition snapshots the page the
+    // moment it is called, and a React state update would land too late.
+    if (numRef.current) {
+      numRef.current.style.viewTransitionName = `take-num-${project.id}`;
+    }
+    if (titleRef.current) {
+      titleRef.current.style.viewTransitionName = `take-title-${project.id}`;
+    }
+    setTakeFocus(project.id);
     navigateWithTransition(router, href, reducedMotion);
   }
 
@@ -72,9 +93,10 @@ export function ProjectRow({ project }: { project: Project }) {
           of crossfading the whole document. That is the "single take": the
           camera stays on the subject through the move. */}
       <span
+        ref={numRef}
         aria-hidden="true"
         style={
-          singleTake
+          named
             ? ({ viewTransitionName: `take-num-${project.id}` } as React.CSSProperties)
             : undefined
         }
@@ -85,8 +107,9 @@ export function ProjectRow({ project }: { project: Project }) {
 
       <span className="block">
         <span
+          ref={titleRef}
           style={
-            singleTake
+            named
               ? ({ viewTransitionName: `take-title-${project.id}` } as React.CSSProperties)
               : undefined
           }

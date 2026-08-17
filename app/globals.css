@@ -373,15 +373,22 @@ body {
 /* Single-take mode. The paired view-transition-names on the work index and
    the project page mean the browser animates those two elements between
    their old and new positions, rather than crossfading the whole document.
-   Slower than a default transition on purpose: a match cut you can follow. */
+   The root crossfade is kept short and the group move long, so the eye
+   follows the travelling title instead of the page dissolving under it. */
 ::view-transition-group(*) {
-  animation-duration: 520ms;
-  animation-timing-function: cubic-bezier(0.2, 0.7, 0.3, 1);
+  animation-duration: 620ms;
+  animation-timing-function: cubic-bezier(0.22, 0.68, 0.24, 1);
 }
 
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 380ms;
+  animation-duration: 240ms;
+}
+
+/* The travelling elements sit above the crossfading page. */
+::view-transition-group(.take-num),
+::view-transition-group(.take-title) {
+  z-index: 10;
 }
 
 @keyframes rec-pulse {
