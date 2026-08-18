@@ -154,6 +154,23 @@
   }
 }
 
+/* Archive rows share the work index's hover: shift right and draw the rule. */
+.archive-row {
+  transition: padding-left 0.45s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.archive-row:hover {
+  padding-left: 20px;
+}
+.archive-row:hover .work-rule,
+.archive-row:focus-visible .work-rule {
+  width: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .archive-row:hover {
+    padding-left: 0;
+  }
+}
+
 @keyframes blink {
   0%,
   49% {

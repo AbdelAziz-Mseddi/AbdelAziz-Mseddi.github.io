@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
 
 export function About() {
@@ -12,6 +13,16 @@ export function About() {
               AI engineer at Rém Data &amp; AI
             </span>
             , where I went from intern to full-time in five months.
+          </p>
+          <p className="text-lg leading-relaxed text-muted">
+            I also keep an{" "}
+            <Link
+              href="/archive"
+              className="text-foreground underline decoration-border-strong underline-offset-4 transition-colors hover:decoration-accent hover:text-accent-bright"
+            >
+              archive of course notes
+            </Link>{" "}
+            for the students coming up behind me at INSAT.
           </p>
           <p className="text-lg leading-relaxed text-foreground">
             My goal, stated plainly: become one of the greats.
