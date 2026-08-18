@@ -105,12 +105,6 @@ export async function GithubActivity() {
     tiles.push({ value: c.reviews.toLocaleString(), label: "Code reviews" });
   if (c.issues > 0)
     tiles.push({ value: c.issues.toLocaleString(), label: "Issues opened" });
-  if (c.privateContributions > 0)
-    tiles.push({
-      value: c.privateContributions.toLocaleString(),
-      label: "Private",
-      caption: "behind org walls",
-    });
   tiles.push({ value: c.reposWithCommits.toLocaleString(), label: "Repos touched" });
   if (c.reposCreated > 0)
     tiles.push({ value: c.reposCreated.toLocaleString(), label: "Repos created" });
@@ -147,7 +141,7 @@ export async function GithubActivity() {
       total={c.total}
       tiles={tiles}
       segments={splitSegments(c)}
-      includesPrivate={c.privateContributions > 0}
+      includesPrivate={c.authed}
     />
   );
 }

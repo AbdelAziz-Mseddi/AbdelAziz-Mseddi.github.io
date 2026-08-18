@@ -19,12 +19,15 @@ export type Segment = {
 
 /** Static SVG donut. Each slice is an arc of one stroked circle, offset by the
  *  running total so the slices chain around the ring. */
-function Donut({ segments }: { segments: Segment[] }) {
+function Donut({ segments, small }: { segments: Segment[]; small?: boolean }) {
   const r = 42;
   const c = 2 * Math.PI * r;
   let offset = 0;
   return (
-    <svg viewBox="0 0 120 120" className="h-24 w-24 shrink-0 -rotate-90">
+    <svg
+      viewBox="0 0 120 120"
+      className={`${small ? "h-16 w-16" : "h-24 w-24"} shrink-0 -rotate-90`}
+    >
       <circle cx="60" cy="60" r={r} fill="none" stroke="var(--border)" strokeWidth="15" />
       {segments.map((s) => {
         const len = s.frac * c;
@@ -65,10 +68,11 @@ export function GithubActivityPanel({
   const hasDonut = segments.length > 0;
   // The donut absorbs whatever cells are left over so the grid never shows an
   // empty tile: it fills the trailing gap of the last row, or takes a full row
-  // of its own when the tiles already divide evenly.
+  // of its own when the tiles already divide evenly. When only a single cell
+  // is left it stacks the ring over the legend so it still fits.
   const rem = (4 - (tiles.length % 4)) % 4;
   const donutSpan = hasDonut ? (rem === 0 ? 4 : rem) : 0;
-  const showLegend = donutSpan >= 2;
+  const stacked = donutSpan === 1;
   const fillerCount = hasDonut ? 0 : rem;
 
   return (
@@ -134,31 +138,31 @@ export function GithubActivityPanel({
 
           {hasDonut && (
             <div
-              className="flex items-center gap-5 bg-background-alt p-5"
+              className={`flex bg-background-alt p-5 ${
+                stacked ? "flex-col items-center gap-4" : "items-center gap-5"
+              }`}
               style={{ gridColumn: `span ${donutSpan}` }}
             >
-              <Donut segments={segments} />
-              {showLegend && (
-                <div className="min-w-0 flex-1">
-                  <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-dim">
-                    {"// where the work went"}
-                  </p>
-                  <ul className="mt-2 space-y-1.5">
-                    {segments.map((s) => (
-                      <li key={s.key} className="flex items-center gap-2 text-sm">
-                        <span
-                          className="h-2.5 w-2.5 shrink-0 rounded-sm"
-                          style={{ background: s.color }}
-                        />
-                        <span className="truncate text-muted">{s.label}</span>
-                        <span className="ml-auto font-mono text-xs tabular-nums text-foreground">
-                          {s.pct}%
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <Donut segments={segments} small={stacked} />
+              <div className={stacked ? "w-full" : "min-w-0 flex-1"}>
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-dim">
+                  {"// where the work went"}
+                </p>
+                <ul className="mt-2 space-y-1.5">
+                  {segments.map((s) => (
+                    <li key={s.key} className="flex items-center gap-2 text-sm">
+                      <span
+                        className="h-2.5 w-2.5 shrink-0 rounded-sm"
+                        style={{ background: s.color }}
+                      />
+                      <span className="truncate text-muted">{s.label}</span>
+                      <span className="ml-auto font-mono text-xs tabular-nums text-foreground">
+                        {s.pct}%
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
         </div>

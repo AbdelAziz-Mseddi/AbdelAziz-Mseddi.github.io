@@ -81,6 +81,13 @@ export type GithubContributions = {
   reposCreated: number;
   /** Distinct repos this person pushed commits to in the window. */
   reposWithCommits: number;
+  /** True when these numbers came from an authenticated build-time fetch (so
+   *  they include private-repo contributions), false when we fell back to the
+   *  committed public-only snapshot. Drives the "public + private" vs
+   *  "public only" scope label. (restrictedContributionsCount is NOT a usable
+   *  signal here: it counts only contributions to repos the viewer cannot see,
+   *  so it is ~0 for the owner's own token even when private work is included.) */
+  authed: boolean;
   /** 53 columns, each a Sun..Sat array of daily counts; -1 = day outside the
    *  window (the ragged first/last week). Kept for deriving streaks / busiest
    *  day / active-day stats, not for drawing a calendar. */
@@ -106,8 +113,14 @@ export type GithubContributions = {
  * and the section always renders a real-shaped calendar.
  */
 export async function getGithubContributions(): Promise<GithubContributions> {
+  // The committed snapshot holds only public data, so its scope is "public".
+  const snapshot: GithubContributions = {
+    ...(contributionSnapshot as Omit<GithubContributions, "authed">),
+    authed: false,
+  };
+
   const token = process.env.GH_STATS_TOKEN || process.env.GITHUB_TOKEN;
-  if (!token) return contributionSnapshot as GithubContributions;
+  if (!token) return snapshot;
 
   const query = `
     query($login:String!){
@@ -138,12 +151,12 @@ export async function getGithubContributions(): Promise<GithubContributions> {
       body: JSON.stringify({ query, variables: { login: GITHUB_USERNAME } }),
       next: { revalidate: 3600 },
     });
-    if (!res.ok) return contributionSnapshot as GithubContributions;
+    if (!res.ok) return snapshot;
 
     const json = await res.json();
     const c = json?.data?.user?.contributionsCollection;
     const cal = c?.contributionCalendar;
-    if (!cal?.weeks?.length) return contributionSnapshot as GithubContributions;
+    if (!cal?.weeks?.length) return snapshot;
 
     type Day = { contributionCount: number; weekday: number; date: string };
     type Week = { contributionDays: Day[] };
@@ -163,11 +176,12 @@ export async function getGithubContributions(): Promise<GithubContributions> {
       privateContributions: c.restrictedContributionsCount ?? 0,
       reposCreated: c.totalRepositoryContributions ?? 0,
       reposWithCommits: c.totalRepositoriesWithContributedCommits ?? 0,
+      authed: true,
       weeks,
       startDate: flat[0]?.date ?? contributionSnapshot.startDate,
       endDate: flat[flat.length - 1]?.date ?? contributionSnapshot.endDate,
     };
   } catch {
-    return contributionSnapshot as GithubContributions;
+    return snapshot;
   }
 }
