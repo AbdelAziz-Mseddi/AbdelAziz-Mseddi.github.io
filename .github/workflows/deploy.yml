@@ -32,6 +32,12 @@ jobs:
       - run: npm ci
 
       - run: npm run build
+        env:
+          # PAT (scopes: read:user, repo), SAML-authorized for the private org,
+          # so the contribution calendar includes private contributions. Without
+          # it the build falls back to the public-only count. Set via:
+          #   gh secret set GH_STATS_TOKEN
+          GH_STATS_TOKEN: ${{ secrets.GH_STATS_TOKEN }}
 
       - uses: actions/upload-pages-artifact@v3
         with:
