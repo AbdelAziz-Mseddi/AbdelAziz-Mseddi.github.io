@@ -39,8 +39,16 @@ function derive(c: GithubContributions) {
     if (run > longest) longest = run;
   }
 
+  // Current streak: consecutive active days ending today. The calendar always
+  // includes today as its final day, and today is often still empty (the UTC
+  // day is young, or the API's per-day count lags the live profile). Treat
+  // today as "not over yet": a trailing zero on the final day does not reset
+  // the streak, so in that case count back from yesterday. This matches how
+  // GitHub's own streak counters behave.
   let current = 0;
-  for (let i = days.length - 1; i >= 0 && days[i].count > 0; i--) current++;
+  let ci = days.length - 1;
+  if (ci >= 0 && days[ci].count === 0) ci--;
+  for (; ci >= 0 && days[ci].count > 0; ci--) current++;
 
   let busiest = days[0] ?? { count: 0, date: new Date() };
   for (const d of days) if (d.count > busiest.count) busiest = d;
