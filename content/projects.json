@@ -43,12 +43,12 @@
           "end": "2026-06"
         },
         {
-          "title": "AI Engineer",
+          "title": "AI Engineer, part-time",
           "start": "2026-07",
           "end": null
         }
       ],
-      "blurb": "Building agentic AI systems at a startup working on ad intelligence and conversational tooling. Agent pipelines, retrieval and quality monitoring, all running in production. Intern to full-time AI Engineer in five months.",
+      "blurb": "Building agentic AI systems at a startup working on ad intelligence and conversational tooling. Agent pipelines, retrieval and quality monitoring, all running in production. Intern to part-time AI Engineer in five months.",
       "stack": [
         "LangChain",
         "LangGraph",

@@ -12,7 +12,7 @@ export function About() {
             <span className="text-foreground">
               AI engineer at Rém Data &amp; AI
             </span>
-            , where I went from intern to full-time in five months.
+            , where I progressed from intern to a part-time AI engineer role in five months.
           </p>
           <p className="text-lg leading-relaxed text-muted">
             I also keep an{" "}
