@@ -683,7 +683,7 @@ const GRANULAR: PlanetDef[] = [
   },
   {
     id: "web-frameworks",
-    label: "Web Frameworks",
+    label: "Backend Stack",
     moons: [
       "Pydantic",
       "Celery",
