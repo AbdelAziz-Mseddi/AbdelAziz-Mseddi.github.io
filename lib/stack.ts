@@ -15,7 +15,7 @@ export type Scheme = {
   planets: Planet[];
 };
 
-// Every scheme below groups the same 70 skills, taken from the confirmed
+// Every scheme below groups the same 77 skills, taken from the confirmed
 // inventory (verified project usage + LinkedIn skill tags). Nothing here is
 // invented for the visualization, and no scheme may drop or duplicate an
 // entry — lib/stack.test-ish checks in the repo's verify scripts assert that.
@@ -93,12 +93,14 @@ const LAYERS: PlanetDef[] = [
   {
     id: "ai-agents",
     label: "AI & Agents",
-    moons: ["LangChain", "LangGraph", "Google ADK", "LiteLLM"],
+    moons: ["LLM Evaluation", "Agent Testing", "LangChain", "LangGraph", "Google ADK", "LiteLLM"],
   },
   {
     id: "ml-retrieval",
     label: "ML & Retrieval",
     moons: [
+      "CLIP",
+      "Hybrid Retrieval",
       "Qdrant",
       "XGBoost",
       "PyTorch",
@@ -119,6 +121,8 @@ const LAYERS: PlanetDef[] = [
     id: "backend",
     label: "Backend",
     moons: [
+      "Pydantic",
+      "Celery",
       "Python",
       "FastAPI",
       "Flask",
@@ -187,6 +191,7 @@ const LAYERS: PlanetDef[] = [
     id: "craft",
     label: "Craft & Tooling",
     moons: [
+      "pytest",
       "Git",
       "GitHub Copilot",
       "Codex",
@@ -227,6 +232,9 @@ const BY_KIND: PlanetDef[] = [
     id: "libraries",
     label: "Libraries",
     moons: [
+      "Pydantic",
+      "Celery",
+      "CLIP",
       "PyTorch",
       "XGBoost",
       "ONNX Runtime",
@@ -273,6 +281,9 @@ const BY_KIND: PlanetDef[] = [
     id: "techniques",
     label: "Techniques",
     moons: [
+      "LLM Evaluation",
+      "Agent Testing",
+      "Hybrid Retrieval",
       "Embeddings",
       "MMR",
       "Quantization",
@@ -289,6 +300,7 @@ const BY_KIND: PlanetDef[] = [
     id: "tools",
     label: "Tools",
     moons: [
+      "pytest",
       "Git",
       "GitHub Copilot",
       "Codex",
@@ -310,6 +322,8 @@ const WHERE_IT_RUNS: PlanetDef[] = [
     id: "in-the-model",
     label: "In the model",
     moons: [
+      "CLIP",
+      "Hybrid Retrieval",
       "PyTorch",
       "XGBoost",
       "ONNX Runtime",
@@ -329,6 +343,8 @@ const WHERE_IT_RUNS: PlanetDef[] = [
     id: "on-the-server",
     label: "On the server",
     moons: [
+      "Pydantic",
+      "Celery",
       "Python",
       "FastAPI",
       "Flask",
@@ -386,6 +402,9 @@ const WHERE_IT_RUNS: PlanetDef[] = [
     id: "around-it-all",
     label: "Around it all",
     moons: [
+      "LLM Evaluation",
+      "Agent Testing",
+      "pytest",
       "Docker",
       "docker-compose",
       "GitHub Actions",
@@ -427,7 +446,16 @@ const REQUEST_PATH: PlanetDef[] = [
   {
     id: "understood",
     label: "Is understood",
-    moons: ["pytesseract", "pdf2image", "rapidfuzz", "Embeddings", "Qdrant", "MMR"],
+    moons: [
+      "CLIP",
+      "Hybrid Retrieval",
+      "pytesseract",
+      "pdf2image",
+      "rapidfuzz",
+      "Embeddings",
+      "Qdrant",
+      "MMR",
+    ],
   },
   {
     id: "reasoned",
@@ -449,6 +477,8 @@ const REQUEST_PATH: PlanetDef[] = [
     id: "served",
     label: "Is served",
     moons: [
+      "Pydantic",
+      "Celery",
       "Python",
       "FastAPI",
       "Flask",
@@ -486,6 +516,9 @@ const REQUEST_PATH: PlanetDef[] = [
     id: "shipped",
     label: "Is shipped & watched",
     moons: [
+      "LLM Evaluation",
+      "Agent Testing",
+      "pytest",
       "Docker",
       "docker-compose",
       "GitHub Actions",
@@ -515,6 +548,10 @@ const BROAD: PlanetDef[] = [
     id: "ai-systems",
     label: "AI Systems",
     moons: [
+      "LLM Evaluation",
+      "Agent Testing",
+      "CLIP",
+      "Hybrid Retrieval",
       "LangChain",
       "LangGraph",
       "Google ADK",
@@ -537,6 +574,8 @@ const BROAD: PlanetDef[] = [
     id: "product",
     label: "Product Engineering",
     moons: [
+      "Pydantic",
+      "Celery",
       "Python",
       "FastAPI",
       "Flask",
@@ -570,6 +609,7 @@ const BROAD: PlanetDef[] = [
     id: "platform-ops",
     label: "Platform & Operations",
     moons: [
+      "pytest",
       "Docker",
       "docker-compose",
       "GitHub Actions",
@@ -617,6 +657,7 @@ const GRANULAR: PlanetDef[] = [
     id: "modelling",
     label: "Modelling",
     moons: [
+      "CLIP",
       "PyTorch",
       "XGBoost",
       "ONNX Runtime",
@@ -628,7 +669,7 @@ const GRANULAR: PlanetDef[] = [
   {
     id: "retrieval",
     label: "Retrieval",
-    moons: ["Qdrant", "Embeddings", "MMR"],
+    moons: ["Hybrid Retrieval", "Qdrant", "Embeddings", "MMR"],
   },
   {
     id: "documents",
@@ -643,7 +684,16 @@ const GRANULAR: PlanetDef[] = [
   {
     id: "web-frameworks",
     label: "Web Frameworks",
-    moons: ["FastAPI", "Flask", "Django", "Uvicorn", "Spring Boot", "Symfony"],
+    moons: [
+      "Pydantic",
+      "Celery",
+      "FastAPI",
+      "Flask",
+      "Django",
+      "Uvicorn",
+      "Spring Boot",
+      "Symfony",
+    ],
   },
   {
     id: "frontend",
@@ -702,6 +752,9 @@ const GRANULAR: PlanetDef[] = [
     id: "craft",
     label: "Craft",
     moons: [
+      "LLM Evaluation",
+      "Agent Testing",
+      "pytest",
       "Git",
       "GitHub Copilot",
       "Codex",

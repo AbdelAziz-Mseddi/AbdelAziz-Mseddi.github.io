@@ -48,7 +48,6 @@
           "end": null
         }
       ],
-      "blurb": "Building agentic AI systems at a startup working on ad intelligence and conversational tooling. Agent pipelines, retrieval and quality monitoring, all running in production. Intern to part-time AI Engineer in five months.",
       "stack": [
         "LangChain",
         "LangGraph",

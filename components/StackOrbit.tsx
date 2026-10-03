@@ -177,7 +177,7 @@ export function StackOrbit() {
           Everything I actually build with. Click a planet to look closer.
         </p>
 
-        {/* The same 70 skills regroup under each scheme; only the grouping
+        {/* The same 77 skills regroup under each scheme; only the grouping
             changes, never the inventory. */}
         <div className="mt-4 max-w-xs">
           <p className="pointer-events-none font-mono text-[9px] uppercase tracking-[0.24em] text-muted-dim/70">
